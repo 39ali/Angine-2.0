@@ -1,6 +1,6 @@
 #pragma once
 #include "renderer\Renderable.h"
-class GameObject :public renderable
+class GameObject :public renderable 
 {
 public:
 

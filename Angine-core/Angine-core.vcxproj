@@ -19,7 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\GameObject.h" />
+    <ClInclude Include="src\renderer\MasterRenderer.h" />
+    <ClInclude Include="src\renderer\opengl\Renderer.h" />
     <ClInclude Include="src\renderer\opengl\Shader.h" />
+    <ClInclude Include="src\renderer\opengl\Texture2D.h" />
+    <ClInclude Include="src\renderer\Renderable.h" />
+    <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Utils\Reader.h" />
   </ItemGroup>
   <ItemGroup>

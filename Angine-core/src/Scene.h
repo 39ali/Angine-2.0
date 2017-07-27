@@ -7,5 +7,5 @@ public:
 	Scene();
 	~Scene();
 	void Init();
-	std::vector<GameObject> m_gameObjects;
+	std::vector<GameObject*> m_gameObjects;
 };
