@@ -3,10 +3,10 @@
 namespace Angine {
 	namespace Core {
 
-		Entity::Entity(RawModel* model, glm::mat4& Transofrm )
+		Entity::Entity(Model* model, glm::mat4& Transofrm )
 		{
 			transform = Transofrm;
-			m_rawModel = model;
+			m_Model = model;
 		}
 		Entity::~Entity() {};
 

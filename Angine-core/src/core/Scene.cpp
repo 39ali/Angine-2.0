@@ -9,9 +9,9 @@ namespace Angine {
 		}
 		Scene::~Scene()
 		{
-			delete m_window;
 			delete m_renderer;
 			delete m_shader;
+			TextureManager::Clean();
 		}
 
 		void Scene::render()
@@ -19,12 +19,19 @@ namespace Angine {
 			m_shader->use();
 			glActiveTexture(GL_TEXTURE0);
 			m_tex->bind();
-			m_shader->setUniform("sampler", 0);
+
+			glm::mat4 projection = glm::perspective(glm::radians(65.f), ((float)m_window->getWidth() / (float)m_window->getHeight()), 0.1f, 1000.0f);
+			//glm::mat4 projection = glm::ortho(0.0f, (float)m_window->getWidth(), 0.0f, (float)m_window->getHeight(), 0.1f, 1000.f);
+			m_shader->setUniform("projection", projection);
 			m_shader->setUniform("view", m_camera->getViewMatrix());
 			for each (auto entity in m_Entities)
 			{
 				m_shader->setUniform("model", entity->transform);
-				m_renderer->render(entity->getRawModel());
+				for each (Mesh*  mesh in entity->getModel()->m_meshes)
+				{
+					m_renderer->render(mesh);
+				}
+
 			}
 
 			m_shader->unuse();
@@ -76,7 +83,8 @@ namespace Angine {
 
 		void Scene::createWindow(const unsigned int &width, const unsigned int & height, const char * title)
 		{
-			m_window = new Renderer::Window(width, height, title, false);
+			Window::CreateInstance(width, height, title);
+			m_window = Window::getInstance();
 		}
 
 
@@ -86,8 +94,8 @@ namespace Angine {
 			m_renderer = new Renderer::Renderer();
 			m_loader = new Loader();
 			m_shader = new Shader("../Shaders/BasicShader.vs.txt", "../Shaders/BasicShader.fs.txt");
-			m_tex = new Texture2D("../Textures/img_test.png");
-			m_camera = new Camera(glm::vec3(0, 0, 0));
+			m_tex = TextureManager::LoadTexture("../Textures/img_test.png");
+			m_camera = new Camera(glm::vec3(0, 0, -10.0f));
 		}
 
 		void Scene::internalUpdate()
@@ -95,10 +103,18 @@ namespace Angine {
 			m_camera->update();
 		}
 
-		RawModel* Scene::addRawModel(float * verts, int size, int * indices, int indicesSize, float * uv, int uvsize)
+		Mesh* Scene::addRawModel(float * verts, int size, int * indices, int indicesSize, float * uv, int uvsize)
 		{
-			RawModel * model = m_loader->loadToVao(verts, size, indices, indicesSize, uv, uvsize);
+			Mesh * model = nullptr; //m_loader->loadToVao(verts, size, indices, indicesSize, uv, uvsize);
 			m_models.push_back(model);
+			return model;
+
+		}
+
+		Model* Scene::addModel(const std::string & fileLocation)
+		{
+			Model * model = m_loader->loadModelFromFile(fileLocation);
+			//m_models.push_back(model);
 			return model;
 
 		}

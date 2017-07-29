@@ -5,12 +5,14 @@
 #include "Time.h"
 #include <string>
 #include "../renderer/Renderer.h"
-#include "../renderer/RawModel.h"
+#include "../renderer/Mesh.h"
 #include "../renderer/Loader.h"
 #include "../renderer/Shader.h"
 #include "../renderer/Texture2D.h"
 #include "../renderer/Camera.h"
 #include "../core/Entity.h"
+#include "../renderer/Model.h"
+#include "../renderer/TextureManager.h"
 
 using namespace Angine::Renderer;
 using namespace Angine::Core;
@@ -25,7 +27,8 @@ namespace Angine {
 			virtual void update() = 0;
 			virtual void tick() = 0;
 			void render();
-			RawModel*  addRawModel(float * verts, int size, int * indices, int indicesSize, float * uv, int uvsize);
+			Mesh*  addRawModel(float * verts, int size, int * indices, int indicesSize, float * uv, int uvsize);
+			Model* Scene::addModel(const std::string & fileLocation);
 			void AddEntity(Entity* entity);
 			void run();
 			void createWindow(const unsigned int &wdith, const unsigned int & height, const char* title);
@@ -35,7 +38,7 @@ namespace Angine {
 
 		private:
 			std::vector<Entity*> m_Entities;
-			std::vector<RawModel*> m_models;
+			std::vector<Mesh*> m_models;
 			Renderer::Window* m_window;
 			float m_fps = 0.0f;
 			float m_ups = 0.0f;

@@ -3,9 +3,10 @@
 namespace Angine {
 	namespace Renderer {
 
-		void Renderer::render(const RawModel* model)const
+		void Renderer::render(  Mesh* model)
 		{
-			glBindVertexArray(model->m_vaoID);
+
+			glBindVertexArray(model->getVAOID());
 			glDrawElements(GL_TRIANGLES, model->m_indicesCount, GL_UNSIGNED_INT, NULL);
 			glBindVertexArray(0);
 

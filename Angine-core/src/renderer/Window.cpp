@@ -2,15 +2,18 @@
 
 namespace Angine {
 	namespace Renderer {
-		Window * Window::m_win;
+
 		bool  Window::m_Keys[MAX_KEYS];
 		bool  Window::m_MouseButtons[MAX_BUTTONS];
 		double Window::mx, Window::my;
 		bool  Window::m_isclosed;
+		bool Window::m_isInstanciated = false;
+		Window* Window::m_win = nullptr;
 
 		Window::Window(const unsigned int width, const unsigned int height, const char* title, bool depth) :
-			m_title(title), m_width(width), m_height(height)
+			m_width(width), m_height(height), m_title(title)
 		{
+
 			for each(auto k in m_Keys)
 			{
 				k = false;
@@ -47,7 +50,7 @@ namespace Angine {
 				glEnable(GL_DEPTH_TEST);
 			}
 
-			int m_width, m_height;
+			//int m_width, m_height;
 
 			glfwGetFramebufferSize(m_window, &m_width, &m_height);
 			glViewport(0, 0, m_width, m_height);
@@ -58,10 +61,17 @@ namespace Angine {
 			glfwSetMouseButtonCallback(m_window, mouse_button_callback);
 			glfwSetKeyCallback(m_window, key_callback);
 			glfwSetWindowCloseCallback(m_window, window_close_callback);
-			//glfwSwapInterval(0);
-			m_win = this;
+			glfwSwapInterval(1);
+
 		}
 
+		void Window::CreateInstance(const unsigned int width, const unsigned int height, const char* title, bool depth)
+		{
+			if (m_isInstanciated) { return; }
+
+			m_isInstanciated = true;
+			m_win = new Window(width, height, title, depth);
+		}
 
 		void Window::update()
 		{
@@ -105,7 +115,6 @@ namespace Angine {
 		{
 			glfwDestroyWindow(m_window);
 			glfwTerminate();
-			delete	m_win;
 		}
 
 

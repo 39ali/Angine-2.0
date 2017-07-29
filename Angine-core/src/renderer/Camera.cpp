@@ -14,11 +14,11 @@ namespace Angine {
 
 		void Camera::update()
 		{
-			if (Window::m_win->isKeyPressed(GLFW_KEY_D))
+			if (Window::getInstance()->isKeyPressed(GLFW_KEY_D))
 			{
 				m_localPosition.x += 0.02f;
 			}
-			if (Window::m_win->isKeyPressed(GLFW_KEY_A))
+			if (Window::getInstance()->isKeyPressed(GLFW_KEY_A))
 			{
 				m_localPosition.x -= 0.02f;
 			}

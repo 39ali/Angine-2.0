@@ -25,10 +25,14 @@
     <ClInclude Include="src\renderer\Camera.h" />
     <ClInclude Include="src\renderer\IRenderable.h" />
     <ClInclude Include="src\renderer\Loader.h" />
-    <ClInclude Include="src\renderer\RawModel.h" />
+    <ClInclude Include="src\renderer\Material.h" />
+    <ClInclude Include="src\renderer\Mesh.h" />
+    <ClInclude Include="src\renderer\Model.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
     <ClInclude Include="src\renderer\Texture2D.h" />
+    <ClInclude Include="src\renderer\TextureManager.h" />
+    <ClInclude Include="src\renderer\VertexData.h" />
     <ClInclude Include="src\renderer\Window.h" />
     <ClInclude Include="src\core\Scene.h" />
     <ClInclude Include="src\core\Time.h" />
@@ -42,9 +46,11 @@
     <ClCompile Include="src\core\Scene.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\Loader.cpp" />
+    <ClCompile Include="src\renderer\Material.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\renderer\Shader.cpp" />
     <ClCompile Include="src\renderer\Texture2D.cpp" />
+    <ClCompile Include="src\renderer\TextureManager.cpp" />
     <ClCompile Include="src\renderer\Window.cpp" />
     <ClCompile Include="src\core\Time.cpp" />
     <ClCompile Include="src\Utils\tiny_obj_loader.cc" />
@@ -105,7 +111,7 @@
     <OutDir>$(SolutionDir)bin\Output\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\Intermediates\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)Deps\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Deps\libs\glew\;$(SolutionDir)Deps\libs\;$(SolutionDir)Deps\libs\FreeImage\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Deps\libs\glew\;$(SolutionDir)Deps\libs\;$(SolutionDir)Deps\libs\FreeImage\;$(SolutionDir)Deps\libs\Assimp\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -115,7 +121,7 @@
     <OutDir>$(SolutionDir)bin\Output\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\Intermediates\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)Deps\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Deps\libs\glew\;$(SolutionDir)Deps\libs\;$(SolutionDir)Deps\libs\FreeImage\;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)Deps\libs\glew\;$(SolutionDir)Deps\libs\;$(SolutionDir)Deps\libs\FreeImage\;$(SolutionDir)Deps\libs\Assimp\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -131,7 +137,7 @@
     <Link>
       <SubSystem>NotSet</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32s.lib;glfw3.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32s.lib;glfw3.lib;FreeImage.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -162,7 +168,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32s.lib;glfw3.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32s.lib;glfw3.lib;FreeImage.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

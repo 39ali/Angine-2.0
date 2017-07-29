@@ -1,6 +1,6 @@
 #include "game.h"
 #include <iostream>
-#include "src\Utils\Tiny_obj_loader.h"
+
 Game::Game()
 {
 	createWindow(800, 600, "game");
@@ -14,24 +14,6 @@ void Game::init()
 
 
 
-	tinyobj::attrib_t attrib;
-	std::vector<tinyobj::shape_t> shapes;
-	std::vector<tinyobj::material_t> materials;
-	std::string err;
-
-	std::string filename = "../Models/cube.obj";
-	std::string material = "../Models/";
-	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, filename.c_str(), material.c_str(), true);
-	if (!err.empty()) {
-		std::cerr << err << std::endl;
-	}
-
-
-
-
-
-
-
 	float uv[] =
 	{ 0,0,
 	 0,1,
@@ -40,25 +22,28 @@ void Game::init()
 	};
 
 	float vertices[] = {
-		-0.5f, 0.5f,0,
-		-0.5f, -0.5f,0,
-		0.5f, -0.5f,0,
-		0.5f, 0.5f,0
+		-0.5f, 0.5f,0.0f,
+		-0.5f, -0.5f,0.0f,
+		0.5f, -0.5f,0.0f,
+		0.5f, 0.5f,0.0f
 	};
 	int indices[] = {
 		0,1,3,
 		3,1,2
 	};
-	RawModel*	model = addRawModel(vertices, sizeof(vertices), indices, sizeof(indices), uv, sizeof(uv));
-	glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(0.2f, 0, 0))* glm::rotate(glm::mat4(), (float)Time::getTime() * glm::radians(45.f), glm::vec3(0, 0, 1));
 
-	entity = new Entity(model, transform);
+
+	std::string filename = "../Models/cube.obj";
+	Model*	model1 = addModel(filename);
+	glm::mat4 transform1 = glm::mat4(1.f);//glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)); //* glm::scale(glm::mat4(), glm::vec3(0.3f, 0.3f, 0.3f));
+	entity = new Entity(model1, transform1);
 	AddEntity(entity);
+
+
 };
 void Game::update()
 {
-
-	entity->transform = glm::translate(glm::mat4(), glm::vec3(0.2f, 0, 0))* glm::rotate(glm::mat4(), (float)Time::getTime() * glm::radians(45.f), glm::vec3(0, 0, 1));
+	entity->transform = glm::translate(glm::mat4(), glm::vec3(0.2f, 0, 0))*glm::scale(glm::mat4(), glm::vec3(0.5f,0.5f, 0.5f))* glm::rotate(glm::mat4(), (float)Time::getTime() * glm::radians(45.f), glm::vec3(1, 1, 1));
 };
 void Game::tick()
 {

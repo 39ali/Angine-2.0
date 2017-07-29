@@ -1,5 +1,5 @@
 #pragma once
-#include "RawModel.h"
+#include "Mesh.h"
 namespace Angine {
 	namespace Renderer {
 
@@ -9,7 +9,7 @@ namespace Angine {
 			Renderer() {};
 			~Renderer() {};
 
-			void render(const RawModel* model)const;
+			void render(  Mesh* model);
 
 
 		};
