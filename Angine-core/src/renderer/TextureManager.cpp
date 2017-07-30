@@ -13,15 +13,21 @@ namespace Angine {
 
 			Texture2D* texture = new Texture2D();
 			texture->fileName = filename;
-			BYTE* data = Utils::imageLoader(filename, texture->m_width, texture->m_height);
+			unsigned int BPP;
+			BYTE* data = Utils::imageLoader(filename, texture->m_width, texture->m_height, BPP);
 			glGenTextures(1, &texture->m_texID);
 			glBindTexture(GL_TEXTURE_2D, texture->m_texID);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture->m_width, texture->m_height, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
-
+			if (BPP == 24) {
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture->m_width, texture->m_height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+			}
+			else if (BPP == 32)
+			{
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->m_width, texture->m_height, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
+			}
 			m_textures.insert({ filename, texture });
 			return texture;
 			//delete[] data;  // TODO: figure out how to delete this  .

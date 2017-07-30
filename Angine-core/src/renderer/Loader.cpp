@@ -3,6 +3,11 @@
 namespace Angine {
 	namespace Renderer {
 
+		 std::vector<GLuint> Loader::m_vaos;
+		 std::vector<GLuint> Loader::m_vbos;
+		 std::string	Loader::directory;
+
+
 
 		Mesh* Loader::loadToVao(const std::vector<VertexData>& data, const std::vector<unsigned>& indices)
 		{
@@ -16,23 +21,27 @@ namespace Angine {
 			return new Mesh(vaoID, indices.size(), vio);
 		}
 
+
+		Model* Loader::loadModelFromVertices(const std::vector<VertexData>& data, const std::vector<unsigned>& indices)
+		{
+			Model * model = new Model();
+
+			Mesh* mesh = loadToVao(data, indices);
+			model->m_meshes.push_back(mesh);
+			return model;
+		}
+
 		Model* Loader::loadModelFromFile(const std::string& fileloc)
 		{
-
-			//	std::string filename = "../Models/sponza/sponza.obj";
-			//	std::string material = "../Models/sponza/";
-
-			std::string filename = "../Models/nanosuit/nanosuit.obj";
-			std::string material = "../Models/";
 			Assimp::Importer import;
-			const aiScene *scene = import.ReadFile(filename, aiProcess_Triangulate | aiProcess_FlipUVs);
+			const aiScene *scene = import.ReadFile(fileloc, aiProcess_Triangulate | aiProcess_FlipUVs);
 
 			if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 			{
 				std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
 				return nullptr;
 			}
-			directory = filename.substr(0, filename.find_last_of('/'));
+			directory = fileloc.substr(0, fileloc.find_last_of('/'));
 			directory += "/";
 			Model * model = new Model();
 
@@ -58,7 +67,7 @@ namespace Angine {
 		{
 			std::vector<VertexData> vertices;
 			std::vector<unsigned int> indices;
-			std::vector<Texture2D> textures;
+			std::vector<Texture2D*>* textures = new std::vector<Texture2D*>();
 
 			for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 			{
@@ -90,32 +99,37 @@ namespace Angine {
 					indices.push_back(face.mIndices[j]);
 			}
 
+			Mesh * mMesh = loadToVao(vertices, indices);
+
 			if (mesh->mMaterialIndex >= 0)
 			{
 				aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-				std::vector<Texture2D> diffuseMaps = loadMaterialTextures(material,
-					aiTextureType_DIFFUSE, TextureType::Diffuse);
-				textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-				std::vector<Texture2D> specularMaps = loadMaterialTextures(material,
-					aiTextureType_SPECULAR, TextureType::Specular);
-				textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-			}
 
-			return	loadToVao(vertices, indices);
+				std::vector<Texture2D*>* diffuseMaps = loadMaterialTextures(material,
+					aiTextureType_DIFFUSE, TextureType::Diffuse);
+				textures->insert(textures->end(), diffuseMaps->begin(), diffuseMaps->end());
+
+				std::vector<Texture2D*>* specularMaps = loadMaterialTextures(material,
+					aiTextureType_SPECULAR, TextureType::Specular);
+				textures->insert(textures->end(), specularMaps->begin(), specularMaps->end());
+			}
+			mMesh->m_textures = textures;
+
+			return mMesh;
 		}
 		///TODO :load for every mesh it's diffuse and specular maps 
-		std::vector<Texture2D> Loader::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
+		std::vector<Texture2D*>* Loader::loadMaterialTextures(aiMaterial *mat, aiTextureType type,
 			TextureType typeName)
 		{
-			std::vector<Texture2D> textures;
+			std::vector<Texture2D*>* textures = new std::vector<Texture2D*>();
 			for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 			{
 				aiString str;
 				mat->GetTexture(type, i, &str);
 				std::string strr(str.C_Str());
-				Texture2D* texture = TextureManager::LoadTexture((directory + strr).c_str());
-
-				textures.push_back(*texture);
+				Texture2D* texture = TextureManager::LoadTexture((directory + "textures/" + strr).c_str());
+				texture->m_type = typeName;
+				textures->push_back(texture);
 			}
 			return textures;
 
@@ -137,10 +151,10 @@ namespace Angine {
 			glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(VertexData), data.data(), GL_STATIC_DRAW);
 			glEnableVertexAttribArray(0);
 			glEnableVertexAttribArray(1);
-			glEnableVertexAttribArray(3);
+			glEnableVertexAttribArray(2);
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, position));
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, normal));
-			glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, uv));
+			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, uv));
 
 			m_vbos.push_back(buffer);
 		}
@@ -159,7 +173,8 @@ namespace Angine {
 			glBindVertexArray(0);
 		}
 
-		Loader::~Loader()
+
+		void Loader::clean()
 		{
 			for each (const GLuint var in m_vbos)
 			{
@@ -170,6 +185,12 @@ namespace Angine {
 			{
 				glDeleteVertexArrays(1, &var);
 			}
+			m_vbos.clear();
+			m_vaos.clear();
+		}
+
+		Loader::~Loader()
+		{
 
 		};
 

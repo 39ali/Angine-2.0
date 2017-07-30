@@ -33,6 +33,7 @@ namespace Angine {
 				}
 
 			}
+		
 
 			m_shader->unuse();
 
@@ -92,9 +93,10 @@ namespace Angine {
 		void Scene::internalInit()
 		{
 			m_renderer = new Renderer::Renderer();
-			m_loader = new Loader();
+			
 			m_shader = new Shader("../Shaders/BasicShader.vs.txt", "../Shaders/BasicShader.fs.txt");
-			m_tex = TextureManager::LoadTexture("../Textures/img_test.png");
+			
+			m_tex = TextureManager::LoadTexture("../Textures/body_showroom_spec.png");//TextureManager::LoadTexture("../Textures/hand_showroom_ddn.png");// // 
 			m_camera = new Camera(glm::vec3(0, 0, -10.0f));
 		}
 
@@ -103,21 +105,7 @@ namespace Angine {
 			m_camera->update();
 		}
 
-		Mesh* Scene::addRawModel(float * verts, int size, int * indices, int indicesSize, float * uv, int uvsize)
-		{
-			Mesh * model = nullptr; //m_loader->loadToVao(verts, size, indices, indicesSize, uv, uvsize);
-			m_models.push_back(model);
-			return model;
 
-		}
-
-		Model* Scene::addModel(const std::string & fileLocation)
-		{
-			Model * model = m_loader->loadModelFromFile(fileLocation);
-			//m_models.push_back(model);
-			return model;
-
-		}
 
 		void Scene::AddEntity(Entity* entity)
 		{

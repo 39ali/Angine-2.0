@@ -15,32 +15,33 @@
 namespace Angine {
 	namespace Renderer {
 
-		
+
 		class Loader
 		{
+
 		public:
+			static Model* loadModelFromFile(const std::string& fileloc);
+			static Model* loadModelFromVertices(const std::vector<VertexData>& data, const std::vector<unsigned>& indices);
+			static void clean();
+		private:
+			static	Mesh * loadToVao(const std::vector<VertexData>& data, const std::vector<unsigned>& indicies);
+			static void processNode(aiNode *node, const aiScene *scene, Model* model);
+			static Mesh* processMesh(aiMesh *mesh, const aiScene *scene);
+			static std::vector<Texture2D*>* loadMaterialTextures(aiMaterial *mat, aiTextureType type,
+				TextureType typeName);
 
 			Loader()
 			{
 			};
 			~Loader();
-		public:
-			Model* loadModelFromFile(const std::string& fileloc);
-			Mesh * loadToVao(const std::vector<VertexData>& data, const std::vector<unsigned>& indicies);
+			static	GLuint createVao();
+			static void Loader::createVertexBuffer(const std::vector<VertexData>& data);
+			static GLuint createIndicesBuffer(const std::vector < unsigned int>& indices);
+			static std::vector<GLuint> m_vaos;
+			static std::vector<GLuint> m_vbos;
+			static std::string	directory;
 
-			void processNode(aiNode *node, const aiScene *scene, Model* model);
-			Mesh* processMesh(aiMesh *mesh, const aiScene *scene);
-			std::vector<Texture2D> loadMaterialTextures(aiMaterial *mat, aiTextureType type,
-				TextureType typeName);
-		private:
-			GLuint createVao();
-			void Loader::createVertexBuffer(const std::vector<VertexData>& data);
-			GLuint createIndicesBuffer(const std::vector < unsigned int>& indices);
-			std::vector<GLuint> m_vaos;
-			std::vector<GLuint> m_vbos;
-			std::string	directory;
-
-			void unbindVao();
+			static void unbindVao();
 		};
 	}
 }

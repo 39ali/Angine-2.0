@@ -9,6 +9,7 @@ namespace Angine {
 			Model() {};
 			~Model() {};
 			//void addMesh(Mesh * mesh) { m_meshes.push_back(mesh); };
+			/// TODO : delete meshes ?
 			std::vector<Mesh*> m_meshes;
 		private:
 			std::string m_directory;

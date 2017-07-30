@@ -27,8 +27,6 @@ namespace Angine {
 			virtual void update() = 0;
 			virtual void tick() = 0;
 			void render();
-			Mesh*  addRawModel(float * verts, int size, int * indices, int indicesSize, float * uv, int uvsize);
-			Model* Scene::addModel(const std::string & fileLocation);
 			void AddEntity(Entity* entity);
 			void run();
 			void createWindow(const unsigned int &wdith, const unsigned int & height, const char* title);
@@ -38,7 +36,6 @@ namespace Angine {
 
 		private:
 			std::vector<Entity*> m_Entities;
-			std::vector<Mesh*> m_models;
 			Renderer::Window* m_window;
 			float m_fps = 0.0f;
 			float m_ups = 0.0f;

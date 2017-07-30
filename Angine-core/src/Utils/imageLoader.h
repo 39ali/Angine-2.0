@@ -7,7 +7,7 @@ namespace Angine
 	namespace Utils
 	{
 
-		static BYTE *  imageLoader(const char * filename, unsigned int &width, unsigned int &height) {
+		static BYTE *  imageLoader(const char * filename, unsigned int &width, unsigned int &height, unsigned int& BPP) {
 			//	, const unsigned int texID, GLenum image_format, GLint internal_format, GLint level, GLint border
 			//image format
 			FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
@@ -67,6 +67,8 @@ namespace Angine
 			//Free FreeImage's copy of the data
 	//		FreeImage_Unload(dib);
 
+
+			BPP = FreeImage_GetBPP(dib);
 			return bits;
 		}
 	}
