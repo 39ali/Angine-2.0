@@ -3,9 +3,9 @@
 namespace Angine {
 	namespace Renderer {
 
-		 std::vector<GLuint> Loader::m_vaos;
-		 std::vector<GLuint> Loader::m_vbos;
-		 std::string	Loader::directory;
+		std::vector<GLuint> Loader::m_vaos;
+		std::vector<GLuint> Loader::m_vbos;
+		std::string	Loader::directory;
 
 
 
@@ -113,7 +113,10 @@ namespace Angine {
 					aiTextureType_SPECULAR, TextureType::Specular);
 				textures->insert(textures->end(), specularMaps->begin(), specularMaps->end());
 			}
-			mMesh->m_textures = textures;
+			if (!textures->empty()) {
+				mMesh->m_textures = textures;
+				mMesh->hasTextures = true;
+			}
 
 			return mMesh;
 		}

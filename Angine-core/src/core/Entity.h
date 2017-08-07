@@ -16,9 +16,11 @@ namespace Angine {
 
 			glm::mat4 transform;
 			inline  Model* getModel() const { return m_Model; };
-
+			void setMaterial(Material* material) { m_material = material; };
+			inline  Material* getMaterial() { return m_material; }
 		private:
 			Model* m_Model;
+			Material * m_material;
 			//	std::unordered_map<ComponentType*, Component*>();
 
 		};

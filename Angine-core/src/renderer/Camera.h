@@ -16,6 +16,7 @@ namespace Angine {
 				m_viewMatrix = glm::translate(glm::mat4(), m_localPosition);
 				return m_viewMatrix;
 			}
+			inline glm::vec3 & getPos() { return m_localPosition; };
 		private:
 			glm::vec3 m_localPosition = glm::vec3(0);
 			glm::mat4 m_viewMatrix = glm::mat4(0);

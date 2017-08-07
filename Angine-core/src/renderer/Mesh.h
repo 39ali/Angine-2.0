@@ -17,8 +17,9 @@ namespace Angine {
 			inline GLuint getVAOID() { return m_vaoID; };
 			int m_indicesCount;
 			Material* m_material;
-		///TODO : delete materials?
-			std::vector<Texture2D*>* m_textures;
+			///TODO : delete materials?
+			std::vector<Texture2D*>* m_textures = nullptr;
+			bool hasTextures = false;
 		private:
 			GLuint m_vaoID, m_vioID;
 		};

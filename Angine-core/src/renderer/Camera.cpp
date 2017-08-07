@@ -23,6 +23,14 @@ namespace Angine {
 				m_localPosition.x -= 0.02f;
 			}
 
+			if (Window::getInstance()->isKeyPressed(GLFW_KEY_S))
+			{
+				m_localPosition.z -= 0.02f;
+			}
+			if (Window::getInstance()->isKeyPressed(GLFW_KEY_D))
+			{
+				m_localPosition.z += 0.02f;
+			}
 
 		}
 	}

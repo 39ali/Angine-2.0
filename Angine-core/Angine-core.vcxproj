@@ -19,9 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Angine.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="src\common.h" />
     <ClInclude Include="src\core\Entity.h" />
+    <ClInclude Include="src\ParticleSystem\Cloth.h" />
+    <ClInclude Include="src\ParticleSystem\Constraint.h" />
+    <ClInclude Include="src\ParticleSystem\Particle.h" />
     <ClInclude Include="src\renderer\Camera.h" />
     <ClInclude Include="src\renderer\IRenderable.h" />
     <ClInclude Include="src\renderer\Loader.h" />
@@ -32,6 +36,7 @@
     <ClInclude Include="src\renderer\Shader.h" />
     <ClInclude Include="src\renderer\Texture2D.h" />
     <ClInclude Include="src\renderer\TextureManager.h" />
+    <ClInclude Include="src\renderer\TPScamera.h" />
     <ClInclude Include="src\renderer\VertexData.h" />
     <ClInclude Include="src\renderer\Window.h" />
     <ClInclude Include="src\core\Scene.h" />
@@ -44,6 +49,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\Scene.cpp" />
+    <ClCompile Include="src\ParticleSystem\Cloth.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\Loader.cpp" />
     <ClCompile Include="src\renderer\Material.cpp" />
@@ -51,6 +57,7 @@
     <ClCompile Include="src\renderer\Shader.cpp" />
     <ClCompile Include="src\renderer\Texture2D.cpp" />
     <ClCompile Include="src\renderer\TextureManager.cpp" />
+    <ClCompile Include="src\renderer\TPScamera.cpp" />
     <ClCompile Include="src\renderer\Window.cpp" />
     <ClCompile Include="src\core\Time.cpp" />
     <ClCompile Include="src\Utils\tiny_obj_loader.cc" />
@@ -63,13 +70,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -108,8 +115,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\Output\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\Intermediates\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(ProjectName)\Output\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\$(ProjectName)\Intermediates\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)Deps\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Deps\libs\glew\;$(SolutionDir)Deps\libs\;$(SolutionDir)Deps\libs\FreeImage\;$(SolutionDir)Deps\libs\Assimp\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -118,8 +125,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\Output\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\Intermediates\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(ProjectName)\Output\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\$(ProjectName)\Intermediates\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)Deps\include\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Deps\libs\glew\;$(SolutionDir)Deps\libs\;$(SolutionDir)Deps\libs\FreeImage\;$(SolutionDir)Deps\libs\Assimp\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>

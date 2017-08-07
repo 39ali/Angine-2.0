@@ -5,15 +5,18 @@ namespace Angine {
 
 		bool  Window::m_Keys[MAX_KEYS];
 		bool  Window::m_MouseButtons[MAX_BUTTONS];
-		double Window::mx, Window::my;
+		double Window::mx, Window::my, Window::oldmx, Window::oldmy;
 		bool  Window::m_isclosed;
 		bool Window::m_isInstanciated = false;
 		Window* Window::m_win = nullptr;
-
+		glm::vec3 Window::m_color;
+		int  Window::m_width, Window::m_height;
+		double Window::xoffset, Window::yoffset;
+		double  Window::dx, Window::dy;
 		Window::Window(const unsigned int width, const unsigned int height, const char* title, bool depth) :
-			m_width(width), m_height(height), m_title(title)
+			m_title(title)
 		{
-
+			m_width = width;  m_height = height;
 			for each(auto k in m_Keys)
 			{
 				k = false;
@@ -61,12 +64,14 @@ namespace Angine {
 			glfwSetMouseButtonCallback(m_window, mouse_button_callback);
 			glfwSetKeyCallback(m_window, key_callback);
 			glfwSetWindowCloseCallback(m_window, window_close_callback);
+			glfwSetScrollCallback(m_window, scroll_callback);
 			glfwSwapInterval(1);
 
 		}
 
-		void Window::CreateInstance(const unsigned int width, const unsigned int height, const char* title, bool depth)
+		void Window::CreateInstance(const unsigned int width, const unsigned int height, const char* title, const glm::vec3& color, bool depth)
 		{
+			m_color = color;
 			if (m_isInstanciated) { return; }
 
 			m_isInstanciated = true;
@@ -82,7 +87,7 @@ namespace Angine {
 		void Window::clear()
 		{
 			//	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+			glClearColor(m_color.x, m_color.y, m_color.z, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glfwPollEvents();
 		}
@@ -97,7 +102,7 @@ namespace Angine {
 			return m_Keys[keycode];
 		}
 
-		bool Window::isMouseButtonPressed(unsigned int button)const
+		bool Window::isMouseButtonPressed(unsigned int button)
 		{
 			if (button >= MAX_BUTTONS)
 				return false;
@@ -127,12 +132,25 @@ namespace Angine {
 
 			window->m_Keys[key] = (action != GLFW_RELEASE);
 		}
-
+		static int i = 0;
 		void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 		{
 			Window* win = (Window*)glfwGetWindowUserPointer(window);
-			win->mx = xpos;
-			win->my = ypos;
+			if (i == 0)
+			{
+				i++;
+				win->dx = 0;
+				win->dy = 0;
+				win->mx = xpos;
+				win->my = ypos;
+			}
+			else {
+				win->dx = win->mx - xpos;
+				win->dy = win->my - ypos;
+				win->mx = xpos;
+				win->my = ypos;
+				
+			}
 		}
 
 		void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -147,6 +165,13 @@ namespace Angine {
 		{
 			Window* win = (Window*)glfwGetWindowUserPointer(window);
 			win->m_isclosed = true;
+		}
+
+		void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+		{
+			Window* win = (Window*)glfwGetWindowUserPointer(window);
+			win->xoffset = xoffset;
+			win->yoffset = yoffset;
 		}
 
 

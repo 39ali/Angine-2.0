@@ -1,0 +1,16 @@
+#pragma once
+#include <vector>
+#include "src\core\Entity.h"
+#include "src\renderer\Window.h"
+#include "Time.h"
+#include <string>
+#include "src\renderer/Renderer.h"
+#include "src\renderer/Mesh.h"
+#include "src\renderer/Loader.h"
+#include "src\renderer/Shader.h"
+#include "src\renderer/Texture2D.h"
+#include "src\renderer/Camera.h"
+#include "src\core/Entity.h"
+#include "src\renderer/Model.h"
+#include "src\renderer/TextureManager.h"
+#include "src\core\Scene.h"

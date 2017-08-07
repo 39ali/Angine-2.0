@@ -1,9 +1,8 @@
 #include "game.h"
-#include <iostream>
 
 Game::Game()
-{
-	createWindow(800, 600, "game");
+{//1024x1280 
+	createWindow(1024, 1280, "game");
 };
 Game::~Game() {};
 
@@ -44,21 +43,22 @@ void Game::init()
 
 
 	//"../Models/nanosuit/nanosuit.obj";
-	std::string filename = "../Models/cube.obj";
-	Model*	model1 = Loader::loadModelFromFile(filename);
-	Model* rect = Loader::loadModelFromVertices((const std::vector<VertexData>)v, (const std::vector<unsigned int >)indices);
-	glm::mat4 transform1 = glm::mat4(1.f);//glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)); //* glm::scale(glm::mat4(), glm::vec3(0.3f, 0.3f, 0.3f));
-	entity = new Entity(model1, transform1);
-	glm::mat4 transform2 = glm::translate(glm::mat4(), glm::vec3(0.5f, 0.5f, 0.f)) * glm::scale(glm::mat4(), glm::vec3(4, 4, 0));
-	Entity* entity1 = new Entity(rect, transform2);
-	AddEntity(entity);
+	//std::string filename = "../Models/nanosuit/nanosuit.obj"; ///"../Models/nanosuit/nanosuit.obj";
+	//Model*	model1 = Loader::loadModelFromFile(filename);
+	//Model* cube = Loader::loadModelFromFile("../Models/cube.obj");
+	////	Model* rect = Loader::loadModelFromVertices((const std::vector<VertexData>)v, (const std::vector<unsigned int >)indices);
+	//glm::mat4 transform1 = glm::mat4(1.f);//glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)); //* glm::scale(glm::mat4(), glm::vec3(0.3f, 0.3f, 0.3f));
+	//entity = new Entity(model1, transform1);
+	//glm::mat4 transform2 = glm::translate(glm::mat4(), glm::vec3(5, 2, 0)) * glm::scale(glm::mat4(), glm::vec3(1, 1, 1));
+	////	Entity* entity1 = new Entity(rect, transform2);
+	//	Entity* entity1 = new Entity(cube, transform2);
+	//AddEntity(entity);
 	//AddEntity(entity1);
-
 
 };
 void Game::update()
 {
-	entity->transform = glm::translate(glm::mat4(), glm::vec3(0.2f, 0, 0))*glm::scale(glm::mat4(), glm::vec3(0.5f, 0.5f, 0.5f))* glm::rotate(glm::mat4(), (float)Time::getTime() * glm::radians(45.f), glm::vec3(1, 1, 1));
+	//entity->transform = glm::translate(glm::mat4(), glm::vec3(0.f, -2.0f, 0))*glm::scale(glm::mat4(), glm::vec3(0.5f, 0.5f, 0.5f))* glm::rotate(glm::mat4(), (float)Time::getTime() * glm::radians(45.f), glm::vec3(0, 1, 0));
 };
 void Game::tick()
 {
