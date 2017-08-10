@@ -15,6 +15,8 @@
 #include "../renderer/TextureManager.h"
 #include "../ParticleSystem/Cloth.h"
 #include "../renderer/TPScamera.h"
+#include "../renderer/ModelFactory.h"
+#include "../renderer/FPSCamera.h"
 using namespace Angine::Renderer;
 using namespace Angine::Core;
 namespace Angine {
@@ -35,7 +37,7 @@ namespace Angine {
 			inline const double & getFps()const { return m_fps; };
 			inline const double & getUps()const { return m_ups; };
 			inline void printFpsUps() { std::cout << "fps:: " + std::to_string(getFps()) + "|| ups:: " + std::to_string(getUps()) + "\n" << std::endl; };
-
+			void setCamera(Camera * cam) { m_camera = cam; };
 		private:
 			std::vector<Entity*> m_Entities;
 			Renderer::Window* m_window;
@@ -47,9 +49,9 @@ namespace Angine {
 			Shader* m_particleShader;
 			Texture2D* m_tex;
 			Camera * m_camera;
-			//   Cloth * m_cloth;
+			
 			glm::mat4 projection ;
-			TPScamera tps;
+			
 		public:
 			void start();
 

@@ -7,7 +7,7 @@ namespace Angine {
 		{
 
 			glBindVertexArray(model->getVAOID());
-			glDrawElements(GL_TRIANGLES, model->m_indicesCount, GL_UNSIGNED_INT, NULL);
+			glDrawElements(model->m_drawMode, model->m_indicesCount, GL_UNSIGNED_INT, NULL);
 			glBindVertexArray(0);
 
 		}

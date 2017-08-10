@@ -10,8 +10,8 @@ namespace Angine {
 		Scene::~Scene()
 		{
 			delete m_renderer;
+			delete m_camera;
 
-			delete m_particleShader;
 			TextureManager::Clean();
 		}
 
@@ -19,15 +19,16 @@ namespace Angine {
 
 		void Scene::render()
 		{
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			for each (auto entity in m_Entities)
 			{
 
 				Material * mat = entity->getMaterial();
 				mat->use();
-				mat->setUniform("projectionView", tps.getMatrix());
-				mat->setUniform("model", model);
-				mat->setUniform("cameraPos", tps.getPos());
-				mat->setUniform("lightPos", glm::vec3(5, 2, 0));
+				mat->setUniform("projectionView", m_camera->getPorjection() *m_camera->getMatrix());
+				mat->setUniform("model", entity->transform);
+				mat->setUniform("cameraPos", m_camera->getPos());
+				mat->setUniform("lightPos", glm::vec3(7, 0,3));
 				for each (Mesh*  mesh in entity->getModel()->m_meshes)
 				{
 					if (!mesh->hasTextures)
@@ -58,7 +59,7 @@ namespace Angine {
 			}
 
 
-			//			m_staticShader->unuse();
+
 
 		}
 		void Scene::tick()
@@ -75,8 +76,8 @@ namespace Angine {
 			while (!m_window->isClosed())
 			{
 				m_window->clear();
-				render();
 				onRender();
+				render();
 				if (Time::getTime() - initialTime >= 1) // 1 sec has passed
 				{
 					tick();
@@ -116,22 +117,14 @@ namespace Angine {
 		void Scene::internalInit()
 		{
 			m_renderer = new Renderer::Renderer();
-
-			//	m_staticShader = new Shader("../Shaders/BasicShader.vs.txt", "../Shaders/BasicShader.fs.txt");
-			m_particleShader = new Shader("../Shaders/particles.vs", "../Shaders/particles.fs");
 			m_tex = TextureManager::LoadTexture("../Textures/body_showroom_spec.png");//TextureManager::LoadTexture("../Textures/hand_showroom_ddn.png");// // 
-			m_camera = new Camera(glm::vec3(0, 0, -10.0f));
-			projection = glm::perspective(glm::radians(65.f), ((float)m_window->getWidth() / (float)m_window->getHeight()), 0.1f, 1000.0f);
-			tps = TPScamera(glm::vec3(0, 0, 0), projection);
-			//	m_cloth = new Cloth(14, 14, 50, 50);
+
 		}
 
 		void Scene::internalUpdate()
 		{
 			m_camera->update();
-			tps.update();
-			//m_cloth->AddWindForce(glm::vec3(0.7f, 0.0f, 0.2f)*(float)(TIME_STEPSIZE2));
-			//m_cloth->update();		
+
 		}
 
 

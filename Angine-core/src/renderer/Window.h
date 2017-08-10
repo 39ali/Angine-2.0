@@ -22,13 +22,16 @@ namespace Angine {
 			inline bool isClosed()const { return m_isclosed; };
 			void update();
 			void clear();
-			bool isKeyPressed(unsigned int keycode)const;
+			bool static isKeyPressed(unsigned int keycode);
 			static bool isMouseButtonPressed(unsigned int keycode);
 			void static  getMousePos(double& x, double& y) { x = mx; y = my; };
 			double static getDx() { return dx; }
+
 			double static getDy() { return dy; }
+
 			void static  getMouseScroll(double& x, double& y) { x = xoffset; y = yoffset; yoffset = xoffset = 0; };
-			void Window::disableCursor()const;
+			void   Window::disableCursor(bool b)const;
+
 		private:
 			Window(const unsigned int width, const unsigned int height, const char* title, bool depth);
 			GLFWwindow* m_window;
@@ -36,9 +39,8 @@ namespace Angine {
 			const char* m_title;
 			static bool m_Keys[MAX_KEYS];
 			static bool m_MouseButtons[MAX_BUTTONS];
-			static double mx, my , oldmx, oldmy;
+			static double mx, my, oldmx, oldmy, dy, dx;
 			static double  xoffset, yoffset;//mouse wheel delta
-			static double dx, dy;
 			static bool m_isclosed;
 			static bool m_isInstanciated;
 			static Window* m_win;

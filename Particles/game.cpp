@@ -20,6 +20,10 @@ glm::vec2 Game::getNormalizedDeviceCoords(double& x, double& y)
 
 void Game::init()
 {
+	glm::mat4 projection = glm::perspective(glm::radians(65.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
+	TPScamera*	tps = new  TPScamera(glm::vec3(0, 0, 0), projection);
+	setCamera(tps);
+
 	m_shader = new Shader("Shaders/particle.vs", "Shaders/particle.fs");
 	m_computeShader = new Shader("Shaders/particle.cs");
 	m_nParticles = glm::ivec3(100, 100, 100);
@@ -27,7 +31,7 @@ void Game::init()
 	initbuffers();
 
 	m_shader->use();
-	glm::mat4 projection =glm::perspective(glm::radians(50.0f), (float)m_width / m_height, 0.1f, 100.0f);
+	//glm::mat4 projection =glm::perspective(glm::radians(50.0f), (float)m_width / m_height, 0.1f, 100.0f);
 	m_shader->setUniform("projection", projection);
 	glm::mat4 view = glm::lookAt(glm::vec3(2, 0, 20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	m_shader->setUniform("view", view);

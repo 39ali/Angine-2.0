@@ -4,34 +4,16 @@ namespace Angine {
 	namespace Renderer {
 
 
-		Camera::Camera(const glm::vec3& pos)
+		Camera::Camera(const glm::mat4& projection) :m_projection(projection), m_position(glm::vec3(0))
 		{
+			m_yaw = 2.4f;
+			m_pitch = 0.7f;
+			 m_roll = 0;
 
-			m_localPosition = pos;
 		};
 
 		Camera::~Camera() {}
 
-		void Camera::update()
-		{
-			if (Window::getInstance()->isKeyPressed(GLFW_KEY_D))
-			{
-				m_localPosition.x += 0.02f;
-			}
-			if (Window::getInstance()->isKeyPressed(GLFW_KEY_A))
-			{
-				m_localPosition.x -= 0.02f;
-			}
 
-			if (Window::getInstance()->isKeyPressed(GLFW_KEY_S))
-			{
-				m_localPosition.z -= 0.02f;
-			}
-			if (Window::getInstance()->isKeyPressed(GLFW_KEY_D))
-			{
-				m_localPosition.z += 0.02f;
-			}
-
-		}
 	}
 }

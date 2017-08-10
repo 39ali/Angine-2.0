@@ -80,6 +80,11 @@ namespace Angine {
 
 		void Window::update()
 		{
+			dx = oldmx - mx;
+			dy = oldmy - my;
+			oldmx = mx;
+			oldmy = my;
+
 			glfwSwapBuffers(m_window);
 			Core::Time::updateTime(glfwGetTime());
 			Core::Time::updateFps(glfwGetTime());
@@ -110,9 +115,12 @@ namespace Angine {
 			return m_MouseButtons[button];
 		}
 
-		void Window::disableCursor()const
+		void Window::disableCursor(bool b)const
 		{
-			glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			if (b == true)
+				glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			else
+				glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}
 
 
@@ -139,17 +147,14 @@ namespace Angine {
 			if (i == 0)
 			{
 				i++;
-				win->dx = 0;
-				win->dy = 0;
+				win->oldmx = xpos;
+				win->oldmy = xpos;
 				win->mx = xpos;
 				win->my = ypos;
 			}
 			else {
-				win->dx = win->mx - xpos;
-				win->dy = win->my - ypos;
 				win->mx = xpos;
 				win->my = ypos;
-				
 			}
 		}
 

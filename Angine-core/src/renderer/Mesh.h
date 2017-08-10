@@ -9,13 +9,15 @@ namespace Angine {
 
 		class Mesh {
 		public:
-			Mesh(GLuint vaoID, int indicesCount, GLuint vioID) {
+			Mesh(GLuint vaoID, int indicesCount, GLuint vioID , int drawMode = GL_TRIANGLES) {
 				m_vaoID = vaoID; m_indicesCount = indicesCount;
 				m_vioID = vioID;
+				m_drawMode = drawMode;
 			}
 			~Mesh() {}
 			inline GLuint getVAOID() { return m_vaoID; };
 			int m_indicesCount;
+			int m_drawMode;
 			Material* m_material;
 			///TODO : delete materials?
 			std::vector<Texture2D*>* m_textures = nullptr;
