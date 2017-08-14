@@ -33,6 +33,43 @@ namespace Angine {
 			//delete[] data;  // TODO: figure out how to delete this  .
 		}
 
+		Texture2D* TextureManager::LoadCubeMap(const std::vector<std::string>& faces)
+		{
+		
+			Texture2D* texture = new Texture2D();
+			glGenTextures(1, &texture->m_texID);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_texID);
+
+			unsigned int  BPP;
+			for (unsigned int i = 0; i < faces.size(); i++)
+			{
+				BYTE* data = Utils::imageLoader(faces[i].c_str(), texture->m_width, texture->m_height, BPP);
+				if (data)
+				{
+					if (BPP == 24) {
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, texture->m_width, texture->m_height, 0, GL_BGR, GL_UNSIGNED_BYTE, data);
+					}
+					else if (BPP == 32)
+					{
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGBA, texture->m_width, texture->m_height, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
+					}
+				}
+				else
+				{
+					std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+					
+				}
+			}
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+			m_textures.insert({ faces[0], texture });
+			return texture;
+
+		}
+
 		void TextureManager::Clean()
 		{
 			for each (auto texture in m_textures)

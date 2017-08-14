@@ -12,6 +12,7 @@ namespace Angine {
 			template<typename T>
 			void setUniform(const std::string& name, const T& value)
 			{
+				m_shader->use();
 				m_shader->setUniform(name.c_str(), value);
 			}
 

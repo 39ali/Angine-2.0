@@ -1,22 +1,8 @@
 ﻿  game.cpp
 c:\dev\angine 2.0\angine-core\src\utils\reader.h(8): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
-c:\dev\angine 2.0\cloth-simulation\sphere.h(15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\sphere.h(15): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\sphere.h(16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\sphere.h(16): warning C4244: 'initializing': conversion from 'double' to 'const float', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\sphere.h(25): warning C4018: '<': signed/unsigned mismatch
-c:\dev\angine 2.0\cloth-simulation\sphere.h(44): warning C4018: '<': signed/unsigned mismatch
-c:\dev\angine 2.0\cloth-simulation\game.cpp(49): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\game.cpp(79): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\game.cpp(80): warning C4244: 'argument': conversion from 'float' to 'unsigned int', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\game.cpp(159): warning C4244: 'argument': conversion from 'float' to 'GLuint', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\game.cpp(172): warning C4244: 'argument': conversion from 'double' to 'GLint', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\game.cpp(182): warning C4244: 'argument': conversion from 'float' to 'GLuint', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\game.cpp(241): warning C4244: 'argument': conversion from 'float' to 'GLuint', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\game.cpp(252): warning C4244: 'argument': conversion from 'float' to 'GLuint', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\game.cpp(288): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
-c:\dev\angine 2.0\cloth-simulation\game.cpp(293): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
-c:\dev\angine 2.0\angine-core\src\core\scene.h(38): warning C4172: returning address of local variable or temporary
-c:\dev\angine 2.0\angine-core\src\core\scene.h(37): warning C4172: returning address of local variable or temporary
+c:\dev\angine 2.0\cloth-simulation\game.cpp(82): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\dev\angine 2.0\cloth-simulation\game.cpp(87): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\dev\angine 2.0\angine-core\src\core\scene.h(43): warning C4172: returning address of local variable or temporary
+c:\dev\angine 2.0\angine-core\src\core\scene.h(42): warning C4172: returning address of local variable or temporary
   Cloth-Simulation.vcxproj -> C:\Dev\Angine 2.0\bin\Cloth-Simulation\Output\Debug\Cloth-Simulation.exe

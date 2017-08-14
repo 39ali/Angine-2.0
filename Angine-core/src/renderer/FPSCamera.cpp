@@ -6,11 +6,13 @@ namespace Angine
 	{
 
 		FPSCamera::FPSCamera(const glm::mat4& projection) :Camera(projection), m_speed(10), m_sprintSpeed(m_speed * 3), m_MouseSensitivity(2)
+			
 		{
 			Window::getInstance()->disableCursor(true);
 			m_forward = glm::vec3(0, 0, -1);
 			m_right = glm::vec3(1, 0, 0);
 			m_up = glm::vec3(0, 1, 0);
+			m_position = glm::vec3(0, 0, 10);
 		}
 
 		void  FPSCamera::update()
@@ -18,6 +20,12 @@ namespace Angine
 
 			m_yaw -= Window::getDx() * m_MouseSensitivity * Time::getDeltaTime();
 			m_pitch += Window::getDy() * m_MouseSensitivity * Time::getDeltaTime();
+
+			if (m_pitch > 89.0f)
+				m_pitch = 89.0f;
+			if (m_pitch < -89.0f)
+				m_pitch = -89.0f;
+
 
 			m_forward.y = glm::sin(glm::radians(m_pitch));
 			m_forward.x = glm::cos(glm::radians(m_pitch))*glm::cos(glm::radians(m_yaw));

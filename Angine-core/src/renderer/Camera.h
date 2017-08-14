@@ -16,6 +16,8 @@ namespace Angine {
 
 			inline glm::vec3 & getPos() { return m_position; };
 			const glm::mat4 & getPorjection() { return m_projection; };
+			const glm::vec3 & getRight() { return m_right; };
+			
 		protected:
 			float m_pitch, m_yaw, m_roll;
 			float m_distanceFromTarget = 50.0f;
@@ -23,7 +25,7 @@ namespace Angine {
 			glm::vec3 m_position;
 			glm::mat4 m_viewMatrix;
 			glm::mat4 m_projection;
-
+			glm::vec3 m_forward, m_right, m_up;
 		};
 	}
 }

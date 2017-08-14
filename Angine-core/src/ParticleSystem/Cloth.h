@@ -1,40 +1,38 @@
 #pragma once
-#include "Particle.h"
-#include "Constraint.h"
-#define STATIC_GLEW
-#include <glew\glew.h>
-class Cloth
+#include "../common.h"
+#include "../renderer/Shader.h"
+#include "../renderer/Texture2D.h"
+#include "../renderer/Camera.h"
+#define PRIMITIVE_RESTART 0xffffff
+using namespace Angine::Renderer;
+namespace Angine
 {
-public:
-	Cloth() {};
-	Cloth(float width, float height, int width_particles, int height_particlesd);
-	~Cloth() {};
-	void draw();
-	void AddWindForce(const glm::vec3& direction);
-	void update();
-
-private:
-
-	int m_width_particles;
-	int m_height_particles;
-	std::vector<Particle> m_particles;
-	std::vector<Constraint> m_constraints;
-	std::vector<glm::vec3>m_vertices;
-	std::vector<glm::vec3>m_normals;
-	std::vector<glm::vec2> m_textureCoords;
-	std::vector<unsigned int > m_indices;
-	GLuint m_vao;
-	GLuint m_vbo;
-	GLuint m_ibo;
-	GLuint m_normalVo;
-
-private:
-	Particle* getParticle(const int x, const int y) { return &m_particles[y*m_width_particles + x]; }
-	void makeConstraint(Particle *p1, Particle *p2) { m_constraints.push_back(Constraint(p1, p2)); }
-	void init();
-
-	void addWindForcesForTriangle(Particle *p1, Particle *p2, Particle *p3, const glm::vec3&direction);
-	glm::vec3 calcTriangleNormal(Particle *p1, Particle *p2, Particle *p3);
-	void bindBufferData();
-	void calcNewNormals();
-};
+	namespace ParticleSystem {
+		class Cloth
+		{
+		public:
+			Cloth(const glm::vec2 &particlesNum, const glm::vec2 &clothSize, const glm::mat4  &model, Texture2D * tex);
+			~Cloth();
+			void render(Camera* cam);
+			void updateSphere(const glm::vec3& pos, float radius);
+			void mousePicker(Camera * cam);
+			void setLightPos(const glm::vec3& pos) {
+				m_shader->use();
+				m_shader->setUniform("lightPos", pos);
+				m_shader->unuse();
+			}
+		private:
+			glm::vec2 m_particlesNum, m_clothSize;
+			GLuint m_pos[2], m_vel[2], m_normal, m_texCoords, m_indices, m_vao;
+			unsigned int m_elementNum;
+			Shader* m_shader, *m_computeCloth, *m_computeNormals;
+			GLuint swap = 0;
+			glm::mat4 m_clothModel;
+			Texture2D* m_Tex;
+			std::vector<glm::vec4> m_positions;
+			glm::mat4 m_model = glm::translate(glm::mat4(), glm::vec3(0, 0, 0));
+		private:
+			void initBuffers();
+		};
+	}
+}

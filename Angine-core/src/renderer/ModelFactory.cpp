@@ -28,7 +28,7 @@ namespace Angine
 				float const y = sin(-M_PI_2 + M_PI * r * R);
 				float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
 				float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
-				VertexData vertex; 
+				VertexData vertex;
 				vertex.uv.x = s*S;
 				vertex.uv.y = r*R;
 				/**t++ = s*S;
@@ -37,16 +37,16 @@ namespace Angine
 				vertex.position.x = x * radius;
 				vertex.position.y = y * radius;
 				vertex.position.z = z * radius;
-			/*	*v++ = x * radius;
-				*v++ = y * radius;
-				*v++ = z * radius;*/
+				/*	*v++ = x * radius;
+					*v++ = y * radius;
+					*v++ = z * radius;*/
 
-				/**n++ = x;
-				*n++ = y;
-				*n++ = z;*/
+					/**n++ = x;
+					*n++ = y;
+					*n++ = z;*/
 
 				vertex.normal.x = x;
-				vertex.normal.y= y;
+				vertex.normal.y = y;
 				vertex.normal.z = z;
 				_data.push_back(vertex);
 			}
@@ -80,92 +80,48 @@ namespace Angine
 			glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, normal));
 			glEnableVertexAttribArray(2);
 			glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, uv));
-			Mesh * mesh = new Mesh(sphereVAO, indices.size()/4 , ebo, GL_QUADS);
+			
+			Mesh * mesh = new Mesh(sphereVAO, indices.size() / 4, ebo, GL_QUADS);
 			m->m_meshes.push_back(mesh);
 			return m;
 
 
 		}
 
-		//Model* ModelFactory::createSphere(unsigned int X_SEGMENTS, unsigned int Y_SEGMENTS, float  radius)
-		//{
-		//	unsigned int sphereVAO = 0;
-		//	int indexCount;
-		//	glGenVertexArrays(1, &sphereVAO);
 
-		//	unsigned int vbo, ebo;
-		//	glGenBuffers(1, &vbo);
-		//	glGenBuffers(1, &ebo);
+		Model* ModelFactory::createPlane()
+		{
+			float planeVertices[] = {
+				// positions            // normals         // texcoords
+				10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+				-10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+				-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
 
-		//	std::vector<VertexData> _data;
+				10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+				-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+				10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
+			};
+			// plane VAO
+			unsigned int planeVAO, planeVBO;
+			glGenVertexArrays(1, &planeVAO);
+			glGenBuffers(1, &planeVBO);
+			glBindVertexArray(planeVAO);
+			glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+			glEnableVertexAttribArray(0);
+			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+			glEnableVertexAttribArray(1);
+			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+			glEnableVertexAttribArray(2);
+			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+			glBindVertexArray(0);
 
-		//	std::vector<unsigned int> indices;
+			Model * m = new Model();
+			Mesh * mesh = new Mesh(planeVAO,6, -1, GL_TRIANGLES);
+			m->m_meshes.push_back(mesh);
+			return m;
 
-
-		//	const float PI = 3.14159265359;
-		//	for (unsigned int y = 0; y <= Y_SEGMENTS; ++y)
-		//	{
-		//		for (unsigned int x = 0; x <= X_SEGMENTS; ++x)
-		//		{
-		//			float xSegment = (float)x / (float)X_SEGMENTS;
-		//			float ySegment = (float)y / (float)Y_SEGMENTS;
-		//			float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
-		//			float yPos = std::cos(ySegment * PI);
-		//			float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
-		//			VertexData data;
-		//			data.position = glm::vec3(xPos*radius, yPos*radius, zPos*radius);
-		//			data.uv = glm::vec2(xSegment, ySegment);
-		//			data.normal = glm::vec3(xPos*radius, yPos*radius, zPos*radius);
-		//			_data.push_back(data);
-		//		}
-		//	}
-
-		//	bool oddRow = false;
-		//	for (int y = 0; y < Y_SEGMENTS; ++y)
-		//	{
-		//		if (!oddRow) // even rows: y == 0, y == 2; and so on
-		//		{
-		//			for (int x = 0; x <= X_SEGMENTS; ++x)
-		//			{
-		//				indices.push_back(y       * (X_SEGMENTS + 1) + x);
-		//				indices.push_back((y + 1) * (X_SEGMENTS + 1) + x);
-		//			}
-		//		}
-		//		else
-		//		{
-		//			for (int x = X_SEGMENTS; x >= 0; --x)
-		//			{
-		//				indices.push_back((y + 1) * (X_SEGMENTS + 1) + x);
-		//				indices.push_back(y       * (X_SEGMENTS + 1) + x);
-		//			}
-		//		}
-		//		oddRow = !oddRow;
-		//	}
-		//	indexCount = indices.size();
-
-
-
-		//	Model * m = new Model();
-
-		//	glBindVertexArray(sphereVAO);
-		//	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		//	glBufferData(GL_ARRAY_BUFFER, _data.size() * sizeof(float), _data.data(), GL_STATIC_DRAW);
-		//	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-		//	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-
-		//	glEnableVertexAttribArray(0);
-		//	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, position));
-		//	glEnableVertexAttribArray(1);
-		//	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, normal));
-		//	glEnableVertexAttribArray(2);
-		//	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, uv));
-		//	Mesh * mesh = new Mesh(sphereVAO, indexCount, ebo, GL_TRIANGLE_STRIP);
-		//	m->m_meshes.push_back(mesh);
-		//	return m;
-		//	//	glBindVertexArray(sphereVAO);
-		//	//	glDrawElements(GL_TRIANGLE_STRIP, indexCount, GL_UNSIGNED_INT, 0);
-		//}
-
+		}
 
 	}
 }

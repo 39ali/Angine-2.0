@@ -24,8 +24,6 @@
     <ClInclude Include="src\common.h" />
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\ParticleSystem\Cloth.h" />
-    <ClInclude Include="src\ParticleSystem\Constraint.h" />
-    <ClInclude Include="src\ParticleSystem\Particle.h" />
     <ClInclude Include="src\renderer\Camera.h" />
     <ClInclude Include="src\renderer\FPSCamera.h" />
     <ClInclude Include="src\renderer\IRenderable.h" />
@@ -36,6 +34,7 @@
     <ClInclude Include="src\renderer\ModelFactory.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
+    <ClInclude Include="src\renderer\SkyBox.h" />
     <ClInclude Include="src\renderer\Texture2D.h" />
     <ClInclude Include="src\renderer\TextureManager.h" />
     <ClInclude Include="src\renderer\TPScamera.h" />
@@ -59,6 +58,7 @@
     <ClCompile Include="src\renderer\ModelFactory.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\renderer\Shader.cpp" />
+    <ClCompile Include="src\renderer\SkyBox.cpp" />
     <ClCompile Include="src\renderer\Texture2D.cpp" />
     <ClCompile Include="src\renderer\TextureManager.cpp" />
     <ClCompile Include="src\renderer\TPScamera.cpp" />

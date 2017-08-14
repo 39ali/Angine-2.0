@@ -1,222 +1,255 @@
 #include "Cloth.h"
 
 
-Cloth::Cloth(float width, float height, int width_particles, int height_particles) :m_width_particles(width_particles), m_height_particles(height_particles)
+namespace Angine
 {
-	m_particles.resize(width_particles*height_particles);
-
-	int count = m_width_particles* m_height_particles;
-	m_vertices.resize(count);
-	m_textureCoords.resize(count);
-	m_normals.resize(count);
-	m_indices.resize(6 * (m_width_particles - 1)*(m_height_particles - 1));
+	namespace ParticleSystem {
 
 
-	for (int x = 0; x < m_width_particles; x++)
-	{
-		for (int y = 0; y < m_height_particles; y++)
+		Cloth::Cloth(const glm::vec2 &particlesNum, const glm::vec2 &clothSize, const glm::mat4 &model, Texture2D * tex) :
+			m_particlesNum(particlesNum), m_clothSize(clothSize), m_model(model), m_Tex(tex)
+
 		{
-			glm::vec3 pos = glm::vec3(width*(x / (float)m_width_particles), -height*(y / (float)m_height_particles), 0);
-			m_vertices[y*m_width_particles + x] = pos;
-			m_particles[y*m_width_particles + x] = Particle(pos);
+			glEnable(GL_PRIMITIVE_RESTART);
+			glPrimitiveRestartIndex(PRIMITIVE_RESTART);
+			m_shader = new Shader("../Shaders/Cloth/cloth.vs", "../Shaders/Cloth/cloth.fs");
+			m_computeCloth = new Shader("../Shaders/Cloth/cloth.cs");
+			m_computeNormals = new Shader("../Shaders/Cloth/normal.cs");
+
+			m_computeCloth->use();
+			float dx = m_clothSize.x / (m_particlesNum.x - 1);
+			float dy = m_clothSize.y / (m_particlesNum.y - 1);
+			m_computeCloth->setUniform("RestLengthHoriz", dx);
+			m_computeCloth->setUniform("RestLengthVert", dy);
+			m_computeCloth->setUniform("RestLengthDiag", sqrtf(dx * dx + dy * dy));
+
+
+			initBuffers();
 		}
 
-	}
 
-
-	int pointer = 0;
-	for (int gz = 0; gz < m_height_particles - 1; gz++) {
-		for (int gx = 0; gx < m_width_particles - 1; gx++) {
-			int topLeft = (gz*m_width_particles) + gx;
-			int topRight = topLeft + 1;
-			int bottomLeft = ((gz + 1)*m_width_particles) + gx;
-			int bottomRight = bottomLeft + 1;
-			m_indices[pointer++] = topLeft;
-			m_indices[pointer++] = bottomLeft;
-			m_indices[pointer++] = topRight;
-			m_indices[pointer++] = topRight;
-			m_indices[pointer++] = bottomLeft;
-			m_indices[pointer++] = bottomRight;
-		}
-	}
-
-	// Connecting immediate neighbor particles with constraints (distance 1 and sqrt(2) in the grid)
-	for (int x = 0; x < width_particles; x++)
-	{
-		for (int y = 0; y < m_height_particles; y++)
+		void Cloth::initBuffers()
 		{
-			if (x < width_particles - 1) makeConstraint(getParticle(x, y), getParticle(x + 1, y));
-			if (y < height_particles - 1) makeConstraint(getParticle(x, y), getParticle(x, y + 1));
-			if (x < width_particles - 1 && y < height_particles - 1) makeConstraint(getParticle(x, y), getParticle(x + 1, y + 1));
-			if (x < width_particles - 1 && y < height_particles - 1) makeConstraint(getParticle(x + 1, y), getParticle(x, y + 1));
+			std::vector<glm::vec4> vel(m_particlesNum.x*m_particlesNum.y, glm::vec4(0));
+			std::vector<glm::vec2> texCoords;
+			std::vector<unsigned int>indices;
+			float dx = m_clothSize.x / (m_particlesNum.x - 1);
+			float dy = m_clothSize.y / (m_particlesNum.y - 1);
+
+			float ds = 1.0f / (m_particlesNum.x - 1);
+			float dt = 1.0f / (m_particlesNum.y - 1);
+
+			glm::vec4 p(0.0f, 0.0f, 0.0f, 1.0f);
+			glm::vec2 texc;
+			for (int y = 0; y < m_particlesNum.y; y++)
+			{
+				for (int x = 0; x < m_particlesNum.x; x++)
+				{
+					p.x = dx*x;
+					p.y = dy*y;
+					m_positions.push_back(m_model*p);
+
+					texc.x = x*ds;
+					texc.y = dt*y;
+					texCoords.push_back(texc);
+				}
+			}
+
+			//indices
+			for (int y = 0; y < m_particlesNum.y - 1; y++)
+			{
+				for (int x = 0; x < m_particlesNum.x; x++)
+				{
+					indices.push_back((y + 0)*m_particlesNum.x + x);
+					indices.push_back((y + 1)*m_particlesNum.x + x);
+				}
+				indices.push_back(PRIMITIVE_RESTART);
+			}
+			m_elementNum = indices.size();
+
+
+			GLuint bufs[7];
+			glGenBuffers(7, bufs);
+			m_pos[0] = bufs[0];
+			m_pos[1] = bufs[1];
+			m_vel[0] = bufs[2];
+			m_vel[1] = bufs[3];
+			m_normal = bufs[4];
+			m_indices = bufs[5];
+			m_texCoords = bufs[6];
+
+
+
+
+			unsigned int size = sizeof(glm::vec4)*m_positions.size();
+
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_pos[0]);
+			glBufferData(GL_SHADER_STORAGE_BUFFER, size, m_positions.data(), GL_DYNAMIC_DRAW);
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_pos[1]);
+			glBufferData(GL_SHADER_STORAGE_BUFFER, size, m_positions.data(), GL_DYNAMIC_DRAW);
+
+
+			//vel
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, m_vel[0]);
+			glBufferData(GL_SHADER_STORAGE_BUFFER, size, NULL, GL_DYNAMIC_COPY);
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, m_vel[1]);
+			glBufferData(GL_SHADER_STORAGE_BUFFER, size, NULL, GL_DYNAMIC_COPY);
+
+			//normal 
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 4, m_normal);
+			glBufferData(GL_SHADER_STORAGE_BUFFER, size, NULL, GL_DYNAMIC_COPY);
+
+			//indices
+			glBindBuffer(GL_ARRAY_BUFFER, m_indices);
+			glBufferData(GL_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_DYNAMIC_COPY);
+
+
+			// Texcoord
+			glBindBuffer(GL_ARRAY_BUFFER, m_texCoords);
+			glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(glm::vec2), texCoords.data(), GL_STATIC_DRAW);
+
+
+			glGenVertexArrays(1, &m_vao);
+			glBindVertexArray(m_vao);
+			glBindBuffer(GL_ARRAY_BUFFER, m_pos[0]);
+			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(0);
+
+			glBindBuffer(GL_ARRAY_BUFFER, m_normal);
+			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(1);
+
+			glBindBuffer(GL_ARRAY_BUFFER, m_texCoords);
+			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(2);
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indices);
+			glBindVertexArray(0);
 		}
-	}
 
 
-	// Connecting secondary neighbors with constraints (distance 2 and sqrt(4) in the grid)
-	for (int x = 0; x < width_particles; x++)
-	{
-		for (int y = 0; y < height_particles; y++)
+		void Cloth::render(Camera* cam)
 		{
-			if (x < width_particles - 2) makeConstraint(getParticle(x, y), getParticle(x + 2, y));
-			if (y < height_particles - 2) makeConstraint(getParticle(x, y), getParticle(x, y + 2));
-			if (x < width_particles - 2 && y < height_particles - 2) makeConstraint(getParticle(x, y), getParticle(x + 2, y + 2));
-			if (x < width_particles - 2 && y < height_particles - 2) makeConstraint(getParticle(x + 2, y), getParticle(x, y + 2));
+
+			m_computeCloth->use();
+			for (int i = 0; i < 2000; i++)
+			{
+				glDispatchCompute(m_particlesNum.x / 10, m_particlesNum.y / 10, 1);//how many work groups
+				glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+				swap = 1 - swap;
+				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, m_pos[swap]);
+				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, m_pos[1 - swap]);
+				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, m_vel[swap]);
+				glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 3, m_vel[1 - swap]);
+			}
+
+			m_computeNormals->use();
+			glDispatchCompute(m_particlesNum.x / 10, m_particlesNum.y / 10, 1);
+			glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+			m_shader->use();
+			glActiveTexture(GL_TEXTURE0);
+			m_Tex->bind();
+			m_shader->setUniform("view", cam->getMatrix());
+			m_shader->setUniform("model", glm::mat4(1));
+			m_shader->setUniform("projection", cam->getPorjection());
+
+			m_shader->setUniform("diffuseMap", 0);
+			m_shader->setUniform("cameraPos", cam->getPos());
+
+
+		
+			glBindVertexArray(m_vao);
+			glDrawElements(GL_TRIANGLE_STRIP, m_elementNum, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
+
+
 		}
-	}
 
 
-	// making the upper left most three and right most three particles unmovable
-	for (int i = 0; i < 3; i++)
-	{
-		getParticle(0 + i, 0)->offsetPos(glm::vec3(0.5, 0.0, 0.0)); // 
-		getParticle(0 + i, 0)->makeUnmovable();
-
-		getParticle(0 + i, 0)->offsetPos(glm::vec3(-0.5, 0.0, 0.0)); // 
-		getParticle(width_particles - 1 - i, 0)->makeUnmovable();
-	}
-	init();
-}
-
-
-
-
-
-void Cloth::init()
-{
-	glGenVertexArrays(1, &m_vao);
-	glGenBuffers(1, &m_vbo);
-	glGenBuffers(1, &m_ibo);
-	glGenBuffers(1, &m_normalVo);
-	glBindVertexArray(m_vao);
-
-	//vbo
-	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-	glBufferData(GL_ARRAY_BUFFER, m_vertices.size()* sizeof(glm::vec3), NULL, GL_DYNAMIC_DRAW);
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	//normals
-	glBindBuffer(GL_ARRAY_BUFFER, m_normalVo);
-	glBufferData(GL_ARRAY_BUFFER, m_indices.size()* sizeof(glm::vec3), NULL, GL_DYNAMIC_DRAW);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-	//ibo
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ibo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size()* sizeof(unsigned int), m_indices.data(), GL_STATIC_DRAW);
-
-	
-
-	glBindVertexArray(0);
-}
-
-
-void Cloth::bindBufferData()
-{
-	for (int i = 0; i < m_particles.size(); i++)
-	{
-		Particle& p =  m_particles[i];
-		m_vertices[i] = m_particles[i].getPos();
-		m_normals[i] = p.getNormal();
-	}
-	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, m_vertices.size()* sizeof(glm::vec3), m_vertices.data());
-
-	glBindBuffer(GL_ARRAY_BUFFER, m_normalVo);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, m_normals.size()* sizeof(glm::vec3), m_normals.data());
-
-}
-
-void Cloth::draw()
-{
-	glBindVertexArray(m_vao);
-	bindBufferData();
-	//glDrawArrays(GL_TRIANGLES, 0, m_width_particles*m_height_particles*0.5f);
-	glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-}
-
-
-
-
-void Cloth::AddWindForce(const glm::vec3& direction)
-{
-	for (int x = 0; x < m_width_particles - 1; x++)
-	{
-		for (int y = 0; y < m_height_particles - 1; y++)
+		void Cloth::updateSphere(const glm::vec3& pos, float radius)
 		{
-			Particle * p1 = getParticle(x + 1, y);
-			Particle * p2 = getParticle(x, y);
-			Particle * p3 = getParticle(x, y + 1);
-			addWindForcesForTriangle(p1, p2, p3, direction);
-			addWindForcesForTriangle(getParticle(x + 1, y + 1), getParticle(x + 1, y), getParticle(x, y + 1), direction);
+			m_computeCloth->use();
+			m_computeCloth->setUniform("SphereR", radius);
+			m_computeCloth->setUniform("SpherePos", pos);
+
 		}
-	}
-}
-void Cloth::addWindForcesForTriangle(Particle *p1, Particle *p2, Particle *p3, const glm::vec3& direction)
-{
-	glm::vec3 normal = calcTriangleNormal(p1, p2, p3);
-	glm::vec3 d = glm::normalize(normal);
-	glm::vec3 force = normal*(glm::dot(d, direction));
-	p1->addForce(force);
-	p2->addForce(force);
-	p3->addForce(force);
-}
 
-glm::vec3 Cloth::calcTriangleNormal(Particle *p1, Particle *p2, Particle *p3)
-{
-	glm::vec3& pos1 = p1->getPos();
-	glm::vec3& pos2 = p2->getPos();
-	glm::vec3& pos3 = p3->getPos();
-
-	glm::vec3 v1 = pos2 - pos1;
-	glm::vec3& v2 = pos3 - pos1;
-
-	return glm::cross(v1, v2);
-}
-
-void Cloth::calcNewNormals()
-{
-
-	for (int x = 0; x < m_width_particles - 1; x++)
-	{
-		for (int y = 0; y < m_width_particles - 1; y++)
+		int selected = -1;
+		void Cloth::mousePicker(Camera * cam)
 		{
-			Particle* p1 = getParticle(x, y);
-			Particle* p2 = getParticle(x, y + 1);
-			Particle* p3 = getParticle(x + 1, y);
 
-			glm::vec3 normal = calcTriangleNormal(p1, p2, p3);
-			p1->addToNormal(normal);
-			p2->addToNormal(normal);
-			p3->addToNormal(normal);
+			if (Window::isMouseButtonPressed(GLFW_MOUSE_BUTTON_1)) {
 
-			p1 = getParticle(x + 1, y + 1);
-			normal = calcTriangleNormal(p3, p2, p1);
-			p1->addToNormal(normal);
-			p2->addToNormal(normal);
-			p3->addToNormal(normal);
 
+				if (selected != -1)
+				{
+					const glm::vec3 & right = cam->getRight();
+					m_computeCloth->use();
+					m_computeCloth->setUniform("selectedVert", selected);
+					glBindBuffer(GL_ARRAY_BUFFER, m_pos[0]);
+					glm::vec4* ptr = (glm::vec4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
+					glm::vec3 force = glm::vec3(ptr[selected]) + glm::vec3(-right[0] * Window::getDx(), Window::getDy()
+						, right[2] * Window::getDx()) * 10.f;
+					m_computeCloth->setUniform("mouseForce", force);
+					glUnmapBuffer(GL_ARRAY_BUFFER);
+					return;
+				}
+
+				float winZ;
+				double x, y;
+				Window::getMousePos(x, y);
+				glReadPixels(x, Window::getHeight() - y, 1, 1, GL_DEPTH_COMPONENT,
+					GL_FLOAT, &winZ);
+
+				if (winZ == 1)
+					winZ = 0;
+
+				glm::vec3 objPt = glm::unProject(glm::vec3
+					(x, Window::getHeight() - y, winZ), glm::mat4(1)*cam->getMatrix(), cam->getPorjection(), glm::vec4(0, 0, Window::getWidth(), Window::getHeight()));
+
+				size_t i = 0;
+				float minDist = 1000.0f;
+				glBindBuffer(GL_ARRAY_BUFFER, m_pos[0]);
+
+				for (i = 0; i < m_positions.size(); i++)
+				{
+					glm::vec4* ptr = (glm::vec4*)glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
+					// if the pointer is valid(mapped), update VBO
+					if (ptr) {
+						float dist = glm::distance(glm::vec3(ptr[i]), objPt);
+						if (dist < 0.7 && dist < minDist) {
+							selected = i;
+							minDist = dist;
+						}
+						glUnmapBuffer(GL_ARRAY_BUFFER);
+					}
+				}
+
+				if (selected != -1) {
+					std::cout << selected << std::endl;
+				}
+			}
+			else
+			{
+				selected = -1;
+				m_computeCloth->use();
+				m_computeCloth->setUniform("selectedVert", selected);
+			}
 		}
-	}
-}
 
-#define CONSTRAINT_ITERATIONS 15
-void Cloth::update()
-{
 
-	for (int i = 0; i < CONSTRAINT_ITERATIONS; i++) // iterate over all constraints several times
-	{
-		for (int i = 0; i < m_constraints.size(); i++)
+
+
+
+		Cloth::~Cloth()
 		{
-			m_constraints[i].satisfyConstraint(); // satisfy constraint.
+
+			delete m_shader, m_computeCloth, m_computeNormals;
+
 		}
 
-	}
 
-	for (int i = 0; i < m_particles.size(); i++)
-	{
-		m_particles[i].timeStep();
 	}
-
 }

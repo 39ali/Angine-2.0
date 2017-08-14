@@ -18,7 +18,7 @@ namespace Angine
 		private:
 
 			float m_speed, m_sprintSpeed, m_MouseSensitivity;
-			glm::vec3 m_forward, m_right, m_up;
+		
 		};
 
 

@@ -39,6 +39,9 @@ namespace Angine
 				std::cout << "couldn't load image: " << filename << '\n';
 				return nullptr;
 			}
+			//flip it 
+			FreeImage_FlipVertical(dib);
+
 			//retrieve the image data
 			bits = FreeImage_GetBits(dib);
 			//get the image width and height
@@ -67,7 +70,7 @@ namespace Angine
 			//Free FreeImage's copy of the data
 	//		FreeImage_Unload(dib);
 
-
+		
 			BPP = FreeImage_GetBPP(dib);
 			return bits;
 		}

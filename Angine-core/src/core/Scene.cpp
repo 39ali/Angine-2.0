@@ -28,11 +28,14 @@ namespace Angine {
 				mat->setUniform("projectionView", m_camera->getPorjection() *m_camera->getMatrix());
 				mat->setUniform("model", entity->transform);
 				mat->setUniform("cameraPos", m_camera->getPos());
-				mat->setUniform("lightPos", glm::vec3(7, 0,3));
+
 				for each (Mesh*  mesh in entity->getModel()->m_meshes)
 				{
 					if (!mesh->hasTextures)
 					{
+						glActiveTexture(GL_TEXTURE0 + 0);
+						const Texture2D* tex = TextureManager::LoadTexture("../Textures/grey/4224.jpg");
+						tex->bind();
 						m_renderer->render(mesh);
 						continue;
 					}
@@ -58,8 +61,12 @@ namespace Angine {
 				mat->unuse();
 			}
 
+			for each (Cloth *  cloth in m_Clothes)
+			{
+				cloth->render(m_camera);
+			}
 
-
+			m_skybox->Draw(m_camera);
 
 		}
 		void Scene::tick()
@@ -132,6 +139,11 @@ namespace Angine {
 		void Scene::AddEntity(Entity* entity)
 		{
 			m_Entities.push_back(entity);
+		}
+
+		void Scene::AddCloth(Cloth *cloth)
+		{
+			m_Clothes.push_back(cloth);
 		}
 
 	}

@@ -6,8 +6,8 @@ namespace Angine {
 
 		Camera::Camera(const glm::mat4& projection) :m_projection(projection), m_position(glm::vec3(0))
 		{
-			m_yaw = 2.4f;
-			m_pitch = 0.7f;
+			m_yaw = -90.f;
+			m_pitch = 0.0f;
 			 m_roll = 0;
 
 		};

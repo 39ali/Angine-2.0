@@ -17,8 +17,11 @@
 #include "../renderer/TPScamera.h"
 #include "../renderer/ModelFactory.h"
 #include "../renderer/FPSCamera.h"
+#include "../ParticleSystem/Cloth.h"
+#include "../renderer/SkyBox.h"
 using namespace Angine::Renderer;
 using namespace Angine::Core;
+using namespace Angine::ParticleSystem;
 namespace Angine {
 	namespace Core {
 		class Scene
@@ -32,6 +35,8 @@ namespace Angine {
 			void render();
 			virtual void onRender() {};
 			void AddEntity(Entity* entity);
+			void AddCloth(Cloth *entity);
+			void AddSkyBox(SkyBox * skybox) { m_skybox = skybox; }
 			void run();
 			void createWindow(const unsigned int &wdith, const unsigned int & height, const char* title, const glm::vec3& color = glm::vec3(0.2f, 0.3f, 0.3f));
 			inline const double & getFps()const { return m_fps; };
@@ -40,18 +45,20 @@ namespace Angine {
 			void setCamera(Camera * cam) { m_camera = cam; };
 		private:
 			std::vector<Entity*> m_Entities;
+			std::vector<Cloth*> m_Clothes;
 			Renderer::Window* m_window;
 			float m_fps = 0.0f;
 			float m_ups = 0.0f;
 			Renderer::Renderer * m_renderer;
 			Loader * m_loader;
-			
+
 			Shader* m_particleShader;
 			Texture2D* m_tex;
 			Camera * m_camera;
-			
-			glm::mat4 projection ;
-			
+
+			SkyBox * m_skybox;
+			glm::mat4 projection;
+
 		public:
 			void start();
 
