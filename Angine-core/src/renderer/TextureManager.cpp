@@ -14,7 +14,8 @@ namespace Angine {
 			Texture2D* texture = new Texture2D();
 			texture->fileName = filename;
 			unsigned int BPP;
-			BYTE* data = Utils::imageLoader(filename, texture->m_width, texture->m_height, BPP);
+			FIBITMAP * dib(0);
+			BYTE*data = Utils::imageLoader(filename, texture->m_width, texture->m_height, BPP, dib);
 			glGenTextures(1, &texture->m_texID);
 			glBindTexture(GL_TEXTURE_2D, texture->m_texID);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -29,6 +30,8 @@ namespace Angine {
 				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texture->m_width, texture->m_height, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
 			}
 			m_textures.insert({ filename, texture });
+			free( data);
+			
 			return texture;
 			//delete[] data;  // TODO: figure out how to delete this  .
 		}
@@ -41,9 +44,10 @@ namespace Angine {
 			glBindTexture(GL_TEXTURE_CUBE_MAP, texture->m_texID);
 
 			unsigned int  BPP;
+			FIBITMAP * dib(0);
 			for (unsigned int i = 0; i < faces.size(); i++)
 			{
-				BYTE* data = Utils::imageLoader(faces[i].c_str(), texture->m_width, texture->m_height, BPP);
+				BYTE* data = Utils::imageLoader(faces[i].c_str(), texture->m_width, texture->m_height, BPP, dib);
 				if (data)
 				{
 					if (BPP == 24) {
@@ -59,6 +63,8 @@ namespace Angine {
 					std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
 					
 				}
+				free( data);
+				
 			}
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

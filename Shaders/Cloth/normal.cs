@@ -17,7 +17,7 @@ void main() {
   vec3 n = vec3(0);
   vec3 a, b, c;
 
-  if( gl_GlobalInvocationID.y < nParticles.y - 1) {
+  if( gl_GlobalInvocationID.y < nParticles.y - 1) { // top-right
     c = Position[idx + nParticles.x].xyz - p;
     if( gl_GlobalInvocationID.x < nParticles.x - 1 ) {
       a = Position[idx + 1].xyz - p;
@@ -42,7 +42,7 @@ void main() {
       n += cross(a,b);
       n += cross(b,c);
     }
-    if( gl_GlobalInvocationID.x < nParticles.x - 1 ) {
+    if( gl_GlobalInvocationID.x < nParticles.x - 1 ) {// top-left
       a = c; 
       b = Position[idx - nParticles.x + 1].xyz - p;
       c = Position[idx + 1].xyz - p;

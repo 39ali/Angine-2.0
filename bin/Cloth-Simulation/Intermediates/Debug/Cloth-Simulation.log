@@ -3,6 +3,6 @@ c:\dev\angine 2.0\angine-core\src\utils\reader.h(8): warning C4996: 'fopen': Thi
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
 c:\dev\angine 2.0\cloth-simulation\game.cpp(82): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
 c:\dev\angine 2.0\cloth-simulation\game.cpp(87): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\dev\angine 2.0\angine-core\src\core\scene.h(44): warning C4172: returning address of local variable or temporary
 c:\dev\angine 2.0\angine-core\src\core\scene.h(43): warning C4172: returning address of local variable or temporary
-c:\dev\angine 2.0\angine-core\src\core\scene.h(42): warning C4172: returning address of local variable or temporary
   Cloth-Simulation.vcxproj -> C:\Dev\Angine 2.0\bin\Cloth-Simulation\Output\Debug\Cloth-Simulation.exe

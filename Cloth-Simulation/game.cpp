@@ -29,7 +29,7 @@ void Game::init()
 
 
 
-	Material * material = new Material(new Shader("../Shaders/BasicShader.vs", "../Shaders/BasicShader.fs"));
+	Material * material = new BasicLightingMaterial(new Shader("../Shaders/BasicShader.vs", "../Shaders/BasicShader.fs"),tps);
 	material->setUniform("lightPos", lightPos);
 	m_cloth->setLightPos(lightPos);
 

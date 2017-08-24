@@ -3,13 +3,14 @@
 out vec4 color;
 
 uniform vec4 Pcolor;
-uniform vec3 BlackHolePos1;
-uniform vec3 BlackHolePos2;
+
 in vec3 velocity ;
 
 void main ()
 {
-float len=length(velocity)/220;
+float len=length(velocity);
+len =len/(256)-1;
 
-color = vec4(1,1.2-len ,1-sin(len),1);
+color = vec4(sin(len),1-cos(1-len),1-tan(len),1);
+//color = vec4(sin(1-len),1-cos(1-len),1-tan(len),1);
 }

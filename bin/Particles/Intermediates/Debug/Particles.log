@@ -3,34 +3,10 @@ c:\dev\angine 2.0\angine-core\src\utils\reader.h(8): warning C4996: 'fopen': Thi
   c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
 c:\dev\angine 2.0\particles\game.cpp(15): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\dev\angine 2.0\particles\game.cpp(16): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-MSVCRTD.lib(initializers.obj) : warning LNK4098: defaultlib 'msvcrt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
-MSVCRTD.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
-game.obj : warning LNK4049: locally defined symbol ___glewBindBuffer imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewBindBuffer imported
-game.obj : warning LNK4049: locally defined symbol ___glewBufferData imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewBufferData imported
-game.obj : warning LNK4049: locally defined symbol ___glewBufferSubData imported
-game.obj : warning LNK4049: locally defined symbol ___glewGenBuffers imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewGenBuffers imported
-game.obj : warning LNK4049: locally defined symbol ___glewEnableVertexAttribArray imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewEnableVertexAttribArray imported
-game.obj : warning LNK4049: locally defined symbol ___glewVertexAttribPointer imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewVertexAttribPointer imported
-game.obj : warning LNK4049: locally defined symbol ___glewDispatchCompute imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewDispatchCompute imported
-game.obj : warning LNK4049: locally defined symbol ___glewMemoryBarrier imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewMemoryBarrier imported
-game.obj : warning LNK4049: locally defined symbol ___glewBindBufferBase imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewBindBufferBase imported
-game.obj : warning LNK4049: locally defined symbol ___glewBindVertexArray imported
-Angine-core.lib(Renderer.obj) : warning LNK4049: locally defined symbol ___glewBindVertexArray imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewBindVertexArray imported
-game.obj : warning LNK4049: locally defined symbol ___glewGenVertexArrays imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewGenVertexArrays imported
-Angine-core.lib(Scene.obj) : warning LNK4049: locally defined symbol ___glewActiveTexture imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewActiveTexture imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewMapBuffer imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewUnmapBuffer imported
-Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewPrimitiveRestartIndex imported
-glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Dev\Angine 2.0\bin\Particles\Output\Debug\vc120.pdb'; linking object as if no debug info
+c:\dev\angine 2.0\particles\game.cpp(46): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\dev\angine 2.0\particles\game.cpp(50): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\dev\angine 2.0\particles\game.cpp(54): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\dev\angine 2.0\particles\game.cpp(58): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\dev\angine 2.0\angine-core\src\core\scene.h(44): warning C4172: returning address of local variable or temporary
+c:\dev\angine 2.0\angine-core\src\core\scene.h(43): warning C4172: returning address of local variable or temporary
   Particles.vcxproj -> C:\Dev\Angine 2.0\bin\Particles\Output\Debug\Particles.exe

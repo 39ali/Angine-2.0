@@ -18,7 +18,8 @@ namespace Angine {
 
 			void use() { m_shader->use(); };
 			void unuse() { m_shader->unuse(); };
-		private:
+			virtual void  onRender() {};
+		protected:
 			Shader*	m_shader;
 
 

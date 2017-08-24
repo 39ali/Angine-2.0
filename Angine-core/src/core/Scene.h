@@ -19,6 +19,7 @@
 #include "../renderer/FPSCamera.h"
 #include "../ParticleSystem/Cloth.h"
 #include "../renderer/SkyBox.h"
+#include "../renderer/BasicLightingMaterial.h"
 using namespace Angine::Renderer;
 using namespace Angine::Core;
 using namespace Angine::ParticleSystem;

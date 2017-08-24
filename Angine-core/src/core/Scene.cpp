@@ -5,13 +5,14 @@ namespace Angine {
 
 		Scene::Scene()
 		{
-
+			m_skybox = nullptr;
+			m_camera = nullptr;
 		}
 		Scene::~Scene()
 		{
 			delete m_renderer;
 			delete m_camera;
-
+			delete m_skybox;
 			TextureManager::Clean();
 		}
 
@@ -27,7 +28,8 @@ namespace Angine {
 				mat->use();
 				mat->setUniform("projectionView", m_camera->getPorjection() *m_camera->getMatrix());
 				mat->setUniform("model", entity->transform);
-				mat->setUniform("cameraPos", m_camera->getPos());
+				mat->onRender();
+				if (entity->getModel() == nullptr) continue;
 
 				for each (Mesh*  mesh in entity->getModel()->m_meshes)
 				{
@@ -36,7 +38,7 @@ namespace Angine {
 						glActiveTexture(GL_TEXTURE0 + 0);
 						const Texture2D* tex = TextureManager::LoadTexture("../Textures/grey/4224.jpg");
 						tex->bind();
-						m_renderer->render(mesh);
+						m_renderer->render(mesh, entity->getMode());
 						continue;
 					}
 					for (int i = 0; i < mesh->m_textures->size(); i++)
@@ -56,7 +58,7 @@ namespace Angine {
 					}
 
 
-					m_renderer->render(mesh);
+					m_renderer->render(mesh, entity->getMode());
 				}
 				mat->unuse();
 			}
@@ -66,7 +68,9 @@ namespace Angine {
 				cloth->render(m_camera);
 			}
 
-			m_skybox->Draw(m_camera);
+			if (m_skybox != nullptr) {
+				m_skybox->Draw(m_camera);
+			}
 
 		}
 		void Scene::tick()
@@ -130,7 +134,8 @@ namespace Angine {
 
 		void Scene::internalUpdate()
 		{
-			m_camera->update();
+			if (m_camera != nullptr)
+				m_camera->update();
 
 		}
 

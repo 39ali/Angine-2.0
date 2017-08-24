@@ -1,6 +1,6 @@
 #include "game.h"
 
-Game::Game() : bh1(7,0, 0, 1), bh2(-7, 0, 0, 1), m_width(1024), m_height(1280)
+Game::Game() : m_bh1(3, 0, 0, 1), m_width(1024), m_height(1280), m_speed(5)
 {
 	createWindow(m_width, m_height, "game", glm::vec3(0, 0, 0));
 };
@@ -21,12 +21,12 @@ glm::vec2 Game::getNormalizedDeviceCoords(double& x, double& y)
 void Game::init()
 {
 	glm::mat4 projection = glm::perspective(glm::radians(65.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
-	TPScamera*	tps = new  TPScamera(glm::vec3(0, 0, 0), projection);
+	FPSCamera*	tps = new  FPSCamera(projection);
 	setCamera(tps);
 
 	m_shader = new Shader("Shaders/particle.vs", "Shaders/particle.fs");
 	m_computeShader = new Shader("Shaders/particle.cs");
-	m_nParticles = glm::ivec3(100, 100, 100);
+	m_nParticles = glm::ivec3(250, 250, 250);
 	particlesSum = m_nParticles.x * m_nParticles.y * m_nParticles.z;
 	initbuffers();
 
@@ -41,14 +41,28 @@ void Game::init()
 };
 void Game::update()
 {
+	if (Window::isKeyPressed(GLFW_KEY_W))
+	{
+		m_bh1.y += m_speed * Time::getDeltaTime();
+	}
+	if (Window::isKeyPressed(GLFW_KEY_S))
+	{
+		m_bh1.y -= m_speed* Time::getDeltaTime();
+	}
+	if (Window::isKeyPressed(GLFW_KEY_D))
+	{
+		m_bh1.x += m_speed * Time::getDeltaTime();
+	}
+	if (Window::isKeyPressed(GLFW_KEY_A))
+	{
+		m_bh1.x -= m_speed * Time::getDeltaTime();
+	}
 
 };
-glm::vec3 mouse3dpos;
+
 void Game::tick()
 {
-
-	
-	//Scene::printFpsUps();
+	Scene::printFpsUps();
 };
 void  Game::initbuffers()
 {
@@ -107,8 +121,8 @@ void  Game::initbuffers()
 	// "black holes"
 	glGenBuffers(1, &m_bhBuf);
 	glBindBuffer(GL_ARRAY_BUFFER, m_bhBuf);
-	GLfloat data[] = { bh1.x, bh1.y, bh1.z, bh1.w, bh2.x, bh2.y, bh2.z, bh2.w };
-	glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(GLfloat), data, GL_DYNAMIC_DRAW);
+	GLfloat data[] = { m_bh1.x, m_bh1.y, m_bh1.z, m_bh1.w, };
+	glBufferData(GL_ARRAY_BUFFER, 4 * sizeof(GLfloat), data, GL_DYNAMIC_DRAW);
 
 	glGenVertexArrays(1, &m_bhVao);
 	glBindVertexArray(m_bhVao);
@@ -124,25 +138,19 @@ void  Game::initbuffers()
 
 void Game::onRender()
 {
-
-
-
-
-
-	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (float)Time::getTime()*glm::radians(20.f), glm::vec3(glm::tan(Time::getDeltaTime())*0.7f, glm::cos(Time::getTime())*0.2f* 0.5f,1.f));
-	glm::vec3 BlackHolePos1 = glm::vec3(rot*bh1);// mouse3dpos;
-	glm::vec3 BlackHolePos2 = glm::vec3(rot*bh2);
+	//glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (float)Time::getTime()*glm::radians(20.f), glm::vec3(0, 0, 1.f));
+	m_BlackHolePos = glm::vec3(m_bh1);
 
 	m_computeShader->use();
-	m_computeShader->setUniform("BlackHolePos1", BlackHolePos1);
-	m_computeShader->setUniform("BlackHolePos2", BlackHolePos2);
-	m_computeShader->setUniform("Gravity2", 1000.f*(float)glm::tan(Time::getTime()));
+
+	m_computeShader->setUniform("BlackHolePos", m_BlackHolePos);
+	m_computeShader->setUniform("Gravity", 1000.f); //*(float)glm::tan(Time::getTime())
+
 	glDispatchCompute(particlesSum / 1000, 1, 1);
 	glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 
 	// Draw the scene
 	m_shader->use();
-
 
 	glm::mat4  model = glm::mat4(1.0f);
 
@@ -150,21 +158,18 @@ void Game::onRender()
 
 	m_shader->setUniform("model", model);
 	m_shader->setUniform("Pcolor", glm::vec4(0, 0, 0, 0.2f));
-	m_shader->setUniform("BlackHolePos1", BlackHolePos1);
-	m_shader->setUniform("BlackHolePos2", BlackHolePos2);
+
 	glBindVertexArray(m_Pvao);
 	glDrawArrays(GL_POINTS, 0, particlesSum);
 	glBindVertexArray(0);
 
-
 	//draw black holes
 	glPointSize(5.0f);
-	GLfloat data[] = { BlackHolePos1.x, BlackHolePos1.y, BlackHolePos1.z, 1.0f, BlackHolePos2.x, BlackHolePos2.y, BlackHolePos2.z, 1.0f };
+	GLfloat data[] = { m_BlackHolePos.x, m_BlackHolePos.y, m_BlackHolePos.z, 1.0f };
 	glBindBuffer(GL_ARRAY_BUFFER, m_bhBuf);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, 8 * sizeof(GLfloat), data);
-	m_shader->setUniform("Pcolor", glm::vec4(1, 1, 0, 1.0f));
+	glBufferSubData(GL_ARRAY_BUFFER, 0, 4 * sizeof(GLfloat), data);
 	glBindVertexArray(m_bhVao);
-	glDrawArrays(GL_POINTS, 0, 2);
+	glDrawArrays(GL_POINTS, 0, 1);
 	glBindVertexArray(0);
 }
 

@@ -24,6 +24,7 @@
     <ClInclude Include="src\common.h" />
     <ClInclude Include="src\core\Entity.h" />
     <ClInclude Include="src\ParticleSystem\Cloth.h" />
+    <ClInclude Include="src\renderer\BasicLightingMaterial.h" />
     <ClInclude Include="src\renderer\Camera.h" />
     <ClInclude Include="src\renderer\FPSCamera.h" />
     <ClInclude Include="src\renderer\IRenderable.h" />
