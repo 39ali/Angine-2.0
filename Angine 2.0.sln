@@ -1,9 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Angine-core", "Angine-core\Angine-core.vcxproj", "{272AA8B6-93F5-46BE-BB4A-A477C046026C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cloth-Simulation", "Cloth-Simulation\Cloth-Simulation.vcxproj", "{C8A6176A-2779-456B-A589-FB6725D710BB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{272AA8B6-93F5-46BE-BB4A-A477C046026C} = {272AA8B6-93F5-46BE-BB4A-A477C046026C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Particles", "Particles\Particles.vcxproj", "{7024955B-C04A-4E5B-8190-9B04B5CD5F8D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{272AA8B6-93F5-46BE-BB4A-A477C046026C} = {272AA8B6-93F5-46BE-BB4A-A477C046026C}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OcTreeCollision", "OcTreeCollision\OcTreeCollision.vcxproj", "{7F6D86E3-83E1-430F-A8C0-75622B23AE47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +33,30 @@ Global
 		{272AA8B6-93F5-46BE-BB4A-A477C046026C}.Release|x64.Build.0 = Release|x64
 		{272AA8B6-93F5-46BE-BB4A-A477C046026C}.Release|x86.ActiveCfg = Release|Win32
 		{272AA8B6-93F5-46BE-BB4A-A477C046026C}.Release|x86.Build.0 = Release|Win32
+		{C8A6176A-2779-456B-A589-FB6725D710BB}.Debug|x64.ActiveCfg = Debug|x64
+		{C8A6176A-2779-456B-A589-FB6725D710BB}.Debug|x64.Build.0 = Debug|x64
+		{C8A6176A-2779-456B-A589-FB6725D710BB}.Debug|x86.ActiveCfg = Debug|Win32
+		{C8A6176A-2779-456B-A589-FB6725D710BB}.Debug|x86.Build.0 = Debug|Win32
+		{C8A6176A-2779-456B-A589-FB6725D710BB}.Release|x64.ActiveCfg = Release|x64
+		{C8A6176A-2779-456B-A589-FB6725D710BB}.Release|x64.Build.0 = Release|x64
+		{C8A6176A-2779-456B-A589-FB6725D710BB}.Release|x86.ActiveCfg = Release|Win32
+		{C8A6176A-2779-456B-A589-FB6725D710BB}.Release|x86.Build.0 = Release|Win32
+		{7024955B-C04A-4E5B-8190-9B04B5CD5F8D}.Debug|x64.ActiveCfg = Debug|x64
+		{7024955B-C04A-4E5B-8190-9B04B5CD5F8D}.Debug|x64.Build.0 = Debug|x64
+		{7024955B-C04A-4E5B-8190-9B04B5CD5F8D}.Debug|x86.ActiveCfg = Debug|Win32
+		{7024955B-C04A-4E5B-8190-9B04B5CD5F8D}.Debug|x86.Build.0 = Debug|Win32
+		{7024955B-C04A-4E5B-8190-9B04B5CD5F8D}.Release|x64.ActiveCfg = Release|x64
+		{7024955B-C04A-4E5B-8190-9B04B5CD5F8D}.Release|x64.Build.0 = Release|x64
+		{7024955B-C04A-4E5B-8190-9B04B5CD5F8D}.Release|x86.ActiveCfg = Release|Win32
+		{7024955B-C04A-4E5B-8190-9B04B5CD5F8D}.Release|x86.Build.0 = Release|Win32
+		{7F6D86E3-83E1-430F-A8C0-75622B23AE47}.Debug|x64.ActiveCfg = Debug|x64
+		{7F6D86E3-83E1-430F-A8C0-75622B23AE47}.Debug|x64.Build.0 = Debug|x64
+		{7F6D86E3-83E1-430F-A8C0-75622B23AE47}.Debug|x86.ActiveCfg = Debug|Win32
+		{7F6D86E3-83E1-430F-A8C0-75622B23AE47}.Debug|x86.Build.0 = Debug|Win32
+		{7F6D86E3-83E1-430F-A8C0-75622B23AE47}.Release|x64.ActiveCfg = Release|x64
+		{7F6D86E3-83E1-430F-A8C0-75622B23AE47}.Release|x64.Build.0 = Release|x64
+		{7F6D86E3-83E1-430F-A8C0-75622B23AE47}.Release|x86.ActiveCfg = Release|Win32
+		{7F6D86E3-83E1-430F-A8C0-75622B23AE47}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

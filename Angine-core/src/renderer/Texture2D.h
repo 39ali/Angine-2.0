@@ -22,7 +22,7 @@ namespace Angine {
 			GLuint m_texID;
 			unsigned int m_width, m_height;
 			std::string fileName;
-			std::string m_type;
+			TextureType m_type;
 			
 		};
 	}

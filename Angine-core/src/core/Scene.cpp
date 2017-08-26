@@ -5,36 +5,84 @@ namespace Angine {
 
 		Scene::Scene()
 		{
-
+			m_skybox = nullptr;
+			m_camera = nullptr;
 		}
 		Scene::~Scene()
 		{
 			delete m_renderer;
-			delete m_shader;
+			delete m_camera;
+			delete m_skybox;
 			TextureManager::Clean();
+
+			for (int i = 0; i < m_Entities.size(); i++)
+			{
+				delete m_Entities[i];
+			}
+			m_Entities.clear();
+
+			for (int i = 0; i < m_Clothes.size(); i++)
+			{
+				delete m_Clothes[i];
+			}
+			m_Clothes.clear();
 		}
+
+		glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(0.f, 0.0f, 0)) * glm::rotate(glm::mat4(), glm::radians(0.f), glm::vec3(1, 1, 1))*glm::scale(glm::mat4(), glm::vec3(0.2, 0.2, 0.2));
 
 		void Scene::render()
 		{
-			m_shader->use();
-			glActiveTexture(GL_TEXTURE0);
-			m_tex->bind();
-
-			glm::mat4 projection = glm::perspective(glm::radians(65.f), ((float)m_window->getWidth() / (float)m_window->getHeight()), 0.1f, 1000.0f);
-			//glm::mat4 projection = glm::ortho(0.0f, (float)m_window->getWidth(), 0.0f, (float)m_window->getHeight(), 0.1f, 1000.f);
-			m_shader->setUniform("projection", projection);
-			m_shader->setUniform("view", m_camera->getViewMatrix());
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			for each (auto entity in m_Entities)
 			{
-				m_shader->setUniform("model", entity->transform);
+
+				Material * mat = entity->getMaterial();
+				mat->use();
+				mat->setUniform("projectionView", m_camera->getPorjection() *m_camera->getMatrix());
+				mat->setUniform("model", entity->transform);
+				mat->onRender();
+				if (entity->getModel() == nullptr) continue;
+
 				for each (Mesh*  mesh in entity->getModel()->m_meshes)
 				{
-					m_renderer->render(mesh);
-				}
+					if (!mesh->hasTextures)
+					{
+						glActiveTexture(GL_TEXTURE0 + 0);
+						const Texture2D* tex = TextureManager::LoadTexture("../Textures/grey/4224.jpg");
+						tex->bind();
+						m_renderer->render(mesh, entity->getMode());
+						continue;
+					}
+					for (int i = 0; i < mesh->m_textures->size(); i++)
+					{
+						glActiveTexture(GL_TEXTURE0 + i);
+						const Texture2D* tex = mesh->m_textures->at(i);
+						tex->bind();
+						const TextureType textype = tex->m_type;
+						if (textype == TextureType::Diffuse)
+						{
+							mat->setUniform<int>("diffuseMap", i);
+						}
+						else if (textype == TextureType::Specular)
+						{
+							mat->setUniform<int>("specularMap", i);
+						}
+					}
 
+
+					m_renderer->render(mesh, entity->getMode());
+				}
+				mat->unuse();
 			}
 
-			m_shader->unuse();
+			for each (Cloth *  cloth in m_Clothes)
+			{
+				cloth->render(m_camera);
+			}
+
+			if (m_skybox != nullptr) {
+				m_skybox->Draw(m_camera);
+			}
 
 		}
 		void Scene::tick()
@@ -51,8 +99,8 @@ namespace Angine {
 			while (!m_window->isClosed())
 			{
 				m_window->clear();
+				onRender();
 				render();
-
 				if (Time::getTime() - initialTime >= 1) // 1 sec has passed
 				{
 					tick();
@@ -81,9 +129,9 @@ namespace Angine {
 			run();
 		}
 
-		void Scene::createWindow(const unsigned int &width, const unsigned int & height, const char * title)
+		void Scene::createWindow(const unsigned int &width, const unsigned int & height, const char * title, const glm::vec3& color)
 		{
-			Window::CreateInstance(width, height, title);
+			Window::CreateInstance(width, height, title, color, true);
 			m_window = Window::getInstance();
 		}
 
@@ -92,36 +140,36 @@ namespace Angine {
 		void Scene::internalInit()
 		{
 			m_renderer = new Renderer::Renderer();
-			m_loader = new Loader();
-			m_shader = new Shader("../Shaders/BasicShader.vs.txt", "../Shaders/BasicShader.fs.txt");
-			m_tex = TextureManager::LoadTexture("../Textures/img_test.png");
-			m_camera = new Camera(glm::vec3(0, 0, -10.0f));
+			m_tex = TextureManager::LoadTexture("../Textures/body_showroom_spec.png");//TextureManager::LoadTexture("../Textures/hand_showroom_ddn.png");// // 
+
 		}
 
 		void Scene::internalUpdate()
 		{
-			m_camera->update();
-		}
-
-		Mesh* Scene::addRawModel(float * verts, int size, int * indices, int indicesSize, float * uv, int uvsize)
-		{
-			Mesh * model = nullptr; //m_loader->loadToVao(verts, size, indices, indicesSize, uv, uvsize);
-			m_models.push_back(model);
-			return model;
+			if (m_camera != nullptr)
+				m_camera->update();
 
 		}
 
-		Model* Scene::addModel(const std::string & fileLocation)
+		void Scene::DeleteEntity(Entity* entity)
 		{
-			Model * model = m_loader->loadModelFromFile(fileLocation);
-			//m_models.push_back(model);
-			return model;
-
+			for (int i = 0; i < m_Entities.size(); i++) {
+				if (m_Entities[i]->getid() == entity->getid()) {
+					m_Entities.erase(m_Entities.begin() + i);
+					delete entity;
+					return;
+				}
+			}
 		}
 
 		void Scene::AddEntity(Entity* entity)
 		{
 			m_Entities.push_back(entity);
+		}
+
+		void Scene::AddCloth(Cloth *cloth)
+		{
+			m_Clothes.push_back(cloth);
 		}
 
 	}

@@ -14,6 +14,13 @@ namespace Angine {
 			link();
 		};
 
+		Shader::Shader(const char * ComputeShader)
+		{
+			m_program_id = glCreateProgram();
+			m_cs_id = compile(ComputeShader, GL_COMPUTE_SHADER);
+			link();
+		};
+
 
 		GLuint Shader::compile(const char * shaderloc, GLenum type)
 		{
@@ -59,6 +66,7 @@ namespace Angine {
 			{
 				GLint maxLength = 0;
 				glGetProgramiv(m_program_id, GL_INFO_LOG_LENGTH, &maxLength);
+			//	if (maxLength == 0)return;
 
 				std::vector<GLchar> infoLog(maxLength);
 				glGetProgramInfoLog(m_program_id, maxLength, &maxLength, &infoLog[0]);

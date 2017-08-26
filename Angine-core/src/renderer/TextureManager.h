@@ -9,6 +9,7 @@ namespace Angine {
 
 		public:
 			static	Texture2D* LoadTexture(const char* filename);
+			static	Texture2D* LoadCubeMap(const std::vector<std::string>& faces);
 			static void Clean();
 		private:
 			TextureManager() {};

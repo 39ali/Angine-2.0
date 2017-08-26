@@ -7,14 +7,14 @@ namespace Angine
 	namespace Utils
 	{
 
-		static BYTE *  imageLoader(const char * filename, unsigned int &width, unsigned int &height) {
+		static BYTE*   imageLoader(const char * filename, unsigned int &width, unsigned int &height, unsigned int& BPP, FIBITMAP * dib) {
 			//	, const unsigned int texID, GLenum image_format, GLint internal_format, GLint level, GLint border
 			//image format
 			FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 			//pointer to the image, once loaded
-			FIBITMAP *dib(0);
+
 			//pointer to the image data
-			BYTE* bits(0);
+			BYTE* bits = nullptr;
 			//image width and height
 
 
@@ -39,8 +39,11 @@ namespace Angine
 				std::cout << "couldn't load image: " << filename << '\n';
 				return nullptr;
 			}
+			//flip it 
+			FreeImage_FlipVertical(dib);
+			BPP = FreeImage_GetBPP(dib);
 			//retrieve the image data
-			bits = FreeImage_GetBits(dib);
+			bits = (FreeImage_GetBits(dib));
 			//get the image width and height
 			width = FreeImage_GetWidth(dib);
 			height = FreeImage_GetHeight(dib);
@@ -65,9 +68,12 @@ namespace Angine
 			border, image_format, GL_UNSIGNED_BYTE, bits);
 			*/
 			//Free FreeImage's copy of the data
-	//		FreeImage_Unload(dib);
-
-			return bits;
+			 
+		    BYTE* data = (BYTE*)malloc(width * height*(BPP / 8));
+			memcpy(data, bits, width * height*(BPP / 8));
+			FreeImage_Unload(dib);
+			return data;
 		}
+
 	}
 }

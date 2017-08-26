@@ -1,0 +1,2 @@
+Please, copy this code on your website to accredit the author:
+<a href="http://www.freepik.com">Designed by kjpargeter / Freepik</a>
