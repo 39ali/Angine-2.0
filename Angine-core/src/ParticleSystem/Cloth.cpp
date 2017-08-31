@@ -68,8 +68,8 @@ namespace Angine
 			m_elementNum = indices.size();
 
 
-			GLuint bufs[7];
-			glGenBuffers(7, bufs);
+			GLuint bufs[9];
+			glGenBuffers(9, bufs);
 			m_pos[0] = bufs[0];
 			m_pos[1] = bufs[1];
 			m_vel[0] = bufs[2];
@@ -77,7 +77,8 @@ namespace Angine
 			m_normal = bufs[4];
 			m_indices = bufs[5];
 			m_texCoords = bufs[6];
-
+			m_spring[0] = bufs[7];
+			m_spring[1] = bufs[8];
 
 
 
@@ -107,6 +108,21 @@ namespace Angine
 			// Texcoord
 			glBindBuffer(GL_ARRAY_BUFFER, m_texCoords);
 			glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(glm::vec2), texCoords.data(), GL_STATIC_DRAW);
+
+			// spring up
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 5, m_spring[0]);
+			glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(unsigned int)* m_positions.size(), NULL, GL_DYNAMIC_COPY);
+			glBindBuffer(GL_ARRAY_BUFFER, m_spring[0]);
+			glVertexAttribPointer(3, 1, GL_UNSIGNED_INT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(3);
+
+			// spring down
+			glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 6, m_spring[1]);
+			glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(unsigned int)* m_positions.size(), NULL, GL_DYNAMIC_COPY);
+			glBindBuffer(GL_ARRAY_BUFFER, m_spring[1]);
+			glVertexAttribPointer(4, 1, GL_UNSIGNED_INT, GL_FALSE, 0, 0);
+			glEnableVertexAttribArray(4);
+
 
 
 			glGenVertexArrays(1, &m_vao);
@@ -159,7 +175,7 @@ namespace Angine
 			m_shader->setUniform("cameraPos", cam->getPos());
 
 
-		
+
 			glBindVertexArray(m_vao);
 			glDrawElements(GL_TRIANGLE_STRIP, m_elementNum, GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
@@ -239,7 +255,7 @@ namespace Angine
 			}
 		}
 
-
+		
 
 
 

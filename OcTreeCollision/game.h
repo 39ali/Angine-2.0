@@ -3,6 +3,7 @@
 #include "Particles.h"
 #include <random>  
 #include "OcTree.h"
+#include <thread>
 #define G 0.005 //6.674e-11
 #define DeltaT 0.0005;
 class Game : public Angine::Core::Scene
@@ -20,6 +21,7 @@ private:
 	void DeleteParticle(Particle * particle, int i);
 	void initparticles();
 	void checkBoxCollision(Particle * particle);
+	void checkParticlesCollision(Particle * particle);
 	void applyGPull(Particle* p1, Particle* p2);
 	bool pInp(const glm::vec3& pos);
 	inline float getRandom(float max, float  min)
@@ -34,7 +36,7 @@ private:
 	Model *m_model;
 	Material * m_material;
 	std::vector<Particle*> m_entities;
-	float m_box_r, m_velocity_max;
+	float m_box_r, m_velocity_max,particlesNum;
 	glm::vec2 m_density, m_velocity;
 	OcTree * m_octree;
 };

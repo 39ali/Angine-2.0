@@ -8,7 +8,7 @@ namespace Angine
 		class FPSCamera : public Camera {
 
 		public:
-			FPSCamera(const glm::mat4& projection);
+			FPSCamera(const glm::mat4& projection, const  glm::vec3& pos = glm::vec3(0, 0, 10));
 			~FPSCamera() {};
 			void  update() override;
 			const 	glm::mat4 getMatrix(void)override { return glm::lookAt(m_position, m_position + m_forward, m_up); }
@@ -18,7 +18,7 @@ namespace Angine
 		private:
 
 			float m_speed, m_sprintSpeed, m_MouseSensitivity;
-		
+
 		};
 
 

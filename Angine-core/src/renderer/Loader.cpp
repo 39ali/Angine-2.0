@@ -92,6 +92,7 @@ namespace Angine {
 				vertices.push_back(vertex);
 			}
 
+
 			for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 			{
 				aiFace face = mesh->mFaces[i];

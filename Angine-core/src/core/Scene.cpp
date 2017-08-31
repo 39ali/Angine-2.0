@@ -32,7 +32,7 @@ namespace Angine {
 
 		void Scene::render()
 		{
-			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			for each (auto entity in m_Entities)
 			{
 
@@ -74,7 +74,7 @@ namespace Angine {
 				}
 				mat->unuse();
 			}
-
+			
 			for each (Cloth *  cloth in m_Clothes)
 			{
 				cloth->render(m_camera);

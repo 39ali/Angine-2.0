@@ -32,16 +32,18 @@ layout(std430, binding=3) buffer VelOut {
   vec4 VelocityOut[];
 };
 
-void main() {
-  uvec3 nParticles = gl_NumWorkGroups * gl_WorkGroupSize;
-  uint idx = gl_GlobalInvocationID.y * nParticles.x + gl_GlobalInvocationID.x;
+layout(std430,binding=5) buffer springupin
+{
+  uint springUp[];
+};
+layout(std430,binding=6) buffer springdownin
+{
+  uint springDown[];
+};
 
-  vec3 p = vec3(PositionIn[idx]);
-  vec3 v = vec3(VelocityIn[idx]), r;
-
-  // Start with gravitational acceleration and add the spring
-  // forces from each neighbor
-  vec3 force = Gravity * ParticleMass;
+vec3 applySprings(uvec3 nParticles ,uint idx , vec3 p , vec3 v )
+{
+  vec3 force = vec3(0),r ;
 
   // Particle above
   if( gl_GlobalInvocationID.y < nParticles.y - 1 ) {
@@ -49,7 +51,7 @@ void main() {
     force += normalize(r) * SpringK * (length(r) - RestLengthVert);
   } 
   // Below
-  if( gl_GlobalInvocationID.y > 0 ) {
+  if( gl_GlobalInvocationID.y > 0   ) {
     r = PositionIn[idx - nParticles.x].xyz - p;
     force += normalize(r) * SpringK * (length(r) - RestLengthVert);
   } 
@@ -71,26 +73,39 @@ void main() {
     force += normalize(r) * SpringK * (length(r) - RestLengthDiag);
   }
   // Upper-right
-  if( gl_GlobalInvocationID.x < nParticles.x - 1 && gl_GlobalInvocationID.y < nParticles.y - 1) {
+  if( gl_GlobalInvocationID.x < nParticles.x - 1 && gl_GlobalInvocationID.y < nParticles.y - 1 ) {
     r = PositionIn[idx + nParticles.x + 1].xyz - p;
     force += normalize(r) * SpringK * (length(r) - RestLengthDiag);
   }
   // lower -left
-  if( gl_GlobalInvocationID.x > 0 && gl_GlobalInvocationID.y > 0 ) {
+  if( gl_GlobalInvocationID.x > 0 && gl_GlobalInvocationID.y > 0  ) {
     r = PositionIn[idx - nParticles.x - 1].xyz - p;
     force += normalize(r) * SpringK * (length(r) - RestLengthDiag);
   }
   // lower-right
-  if( gl_GlobalInvocationID.x < nParticles.x - 1 && gl_GlobalInvocationID.y > 0 ) {
+  if( gl_GlobalInvocationID.x < nParticles.x - 1 && gl_GlobalInvocationID.y > 0) {
     r = PositionIn[idx - nParticles.x + 1].xyz - p;
     force += normalize(r) * SpringK * (length(r) - RestLengthDiag);
   }
+return force;
+}
 
- force += -DampingConst * v;
+void main() {
+  uvec3 nParticles = gl_NumWorkGroups * gl_WorkGroupSize;
+  uint idx = gl_GlobalInvocationID.y * nParticles.x + gl_GlobalInvocationID.x;
+
+  vec3 p = vec3(PositionIn[idx]);
+  vec3 v = vec3(VelocityIn[idx]) , force = vec3(0);
+
+
+  force = applySprings(nParticles,idx,p,v);
+
+  force += Gravity * ParticleMass;
+  force += -DampingConst * v;
 
 
 /// sphere coll
-vec3 dic =p-SpherePos;
+  vec3 dic =p-SpherePos;
   float l =length(dic);
   if(l<SphereR)
   {
@@ -104,7 +119,7 @@ if (idx ==selectedVert)
   force+=mouseForce;
 }
 
-  // Apply simple Euler integrator
+  // Euler integrator
   vec3 a = force * ParticleInvMass;
   PositionOut[idx] = vec4(
       p + v * DeltaT + 0.5 * a * DeltaT * DeltaT, 1.0);
@@ -112,14 +127,14 @@ if (idx ==selectedVert)
 
 
 
-
-
-  // Pin a few of the top verts
+/// pin points
   if( gl_GlobalInvocationID.y == nParticles.y - 1 && 
       (gl_GlobalInvocationID.x == 0 || 
-       gl_GlobalInvocationID.x == nParticles.x / 4 ||
-       gl_GlobalInvocationID.x == nParticles.x * 2 / 4 ||
-       gl_GlobalInvocationID.x == nParticles.x * 3 / 4 ||
+       gl_GlobalInvocationID.x == nParticles.x / 6 ||
+        gl_GlobalInvocationID.x == nParticles.x * 2 / 6 ||
+       gl_GlobalInvocationID.x == nParticles.x * 3 / 6 ||
+       gl_GlobalInvocationID.x == nParticles.x * 4 / 6 ||
+        gl_GlobalInvocationID.x == nParticles.x * 5 / 6 ||
        gl_GlobalInvocationID.x == nParticles.x - 1)) {
     PositionOut[idx] = vec4(p,1.0);
     VelocityOut[idx] = vec4(0,0,0,0);

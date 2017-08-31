@@ -95,18 +95,19 @@ int OcTree::getIndex(Particle* particle)
 	}
 
 	for (int i = 0; i < 8; i++) {
-		if (pos.x > m_nodes[i].m_bound.m_center.x + m_nodes[i].m_bound.m_radius ||
-			pos.x < m_nodes[i].m_bound.m_center.x - m_nodes[i].m_bound.m_radius) {
+
+		if (pos.x+ particle->radius > m_nodes[i].m_bound.m_center.x + m_nodes[i].m_bound.m_radius ||
+			pos.x- particle->radius < m_nodes[i].m_bound.m_center.x - m_nodes[i].m_bound.m_radius) {
 			continue;
 		}
 
-		if (pos.y > m_nodes[i].m_bound.m_center.y + m_nodes[i].m_bound.m_radius ||
-			pos.y < m_nodes[i].m_bound.m_center.y - m_nodes[i].m_bound.m_radius) {
+		if (pos.y + particle->radius> m_nodes[i].m_bound.m_center.y + m_nodes[i].m_bound.m_radius ||
+			pos.y- particle->radius < m_nodes[i].m_bound.m_center.y - m_nodes[i].m_bound.m_radius) {
 			continue;
 		}
 
-		if (pos.z > m_nodes[i].m_bound.m_center.z + m_nodes[i].m_bound.m_radius ||
-			pos.z < m_nodes[i].m_bound.m_center.z - m_nodes[i].m_bound.m_radius) {
+		if (pos.z+ particle->radius > m_nodes[i].m_bound.m_center.z + m_nodes[i].m_bound.m_radius ||
+			pos.z- particle->radius < m_nodes[i].m_bound.m_center.z - m_nodes[i].m_bound.m_radius) {
 			continue;
 		}
 		return i;

@@ -16,6 +16,7 @@ namespace Angine
 			void render(Camera* cam);
 			void updateSphere(const glm::vec3& pos, float radius);
 			void mousePicker(Camera * cam);
+		
 			void setLightPos(const glm::vec3& pos) {
 				m_shader->use();
 				m_shader->setUniform("lightPos", pos);
@@ -23,7 +24,7 @@ namespace Angine
 			}
 		private:
 			glm::vec2 m_particlesNum, m_clothSize;
-			GLuint m_pos[2], m_vel[2], m_normal, m_texCoords, m_indices, m_vao;
+			GLuint m_pos[2], m_vel[2], m_normal, m_texCoords, m_indices, m_vao , m_spring[2];
 			unsigned int m_elementNum;
 			Shader* m_shader, *m_computeCloth, *m_computeNormals;
 			GLuint swap = 0;

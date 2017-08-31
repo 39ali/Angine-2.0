@@ -29,10 +29,10 @@ void Game::init()
 
 
 
-	Material * material = new BasicLightingMaterial(new Shader("../Shaders/BasicShader.vs", "../Shaders/BasicShader.fs"),tps);
+	Material * material = new BasicLightingMaterial(new Shader("../Shaders/BasicShader.vs", "../Shaders/BasicShader.fs"), tps);
 	material->setUniform("lightPos", lightPos);
 	m_cloth->setLightPos(lightPos);
-
+	
 
 	//sphere
 	sphere_ent = new Entity(Loader::loadModelFromFile("Models/SphereHighPoly.obj"), glm::translate(glm::mat4(), pos)* glm::scale(glm::mat4(), scale));
@@ -53,16 +53,16 @@ void Game::init()
 		"Textures/SkyBox/bot.png",
 		"Textures/SkyBox/back.png",
 		"Textures/SkyBox/front.png"*/
-	///skybox 
+		///skybox 
 	std::vector < std::string > cubemaps =
-	{ 
+	{
 		"Textures/nightsky/nightsky_rt.tga",
 		"Textures/nightsky/nightsky_lf.tga",
 		"Textures/nightsky/nightsky_up.tga",
 		"Textures/nightsky/nightsky_dn.tga",
 		"Textures/nightsky/nightsky_bk.tga",
 		"Textures/nightsky/nightsky_ft.tga",
-		
+
 	};
 	AddSkyBox(new SkyBox(cubemaps));
 };
@@ -75,9 +75,9 @@ void Game::onRender()/// use for special  stuff
 
 void Game::update()
 {
-	pos = glm::vec3(2, 1.5, (float)glm::cos(Time::getTime() / 3)*-5);
+      pos = glm::vec3(2, 1.5, (float)glm::cos(Time::getTime() / 3)*-5);
 	sphere_ent->transform = glm::translate(glm::mat4(), pos)* glm::scale(glm::mat4(), scale);
-	//mousePicker();
+	
 	if (Window::isKeyPressed(GLFW_KEY_Q)) {
 		pos.z += 1 * Time::getDeltaTime();
 		sphere_ent->transform = glm::translate(glm::mat4(), pos)* glm::scale(glm::mat4(), scale);
@@ -88,7 +88,7 @@ void Game::update()
 		sphere_ent->transform = glm::translate(glm::mat4(), pos)* glm::scale(glm::mat4(), scale);
 	}
 	m_cloth->updateSphere(pos, 1.0f);
-	m_cloth->mousePicker(tps);
+	
 
 	if (Window::isKeyPressed(GLFW_KEY_C))
 	{
