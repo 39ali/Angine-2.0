@@ -115,7 +115,7 @@ void Game::checkParticlesCollision(Particle * entity1)
 
 void Game::update()
 {
-	for (int ii = 0; ii < 1; ii++) {
+
 		for each (Particle* entity1 in m_entities)
 		{
 			checkBoxCollision(entity1);
@@ -142,11 +142,11 @@ void Game::update()
 
 
 		m_octree->clear();
-
 		for each (Particle* entity1 in m_entities)
 		{
 			m_octree->insert(entity1);
 		}
+
 
 		int s = m_entities.size();
 		for (std::size_t i = 0; i <s; i++)
@@ -165,8 +165,7 @@ void Game::update()
 		{
 			m_entities[i]->update();
 		}
-	}
-
+	
 };
 
 

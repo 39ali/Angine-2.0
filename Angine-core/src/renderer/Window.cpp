@@ -117,8 +117,10 @@ namespace Angine {
 
 		void Window::disableCursor(bool b)const
 		{
-			if (b == true)
+			if (b == true) {
+				glfwSetCursorPos(m_window, m_width, m_height);
 				glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			}
 			else
 				glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		}

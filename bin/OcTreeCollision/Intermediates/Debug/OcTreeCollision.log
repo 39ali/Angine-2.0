@@ -6,7 +6,8 @@ c:\dev\angine 2.0\octreecollision\game.cpp(53): warning C4305: 'argument': trunc
 c:\dev\angine 2.0\octreecollision\game.cpp(152): warning C4018: '<': signed/unsigned mismatch
 c:\dev\angine 2.0\octreecollision\game.cpp(157): warning C4018: '<': signed/unsigned mismatch
 c:\dev\angine 2.0\octreecollision\game.cpp(164): warning C4018: '<': signed/unsigned mismatch
-c:\dev\angine 2.0\octreecollision\game.cpp(179): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\dev\angine 2.0\octreecollision\game.cpp(178): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\dev\angine 2.0\angine-core\src\core\scene.h(45): warning C4172: returning address of local variable or temporary
 c:\dev\angine 2.0\angine-core\src\core\scene.h(44): warning C4172: returning address of local variable or temporary
   OcTreeCollision.vcxproj -> C:\Dev\Angine 2.0\bin\OcTreeCollision\Output\Debug\OcTreeCollision.exe
+  OcTreeCollision.vcxproj -> C:\Dev\Angine 2.0\bin\OcTreeCollision\Output\Debug\OcTreeCollision.pdb (Full PDB)
