@@ -2,7 +2,7 @@
 
 Game::Game()
 {//1024x1280 
-	createWindow(1024, 1280, "game");
+	createWindow(1024, 1280, "game", false);
 };
 Game::~Game() {};
 

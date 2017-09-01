@@ -5,8 +5,9 @@ namespace Angine
 	namespace Renderer
 	{
 
-		FPSCamera::FPSCamera(const glm::mat4& projection, const  glm::vec3& pos) :Camera(projection), m_speed(15), m_sprintSpeed(m_speed * 6), m_MouseSensitivity(2)
-
+		FPSCamera::FPSCamera(const float pov, const float aspectRatio, const float near, const  float far, const  glm::vec3& pos)
+			:Camera(glm::perspective(pov, aspectRatio, near, far)), m_speed(15), m_sprintSpeed(m_speed * 6), m_MouseSensitivity(2),
+			m_near(near), m_far(far), m_pov(pov)
 		{
 			Window::getInstance()->disableCursor(true);
 			m_forward = glm::vec3(0, 0, -1);

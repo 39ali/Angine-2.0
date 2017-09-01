@@ -14,7 +14,7 @@ private:
 
 private:
 	glm::vec2 m_particlesNum, m_clothSize;
-	glm::mat4 projection;
+
 	Camera*	tps;
 	Entity* sphere_ent;
 	std::vector<glm::vec4> m_positions;

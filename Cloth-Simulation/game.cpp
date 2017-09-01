@@ -2,7 +2,7 @@
 
 Game::Game() :m_particlesNum(glm::vec2(40, 40)), m_clothSize(glm::vec2(4, 3))
 {
-	createWindow(1024, 1280, "game");
+	createWindow(1024, 1280, "game", false);
 };
 Game::~Game()
 {
@@ -19,8 +19,8 @@ glm::vec3 lightPos(glm::vec3(0, 0, 10));
 void Game::init()
 {
 
-	projection = glm::perspective(glm::radians(65.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
-	tps = new  FPSCamera(projection);
+	
+	tps = new  FPSCamera(glm::radians(65.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
 	setCamera(tps);
 	m_Tex = TextureManager::LoadTexture("Textures/tex.jpg");
 

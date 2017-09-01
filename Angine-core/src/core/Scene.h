@@ -40,7 +40,7 @@ namespace Angine {
 			void AddCloth(Cloth *entity);
 			void AddSkyBox(SkyBox * skybox) { m_skybox = skybox; }
 			void run();
-			void createWindow(const unsigned int &wdith, const unsigned int & height, const char* title, const glm::vec3& color = glm::vec3(0.2f, 0.3f, 0.3f));
+			void createWindow(const unsigned int &wdith, const unsigned int & height, const char* title, bool fullScreen, const glm::vec3& color = glm::vec3(0.2f, 0.3f, 0.3f));
 			inline const double & getFps()const { return m_fps; };
 			inline const double & getUps()const { return m_ups; };
 			inline void printFpsUps() { std::cout << "fps:: " + std::to_string(getFps()) + "|| ups:: " + std::to_string(getUps()) + "\n" << std::endl; };

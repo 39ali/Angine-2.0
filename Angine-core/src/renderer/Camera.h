@@ -15,9 +15,9 @@ namespace Angine {
 			const glm::mat4  virtual getMatrix() = 0;
 
 			inline glm::vec3 & getPos() { return m_position; };
-			const glm::mat4 & getPorjection() { return m_projection; };
+			virtual const glm::mat4 & getPorjection() { return m_projection; };
 			const glm::vec3 & getRight() { return m_right; };
-			
+
 		protected:
 			float m_pitch, m_yaw, m_roll;
 			float m_distanceFromTarget = 50.0f;

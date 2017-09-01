@@ -15,13 +15,15 @@ namespace Angine {
 		{
 		public:
 			~Window();
-			static void CreateInstance(const unsigned int width, const unsigned int height, const char* title, const glm::vec3& color, bool depth);
+			static void CreateInstance(const unsigned int width, const unsigned int height, const char* title, const glm::vec3& color, bool depth, bool fullscreen);
 			inline static Window* getInstance() { return m_win; }
 			inline static int getWidth() { return m_width; };
 			inline static int getHeight() { return m_height; };
 			inline bool isClosed()const { return m_isclosed; };
 			void update();
 			void clear();
+			bool isResized();
+
 			bool static isKeyPressed(unsigned int keycode);
 			static bool isMouseButtonPressed(unsigned int keycode);
 			void static  getMousePos(double& x, double& y) { x = mx; y = my; };
@@ -33,7 +35,7 @@ namespace Angine {
 			void   Window::disableCursor(bool b)const;
 
 		private:
-			Window(const unsigned int width, const unsigned int height, const char* title, bool depth);
+			Window(const unsigned int width, const unsigned int height, const char* title, bool depth, bool fullScreen);
 			GLFWwindow* m_window;
 			int static m_width, m_height;
 			const char* m_title;
@@ -43,6 +45,7 @@ namespace Angine {
 			static double  xoffset, yoffset;//mouse wheel delta
 			static bool m_isclosed;
 			static bool m_isInstanciated;
+			bool m_isResized;
 			static Window* m_win;
 			static glm::vec3 m_color;
 		private:
@@ -51,6 +54,8 @@ namespace Angine {
 			friend void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 			friend void window_close_callback(GLFWwindow* window);
 			friend void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+			friend void window_size_callback(GLFWwindow* window, int width, int height);
+
 		};
 
 	}

@@ -28,11 +28,11 @@ namespace Angine {
 			m_Clothes.clear();
 		}
 
-		glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(0.f, 0.0f, 0)) * glm::rotate(glm::mat4(), glm::radians(0.f), glm::vec3(1, 1, 1))*glm::scale(glm::mat4(), glm::vec3(0.2, 0.2, 0.2));
+		//	glm::mat4 model = glm::translate(glm::mat4(), glm::vec3(0.f, 0.0f, 0)) * glm::rotate(glm::mat4(), glm::radians(0.f), glm::vec3(1, 1, 1))*glm::scale(glm::mat4(), glm::vec3(0.2, 0.2, 0.2));
 
 		void Scene::render()
 		{
-		//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			for each (auto entity in m_Entities)
 			{
 
@@ -74,7 +74,7 @@ namespace Angine {
 				}
 				mat->unuse();
 			}
-			
+
 			for each (Cloth *  cloth in m_Clothes)
 			{
 				cloth->render(m_camera);
@@ -129,9 +129,9 @@ namespace Angine {
 			run();
 		}
 
-		void Scene::createWindow(const unsigned int &width, const unsigned int & height, const char * title, const glm::vec3& color)
+		void Scene::createWindow(const unsigned int &width, const unsigned int & height, const char * title, bool fullScreen, const glm::vec3& color)
 		{
-			Window::CreateInstance(width, height, title, color, true);
+			Window::CreateInstance(width, height, title, color, true, fullScreen);
 			m_window = Window::getInstance();
 		}
 

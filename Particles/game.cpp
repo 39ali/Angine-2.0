@@ -2,7 +2,7 @@
 
 Game::Game() : m_bh1(3, 0, 0, 1), m_width(1024), m_height(1280), m_speed(5)
 {
-	createWindow(m_width, m_height, "game", glm::vec3(0, 0, 0));
+	createWindow(m_width, m_height, "game",true, glm::vec3(0, 0, 0));
 };
 Game::~Game()
 {
@@ -21,7 +21,7 @@ glm::vec2 Game::getNormalizedDeviceCoords(double& x, double& y)
 void Game::init()
 {
 	glm::mat4 projection = glm::perspective(glm::radians(65.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
-	FPSCamera*	tps = new  FPSCamera(projection);
+	FPSCamera*	tps = new  FPSCamera(glm::radians(65.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
 	setCamera(tps);
 
 	m_shader = new Shader("Shaders/particle.vs", "Shaders/particle.fs");

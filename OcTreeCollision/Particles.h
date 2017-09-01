@@ -24,7 +24,7 @@ public:
 
 	void update()
 	{
-		updatePos(velocity);
+		updatePos(velocity*(float)Time::getDeltaTime());
 	}
 
 	inline glm::vec3 getPosition() { return  m_entity->getPosition(); }

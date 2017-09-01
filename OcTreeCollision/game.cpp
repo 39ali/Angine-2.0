@@ -1,8 +1,8 @@
 #include "game.h"
 
-Game::Game() : m_width(1024), m_height(1280), m_box_r(50), m_velocity(0.3, 2), m_velocity_max(2), particlesNum(300)
+Game::Game() : m_width(1024), m_height(1280), m_box_r(50), m_velocity(10, 30), m_velocity_max(30), particlesNum(300)
 {
-	createWindow(m_width, m_height, "game", glm::vec3(0.5, 0.5, 0.5));
+	createWindow(m_width, m_height, "game", false, glm::vec3(0.5, 0.5, 0.5));
 	m_octree = new  OcTree(0, Cube(glm::vec3(0), m_box_r));
 };
 Game::~Game()
@@ -17,8 +17,8 @@ glm::vec3 scale(1.f / 2.39200807, 1.f / 2.39200807, 1.f / 2.39200807); // raduis
 glm::vec3 lightPos(0, 0, 5);
 void Game::init()
 {
-	glm::mat4 projection = glm::perspective(glm::radians(65.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
-	FPSCamera*	tps = new  FPSCamera(projection, glm::vec3(0, 0, 380));
+
+	FPSCamera*	tps = new  FPSCamera(glm::radians(65.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f, glm::vec3(0, 0, 380));
 	setCamera(tps);
 
 	m_material = new Material(new Shader("Shaders/BasicShader.vs", "Shaders/BasicShader.fs"));
@@ -115,57 +115,58 @@ void Game::checkParticlesCollision(Particle * entity1)
 
 void Game::update()
 {
+	Window::getInstance()->disableCursor(0);
 
-		for each (Particle* entity1 in m_entities)
+	for each (Particle* entity1 in m_entities)
+	{
+		checkBoxCollision(entity1);
+
+		if (entity1->velocity.x > m_velocity_max)
+			entity1->velocity.x = m_velocity_max;
+		if (entity1->velocity.y > m_velocity_max)
+			entity1->velocity.y = m_velocity_max;
+		if (entity1->velocity.z > m_velocity_max)
+			entity1->velocity.z = m_velocity_max;
+	}
+
+	for (size_t i = 0; i < m_entities.size(); i++)
+	{
+
+		for (size_t j = i; j < m_entities.size(); j++)
 		{
-			checkBoxCollision(entity1);
-
-			if (entity1->velocity.x > m_velocity_max)
-				entity1->velocity.x = m_velocity_max;
-			if (entity1->velocity.y > m_velocity_max)
-				entity1->velocity.y = m_velocity_max;
-			if (entity1->velocity.z > m_velocity_max)
-				entity1->velocity.z = m_velocity_max;
-		}
-
-		for (size_t i = 0; i < m_entities.size(); i++)
-		{
-
-			for (size_t j = i; j < m_entities.size(); j++)
+			if (m_entities[i]->getId() != m_entities[j]->getId())
 			{
-				if (m_entities[i]->getId() != m_entities[j]->getId())
-				{
-					applyGPull(m_entities[i], m_entities[j]);
-				}
+				applyGPull(m_entities[i], m_entities[j]);
 			}
 		}
+	}
 
 
-		m_octree->clear();
-		for each (Particle* entity1 in m_entities)
-		{
-			m_octree->insert(entity1);
-		}
+	m_octree->clear();
+	for each (Particle* entity1 in m_entities)
+	{
+		m_octree->insert(entity1);
+	}
 
 
-		int s = m_entities.size();
-		for (std::size_t i = 0; i <s; i++)
-		{
-			checkParticlesCollision(m_entities[i]);
-		}
+	int s = m_entities.size();
+	for (std::size_t i = 0; i < s; i++)
+	{
+		checkParticlesCollision(m_entities[i]);
+	}
 
-		for (int i = 0; i < m_entities.size();)
-		{
-			if (!m_entities[i]->isActive)
-				DeleteParticle(m_entities[i], i);
-			else
-				i++;
-		}
-		for (int i = 0; i < m_entities.size(); i++)
-		{
-			m_entities[i]->update();
-		}
-	
+	for (int i = 0; i < m_entities.size();)
+	{
+		if (!m_entities[i]->isActive)
+			DeleteParticle(m_entities[i], i);
+		else
+			i++;
+	}
+	for (int i = 0; i < m_entities.size(); i++)
+	{
+		m_entities[i]->update();
+	}
+
 };
 
 

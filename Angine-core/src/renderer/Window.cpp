@@ -13,7 +13,7 @@ namespace Angine {
 		int  Window::m_width, Window::m_height;
 		double Window::xoffset, Window::yoffset;
 		double  Window::dx, Window::dy;
-		Window::Window(const unsigned int width, const unsigned int height, const char* title, bool depth) :
+		Window::Window(const unsigned int width, const unsigned int height, const char* title, bool depth, bool fullScreen) :
 			m_title(title)
 		{
 			m_width = width;  m_height = height;
@@ -34,8 +34,17 @@ namespace Angine {
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 			//glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-
-			m_window = glfwCreateWindow(m_width, m_height, m_title, nullptr, nullptr);
+			if (fullScreen)
+			{
+				GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+				const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+				m_width = mode->width;
+				m_height = mode->height;
+				m_window = glfwCreateWindow(m_width, m_height, m_title, monitor, nullptr);
+				std::cout << m_width << ",,," << m_height << "/n";
+			}
+			else
+				m_window = glfwCreateWindow(m_width, m_height, m_title, nullptr, nullptr);
 			if (m_window == nullptr)
 			{
 				std::cout << "didn't create window" << std::endl;
@@ -65,17 +74,18 @@ namespace Angine {
 			glfwSetKeyCallback(m_window, key_callback);
 			glfwSetWindowCloseCallback(m_window, window_close_callback);
 			glfwSetScrollCallback(m_window, scroll_callback);
+			glfwSetWindowSizeCallback(m_window, window_size_callback);
 			glfwSwapInterval(1);
 
 		}
 
-		void Window::CreateInstance(const unsigned int width, const unsigned int height, const char* title, const glm::vec3& color, bool depth)
+		void Window::CreateInstance(const unsigned int width, const unsigned int height, const char* title, const glm::vec3& color, bool depth, bool fullscreen)
 		{
 			m_color = color;
 			if (m_isInstanciated) { return; }
 
 			m_isInstanciated = true;
-			m_win = new Window(width, height, title, depth);
+			m_win = new Window(width, height, title, depth, fullscreen);
 		}
 
 		void Window::update()
@@ -179,6 +189,24 @@ namespace Angine {
 			Window* win = (Window*)glfwGetWindowUserPointer(window);
 			win->xoffset = xoffset;
 			win->yoffset = yoffset;
+		}
+		void window_size_callback(GLFWwindow* window, int width, int height)
+		{
+			Window* win = (Window*)glfwGetWindowUserPointer(window);
+			win->m_width = width;
+			win->m_height = height;
+			glViewport(0, 0, width, height);
+			win->m_isResized = true;
+		}
+
+		bool Window::isResized()
+		{
+			if (m_isResized)
+			{
+				m_isResized = false;
+				return true;
+			}
+			return false;
 		}
 
 
