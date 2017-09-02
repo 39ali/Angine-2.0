@@ -1,0 +1,25 @@
+﻿MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
+  Generating code
+c:\dev\angine 2.0\angine-core\src\core\scene.h(44): warning C4172: returning address of local variable or temporary
+c:\dev\angine 2.0\angine-core\src\core\scene.h(45): warning C4172: returning address of local variable or temporary
+  All 1339 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+Angine-core.lib(Loader.obj) : warning LNK4049: locally defined symbol ___glewDeleteBuffers imported
+Angine-core.lib(Loader.obj) : warning LNK4049: locally defined symbol ___glewGenBuffers imported
+Angine-core.lib(Loader.obj) : warning LNK4049: locally defined symbol ___glewGenVertexArrays imported
+Angine-core.lib(Loader.obj) : warning LNK4049: locally defined symbol ___glewBufferData imported
+Angine-core.lib(Loader.obj) : warning LNK4049: locally defined symbol ___glewDeleteVertexArrays imported
+Angine-core.lib(Loader.obj) : warning LNK4049: locally defined symbol ___glewBindBuffer imported
+Angine-core.lib(Loader.obj) : warning LNK4049: locally defined symbol ___glewVertexAttribPointer imported
+Angine-core.lib(Loader.obj) : warning LNK4049: locally defined symbol ___glewBindVertexArray imported
+Angine-core.lib(Loader.obj) : warning LNK4049: locally defined symbol ___glewEnableVertexAttribArray imported
+Angine-core.lib(Scene.obj) : warning LNK4049: locally defined symbol ___glewActiveTexture imported
+Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewMemoryBarrier imported
+Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewPrimitiveRestartIndex imported
+Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewBindBufferBase imported
+Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewMapBuffer imported
+Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewUnmapBuffer imported
+Angine-core.lib(Cloth.obj) : warning LNK4049: locally defined symbol ___glewDispatchCompute imported
+glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Dev\Angine 2.0\bin\OcTreeCollision\Output\Release\vc120.pdb'; linking object as if no debug info
+  OcTreeCollision.vcxproj -> C:\Dev\Angine 2.0\bin\OcTreeCollision\Output\Release\OcTreeCollision.exe
+  OcTreeCollision.vcxproj -> C:\Dev\Angine 2.0\bin\OcTreeCollision\Output\Release\OcTreeCollision.pdb (Full PDB)

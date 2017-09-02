@@ -1,6 +1,6 @@
 #include "game.h"
 
-Game::Game() : m_width(1024), m_height(1280), m_box_r(50), m_velocity(10, 30), m_velocity_max(30), particlesNum(300)
+Game::Game() : m_width(1024), m_height(1280), m_box_r(100), m_velocity(10, 30), m_velocity_max(30), particlesNum(1500)
 {
 	createWindow(m_width, m_height, "game", false, glm::vec3(0.5, 0.5, 0.5));
 	m_octree = new  OcTree(0, Cube(glm::vec3(0), m_box_r));

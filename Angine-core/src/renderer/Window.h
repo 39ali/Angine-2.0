@@ -23,7 +23,7 @@ namespace Angine {
 			void update();
 			void clear();
 			bool isResized();
-
+			void Close() { m_isclosed = true; }
 			bool static isKeyPressed(unsigned int keycode);
 			static bool isMouseButtonPressed(unsigned int keycode);
 			void static  getMousePos(double& x, double& y) { x = mx; y = my; };

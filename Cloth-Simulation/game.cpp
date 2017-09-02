@@ -1,8 +1,8 @@
 #include "game.h"
 
-Game::Game() :m_particlesNum(glm::vec2(40, 40)), m_clothSize(glm::vec2(4, 3))
+Game::Game() :m_particlesNum(glm::vec2(60, 60)), m_clothSize(glm::vec2(4, 3))
 {
-	createWindow(1024, 1280, "game", false);
+	createWindow(1920, 1080, "game", false);
 };
 Game::~Game()
 {
@@ -19,7 +19,6 @@ glm::vec3 lightPos(glm::vec3(0, 0, 10));
 void Game::init()
 {
 
-	
 	tps = new  FPSCamera(glm::radians(65.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
 	setCamera(tps);
 	m_Tex = TextureManager::LoadTexture("Textures/tex.jpg");
@@ -32,7 +31,7 @@ void Game::init()
 	Material * material = new BasicLightingMaterial(new Shader("../Shaders/BasicShader.vs", "../Shaders/BasicShader.fs"), tps);
 	material->setUniform("lightPos", lightPos);
 	m_cloth->setLightPos(lightPos);
-	
+
 
 	//sphere
 	sphere_ent = new Entity(Loader::loadModelFromFile("Models/SphereHighPoly.obj"), glm::translate(glm::mat4(), pos)* glm::scale(glm::mat4(), scale));
@@ -75,9 +74,9 @@ void Game::onRender()/// use for special  stuff
 
 void Game::update()
 {
-      pos = glm::vec3(2, 1.5, (float)glm::cos(Time::getTime() / 3)*-5);
+	pos = glm::vec3(2, 1.5, (float)glm::cos(Time::getTime() / 3)*-5);
 	sphere_ent->transform = glm::translate(glm::mat4(), pos)* glm::scale(glm::mat4(), scale);
-	
+
 	if (Window::isKeyPressed(GLFW_KEY_Q)) {
 		pos.z += 1 * Time::getDeltaTime();
 		sphere_ent->transform = glm::translate(glm::mat4(), pos)* glm::scale(glm::mat4(), scale);
@@ -88,7 +87,7 @@ void Game::update()
 		sphere_ent->transform = glm::translate(glm::mat4(), pos)* glm::scale(glm::mat4(), scale);
 	}
 	m_cloth->updateSphere(pos, 1.0f);
-	
+
 
 	if (Window::isKeyPressed(GLFW_KEY_C))
 	{

@@ -1,8 +1,8 @@
 #include "game.h"
 
-Game::Game() : m_bh1(3, 0, 0, 1), m_width(1024), m_height(1280), m_speed(5)
+Game::Game() : m_bh1(3, 0, 0, 1), m_width(1024), m_height(1280), m_speed(90)
 {
-	createWindow(m_width, m_height, "game",true, glm::vec3(0, 0, 0));
+	createWindow(m_width, m_height, "game", true, glm::vec3(0, 0, 0));
 };
 Game::~Game()
 {
@@ -20,19 +20,19 @@ glm::vec2 Game::getNormalizedDeviceCoords(double& x, double& y)
 
 void Game::init()
 {
-	glm::mat4 projection = glm::perspective(glm::radians(65.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
-	FPSCamera*	tps = new  FPSCamera(glm::radians(65.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
+	glm::mat4 projection = glm::perspective(glm::radians(170.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
+	FPSCamera*	tps = new  FPSCamera(glm::radians(170.f), ((float)Window::getWidth() / (float)Window::getHeight()), 0.1f, 1000.0f);
 	setCamera(tps);
 
 	m_shader = new Shader("Shaders/particle.vs", "Shaders/particle.fs");
 	m_computeShader = new Shader("Shaders/particle.cs");
-	m_nParticles = glm::ivec3(250, 250, 250);
+	m_nParticles = glm::ivec3(200, 200, 200);
 	particlesSum = m_nParticles.x * m_nParticles.y * m_nParticles.z;
 	initbuffers();
 
 	m_shader->use();
 	//glm::mat4 projection =glm::perspective(glm::radians(50.0f), (float)m_width / m_height, 0.1f, 100.0f);
-	m_shader->setUniform("projection", projection);
+	m_shader->setUniform("projection", tps->getPorjection());
 	glm::mat4 view = glm::lookAt(glm::vec3(2, 0, 20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	m_shader->setUniform("view", view);
 
@@ -56,6 +56,11 @@ void Game::update()
 	if (Window::isKeyPressed(GLFW_KEY_A))
 	{
 		m_bh1.x -= m_speed * Time::getDeltaTime();
+	}
+
+	if (Window::getInstance()->isKeyPressed(GLFW_KEY_ESCAPE))
+	{
+		Window::getInstance()->Close();
 	}
 
 };
@@ -163,7 +168,7 @@ void Game::onRender()
 	glDrawArrays(GL_POINTS, 0, particlesSum);
 	glBindVertexArray(0);
 
-	//draw black holes
+	//draw black hole
 	glPointSize(5.0f);
 	GLfloat data[] = { m_BlackHolePos.x, m_BlackHolePos.y, m_BlackHolePos.z, 1.0f };
 	glBindBuffer(GL_ARRAY_BUFFER, m_bhBuf);

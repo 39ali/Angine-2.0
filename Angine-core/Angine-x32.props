@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <IncludePath>$(SolutionDir)\Angine-core\;$(SolutionDir)Deps\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Deps\libs\glew\;$(SolutionDir)Deps\libs\;$(SolutionDir)Deps\libs\FreeImage\;$(SolutionDir)Deps\libs\Assimp\;$(SolutionDir)bin\Angine-core\Output\Debug\;$(LibraryPath)</LibraryPath>
+    <IntDir>$(SolutionDir)bin\$(ProjectName)\Intermediates\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)bin\$(ProjectName)\Output\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32s.lib;glfw3.lib;FreeImage.lib;assimp-vc140-mt.lib;Angine-core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>
