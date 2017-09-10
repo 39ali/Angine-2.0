@@ -29,9 +29,9 @@ namespace Angine {
 			inline glm::vec3 getPosition() const { return glm::vec3(transform[3]); }
 			void setPosition(const glm::vec3& pos) {
 				transform[3].x = pos.x;  transform[3].y = pos.y;
-				transform[3].y = pos.y;
+				transform[3].z = pos.z;
 			}
-			void setScale(const glm::vec3& scale) 
+			void setScale(const glm::vec3& scale)
 			{
 				transform[0][0] = scale.x;
 				transform[1][1] = scale.y;

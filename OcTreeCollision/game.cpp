@@ -1,8 +1,8 @@
 #include "game.h"
 
-Game::Game() : m_width(1024), m_height(1280), m_box_r(100), m_velocity(10, 30), m_velocity_max(30), particlesNum(1500)
+Game::Game() : m_width(1024), m_height(1280), m_box_r(200), m_velocity(10, 30), m_velocity_max(30), particlesNum(3000)
 {
-	createWindow(m_width, m_height, "game", false, glm::vec3(0.5, 0.5, 0.5));
+	createWindow(m_width, m_height, "game", true, glm::vec3(0.5, 0.5, 0.5));
 	m_octree = new  OcTree(0, Cube(glm::vec3(0), m_box_r));
 };
 Game::~Game()
@@ -75,7 +75,7 @@ bool  Game::pInp(const glm::vec3& pos)
 
 void Game::addParticle(const glm::vec3 & pos, const glm::vec3 & vel, const float mass)
 {
-	float r = glm::min(glm::pow(mass, 0.8f), m_box_r - 1);
+	float r = glm::min(glm::pow(mass, 0.8f), m_box_r - 2);
 	Entity * sphere_ent = new Entity(m_model, glm::translate(glm::mat4(), pos)* glm::scale(glm::mat4(), r*scale));
 	sphere_ent->setMaterial(m_material);
 	AddEntity(sphere_ent);
@@ -115,7 +115,10 @@ void Game::checkParticlesCollision(Particle * entity1)
 
 void Game::update()
 {
-	Window::getInstance()->disableCursor(0);
+	//Window::getInstance()->disableCursor(0);
+
+
+	
 
 	for each (Particle* entity1 in m_entities)
 	{
@@ -136,11 +139,10 @@ void Game::update()
 		{
 			if (m_entities[i]->getId() != m_entities[j]->getId())
 			{
-				applyGPull(m_entities[i], m_entities[j]);
+				//applyGPull(m_entities[i], m_entities[j]);
 			}
 		}
 	}
-
 
 	m_octree->clear();
 	for each (Particle* entity1 in m_entities)
@@ -162,11 +164,13 @@ void Game::update()
 		else
 			i++;
 	}
+
+
 	for (int i = 0; i < m_entities.size(); i++)
 	{
 		m_entities[i]->update();
 	}
-
+	
 };
 
 
@@ -180,7 +184,8 @@ void  Game::applyGPull(Particle* p1, Particle* p2)
 	float a1 = f / p1->mass;
 	float a2 = f / p2->mass;
 
-
+	a1 = std::isnan(a1) ? 0 : a1;
+	a2 = std::isnan(a1) ? 0 : a2;
 	p1->velocity += a1*DeltaT;
 	p2->velocity += a2*DeltaT;
 }
@@ -190,13 +195,13 @@ void  Game::checkBoxCollision(Particle * particle)
 {
 	const glm::vec3& pos = particle->getPosition();
 
-	if ((pos.x + particle->radius > m_box_r))
+	if ((pos.x + particle->radius) > m_box_r)
 	{
 		particle->updatePos(glm::vec3(m_box_r - (pos.x + particle->radius), 0, 0));
 
 		particle->velocity.x = -particle->velocity.x;
 	}
-	else if (pos.x - particle->radius < -m_box_r)
+	if (pos.x - particle->radius < -m_box_r)
 	{
 		particle->updatePos(glm::vec3(-m_box_r - (pos.x - particle->radius), 0, 0));
 		particle->velocity.x = -particle->velocity.x;
@@ -206,20 +211,19 @@ void  Game::checkBoxCollision(Particle * particle)
 	{
 		particle->updatePos(glm::vec3(0, m_box_r - (pos.y + particle->radius), 0));
 		particle->velocity.y = -particle->velocity.y;
-
 	}
-	else if (pos.y - particle->radius < -m_box_r)
+	if (pos.y - particle->radius < -m_box_r)
 	{
 		particle->updatePos(glm::vec3(0, -m_box_r - (pos.y - particle->radius), 0));
 		particle->velocity.y = -particle->velocity.y;
 	}
-	if ((pos.z + particle->radius > m_box_r))
+	if ((pos.z + particle->radius) > m_box_r)
 	{
 		particle->updatePos(glm::vec3(0, 0, m_box_r - (pos.z + particle->radius)));
 		particle->velocity.z = -particle->velocity.z;
 
 	}
-	else if (pos.z - particle->radius < -m_box_r)
+	if (pos.z - particle->radius < -m_box_r)
 	{
 		particle->updatePos(glm::vec3(0, 0, -m_box_r - (pos.z - particle->radius)));
 		particle->velocity.z = -particle->velocity.z;

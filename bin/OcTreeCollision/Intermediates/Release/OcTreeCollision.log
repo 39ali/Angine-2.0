@@ -1,8 +1,17 @@
-﻿MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
+﻿  game.cpp
+c:\dev\angine 2.0\angine-core\src\renderer\../Utils/Reader.h(8): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.10240.0\ucrt\stdio.h(205): note: see declaration of 'fopen'
+c:\dev\angine 2.0\octreecollision\game.h(31): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+game.cpp(53): warning C4305: 'argument': truncation from 'double' to 'float'
+game.cpp(155): warning C4018: '<': signed/unsigned mismatch
+game.cpp(160): warning C4018: '<': signed/unsigned mismatch
+game.cpp(169): warning C4018: '<': signed/unsigned mismatch
+game.cpp(183): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+MSVCRT.lib(initializers.obj) : warning LNK4098: defaultlib 'libcmt.lib' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-c:\dev\angine 2.0\angine-core\src\core\scene.h(44): warning C4172: returning address of local variable or temporary
-c:\dev\angine 2.0\angine-core\src\core\scene.h(45): warning C4172: returning address of local variable or temporary
-  All 1339 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  4 of 1335 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    11 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 Angine-core.lib(Loader.obj) : warning LNK4049: locally defined symbol ___glewDeleteBuffers imported
 Angine-core.lib(Loader.obj) : warning LNK4049: locally defined symbol ___glewGenBuffers imported
