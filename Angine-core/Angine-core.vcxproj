@@ -23,6 +23,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="src\common.h" />
     <ClInclude Include="src\core\Entity.h" />
+    <ClInclude Include="src\openGL\OpenGLDevice.h" />
     <ClInclude Include="src\ParticleSystem\Cloth.h" />
     <ClInclude Include="src\renderer\BasicLightingMaterial.h" />
     <ClInclude Include="src\renderer\Camera.h" />
@@ -51,6 +52,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="src\core\Entity.cpp" />
     <ClCompile Include="src\core\Scene.cpp" />
+    <ClCompile Include="src\openGL\OpenGLDevice.cpp" />
     <ClCompile Include="src\ParticleSystem\Cloth.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\FPSCamera.cpp" />
