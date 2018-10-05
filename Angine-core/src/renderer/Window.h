@@ -30,7 +30,7 @@ namespace Angine {
 			double static getDx() { return dx; }
 
 			double static getDy() { return dy; }
-
+			inline  constexpr GLFWwindow* getWindowHandle()const { return m_window; };
 			void static  getMouseScroll(double& x, double& y) { x = xoffset; y = yoffset; yoffset = xoffset = 0; };
 			void   Window::disableCursor(bool b)const;
 

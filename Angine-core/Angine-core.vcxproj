@@ -23,6 +23,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="src\common.h" />
     <ClInclude Include="src\core\Entity.h" />
+    <ClInclude Include="src\math\Color.h" />
     <ClInclude Include="src\openGL\OpenGLDevice.h" />
     <ClInclude Include="src\ParticleSystem\Cloth.h" />
     <ClInclude Include="src\renderer\BasicLightingMaterial.h" />

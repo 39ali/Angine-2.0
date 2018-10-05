@@ -19,3 +19,10 @@ using uint16 = uint16_t;
 using uint32 = uint32_t;
 using uint64 = uint64_t;
 using uintptr = uintptr_t;
+
+
+
+#define A_LOG(type ,message, ...) \
+fprintf(stderr, "[%s] ", type); \
+fprintf(stderr,message, ##__VA_ARGS__); \
+fprintf(stderr,"\n");

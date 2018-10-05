@@ -3,7 +3,12 @@
 #include <unordered_map>
 #include <vector>
 #include "../common.h"
+#define GLEW_STATIC
+#include <glew\glew.h>
+#include <GLFW\glfw3.h>
+
 #include "../renderer/Window.h"
+#include "../math/Color.h"
 
 namespace Angine {
 class OpenGLDevice {
@@ -105,7 +110,7 @@ class OpenGLDevice {
     FORMAT_DEPTH_AND_STENCIL,
   };
 
-  struct DrawOInfo {
+  struct DrawInfo {
     enum PrimitiveType primitiveType = PrimitiveType::PRIMITIVE_TRIANGLES;
     enum FaceCulling faceCulling = FaceCulling::FACE_CULL_NONE;
     enum DrawFunc drawFunc = DrawFunc::DRAW_FUNC_ALWAYS;
@@ -175,12 +180,13 @@ class OpenGLDevice {
 	  uint32 texture, uint32 sampler, uint32 unit);
   uint32 deleteShaderProgram(uint32 shader);
 
-  void draw(uint32 fbo, uint32 shader, uint32 vao, const DrawOInfo& drawParams,
+
+  void draw(uint32 fbo, uint32 shader, uint32 vao, const DrawInfo& drawParams,
 	  uint32 numInstances, uint32 numElements);
 
-  //void clear(uint32 fbo,
-	 // bool shouldClearColor, bool shouldClearDepth, bool shouldClearStencil,
-	 // const Color& color, uint32 stencil);
+  void clear(uint32 fbo,
+	  bool shouldclearcolor, bool shouldcleardepth, bool shouldclearstencil,
+	  const Color& color, uint32 stencil);
  private:
   struct VertexArray {
     enum BufferUse usage;
@@ -202,6 +208,11 @@ class OpenGLDevice {
     uint32 height;
   };
 
+  std::unordered_map<uint32, VertexArray> vaoMap;
+  std::unordered_map<uint32, Fbo> fboMap;
+  std::unordered_map<uint32, ShaderProgram> shaderProgramMap;
+
+
   uint32 currentFBO;
   uint32 curentviewportFBO;
   uint32 currentVAO;
@@ -222,12 +233,14 @@ class OpenGLDevice {
   bool stencilTestEnabled;
   bool scissorTestEnabled;
 
+  static bool isInitialized;
+
   void setFBO(uint32 fbo);
   void setViewport(uint32 view);
   void setVAO(uint32 vao);
   void setShader(uint32 shader);
   void setFaceCulling(enum FaceCulling faceCulling);
-  void setDepthTest(bool shouldWrite, enum DrawFunc depthFunc);
+  void setDepthTest( enum DrawFunc depthFunc , bool shouldWrite);
   void setBlending(enum BlendFunc sourceBlend, enum BlendFunc destBlend);
   void setStencilTest(bool enable, enum DrawFunc stencilFunc,
                       uint32 stencilTestMask, uint32 stencilWriteMask,
