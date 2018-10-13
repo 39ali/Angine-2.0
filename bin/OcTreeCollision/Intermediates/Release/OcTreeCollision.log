@@ -1,1 +1,18 @@
-﻿
+﻿  game.cpp
+c:\dev\angine-2.0\angine-core\src\renderer\../Utils/Reader.h(8): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\ucrt\stdio.h(207): note: see declaration of 'fopen'
+c:\dev\angine-2.0\octreecollision\game.h(31): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+game.cpp(53): warning C4305: 'argument': truncation from 'double' to 'float'
+game.cpp(155): warning C4018: '<': signed/unsigned mismatch
+game.cpp(160): warning C4018: '<': signed/unsigned mismatch
+game.cpp(169): warning C4018: '<': signed/unsigned mismatch
+game.cpp(183): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  OcTree.cpp
+c:\dev\angine-2.0\angine-core\src\renderer\../Utils/Reader.h(8): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\ucrt\stdio.h(207): note: see declaration of 'fopen'
+OcTree.cpp(30): warning C4018: '<': signed/unsigned mismatch
+OcTree.cpp(60): warning C4018: '<': signed/unsigned mismatch
+  Particle.cpp
+c:\dev\angine-2.0\angine-core\src\renderer\../Utils/Reader.h(8): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\ucrt\stdio.h(207): note: see declaration of 'fopen'
+LINK : fatal error LNK1181: cannot open input file 'Angine-core.lib'

@@ -4,12 +4,12 @@
 #include <vector>
 #include "../common.h"
 #define GLEW_STATIC
-#include <glew\glew.h>
 #include <GLFW\glfw3.h>
+#include <glew\glew.h>
 
-#include "../renderer/Window.h"
 #include "../math/Color.h"
-
+#include "../renderer/Window.h"
+///TODO: make sure you need all these includes ..?
 namespace Angine {
 class OpenGLDevice {
  public:
@@ -162,31 +162,35 @@ class OpenGLDevice {
                        enum SamplerWrapMode wrapU, enum samplerWrapMode wrapV,
                        float anisotropy);
 
-  uint32 deleteSampler(uint32 sampler);
+  void deleteSampler(uint32 sampler);
 
   uint32 createTexture2D(int32 width, int32 height, const void* data,
-                         enum PixelFormat dataFormat,
-                         enum PixelFormat internalFormat, bool generateMipmaps,
-                         bool compress);
-  uint32 deleteTexture2D(uint32 texture2D);
+                         TexturePixelFormat dataFormat,
+                         TexturePixelFormat internalFormat,
+                         bool generateMipmaps);
+  void deleteTexture2D(uint32 texture2D);
 
-  uint32 createUniformBuffer(const void* data, uintptr dataSize, enum BufferUsage usage);
+  uint32 createUniformBuffer(const void* data, uintptr dataSize,
+                             enum BufferUsage usage);
   void updateUniformBuffer(uint32 buffer, const void* data, uintptr dataSize);
-  uint32 deleteUniformBuffer(uint32 buffer);
+  void deleteUniformBuffer(uint32 buffer);
 
-  void setShaderUniformBuffer(uint32 shader, const std::string& uniformBufferName,
-	  uint32 buffer);
+
+  uint32 createShaderProgram(const String& shaderText);
+
+  void setShaderUniformBuffer(uint32 shader,
+                              const std::string& uniformBufferName,
+                              uint32 buffer);
   void setShaderSampler(uint32 shader, const std::string& samplerName,
-	  uint32 texture, uint32 sampler, uint32 unit);
-  uint32 deleteShaderProgram(uint32 shader);
-
+                        uint32 texture, uint32 sampler, uint32 unit);
+  void deleteShaderProgram(uint32 shader);
 
   void draw(uint32 fbo, uint32 shader, uint32 vao, const DrawInfo& drawParams,
-	  uint32 numInstances, uint32 numElements);
+            uint32 numInstances, uint32 numElements);
 
-  void clear(uint32 fbo,
-	  bool shouldclearcolor, bool shouldcleardepth, bool shouldclearstencil,
-	  const Color& color, uint32 stencil);
+  void clear(uint32 fbo, bool shouldclearcolor, bool shouldcleardepth,
+             bool shouldclearstencil, const Color& color, uint32 stencil);
+
  private:
   struct VertexArray {
     enum BufferUse usage;
@@ -211,7 +215,6 @@ class OpenGLDevice {
   std::unordered_map<uint32, VertexArray> vaoMap;
   std::unordered_map<uint32, Fbo> fboMap;
   std::unordered_map<uint32, ShaderProgram> shaderProgramMap;
-
 
   uint32 currentFBO;
   uint32 curentviewportFBO;
@@ -240,7 +243,7 @@ class OpenGLDevice {
   void setVAO(uint32 vao);
   void setShader(uint32 shader);
   void setFaceCulling(enum FaceCulling faceCulling);
-  void setDepthTest( enum DrawFunc depthFunc , bool shouldWrite);
+  void setDepthTest(enum DrawFunc depthFunc, bool shouldWrite);
   void setBlending(enum BlendFunc sourceBlend, enum BlendFunc destBlend);
   void setStencilTest(bool enable, enum DrawFunc stencilFunc,
                       uint32 stencilTestMask, uint32 stencilWriteMask,

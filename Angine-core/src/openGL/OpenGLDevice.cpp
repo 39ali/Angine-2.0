@@ -2,6 +2,16 @@
 
 namespace Angine {
 
+	//TODO : implement these funcs
+	//static bool addShader(GLuint shaderProgram, const String& text, GLenum type,
+	//	Array<GLuint>* shaders);
+	//static void addAllAttributes(GLuint program, const String& vertexShaderText, uint32 version);
+	//static bool checkShaderError(GLuint shader, int flag,
+	//	bool isProgram, const String& errorMessage);
+	//static void addShaderUniforms(GLuint shaderProgram, const String& shaderText,
+	//	Map<String, GLint>& uniformMap, Map<String, GLint>& samplerMap);
+	uint32 createShaderProgram(const String& shaderText);
+bool OpenGLDevice::isInitialized = false;
 bool OpenGLDevice::initialInit() {
   if (isInitialized) return true;
   glfwInit();
@@ -178,47 +188,190 @@ void OpenGLDevice::setDepthTest(enum DrawFunc depthfunc, bool shouldWrite) {
   glDepthFunc(depthfunc);
 }
 
-uint32 createFBO(uint32 texture, int32 width, int32 height,
-                 enum FrameBufferAttachment attachment, uint32 attachmentNumber,
-                 uint32 mipmaplevel);
+uint32 OpenGLDevice::createFBO(uint32 texture, int32 width, int32 height,
+                               enum FrameBufferAttachment attachment,
+                               uint32 attachmentNumber, uint32 mipmaplevel) {
+  uint32 fbo;
+  glGenFramebuffers(1, &fbo);
+  setFBO(fbo);
 
-void unbindFBO(uint32 fbo);
+  GLenum att = attachment + attachmentNumber;
+  glFramebufferTexture2D(GL_FRAMEBUFFER, att, GL_TEXTURE_2D, texture,
+                         mipmaplevel);
 
-uint32 createVertexArray(const float** Data, const uint32* vertexElementSizes,
-                         uint32 numVertexComponents,
-                         uint32 numInstanceComponents, uint32 numVertices,
-                         const uint32* indices, uint32 numIndices,
-                         enum BufferUsage usage);
+  Fbo data;
+  data.width = width;
+  data.height = height;
+  fboMap[fbo] = data;
 
-void updateVertexArrayBuffer(uint32 vao, uint32 bufferIndex, const void* data,
-                             uintptr dataSize);
+  return fbo;
+}
+
+void OpenGLDevice::unbindFBO(uint32 fbo) {
+  auto it = fboMap.find(fbo);
+  if (it == fboMap.end()) return;
+  glDeleteFramebuffers(1, &fbo);
+
+  fboMap.erase(it);
+}
+
+uint32 OpenGLDevice::createVertexArray(const float** Data,
+                                       const uint32* vertexElementSizes,
+                                       uint32 numVertexComponents,
+                                       uint32 numInstanceComponents,
+                                       uint32 numVertices,
+                                       const uint32* indices, uint32 numIndices,
+                                       enum BufferUsage usage) {}
+
+void OpenGLDevice::updateVertexArrayBuffer(uint32 vao, uint32 bufferIndex,
+                                           const void* data, uintptr dataSize) {
+  if (!vao) return;
+  auto it = vaoMap.find(vao);
+  if (it == vaoMap.end()) return;
+
+  const VertexArray* data = &it->second;
+}
 
 void deleteVertexArray(uint32 vao);
 
-uint32 createSampler(enum SamplerFilter minFilter,
-                     enum SamplerWrapMode magFilter, enum SamplerWrapMode wrapU,
-                     enum samplerWrapMode wrapV, float anisotropy);
+uint32 OpenGLDevice::createSampler(
+    enum SamplerFilter minFilter, enum SamplerWrapMode magFilter,
+    enum SamplerWrapMode wrapU, enum samplerWrapMode wrapV,
+    float anisotropy)  // anisotropy  val :1.0f-16.0f
+{
+  uint32 samp = 0;
+  glGenSamplers(1, &samp);
+  glSamplerParameteri(samp, GL_TEXTURE_WRAP_S, wrapU);
+  glSamplerParameteri(samp, GL_TEXTURE_WRAP_T, wrapV);
+  glSamplerParameteri(samp, GL_TEXTURE_MIN_FILTER, minFilter);
+  glSamplerParameteri(samp, GL_TEXTURE_MAG_FILTER, magFilter);
+  if (anisotropy != 0.0f && minFilter != SamplerFilter::FILTER_NEAREST &&
+      minFilter != SamplerFilter::FILTER_LINEAR)
+    glSamplerParameterf(samp, GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
 
-uint32 deleteSampler(uint32 sampler);
+  return samp;
+}
 
-uint32 createTexture2D(int32 width, int32 height, const void* data,
-                       enum PixelFormat dataFormat,
-                       enum PixelFormat internalFormat, bool generateMipmaps,
-                       bool compress);
-uint32 deleteTexture2D(uint32 texture2D);
+void OpenGLDevice::deleteSampler(uint32 sampler) {
+  if (sampler == 0) return;
+  glDeleteSamplers(1, &sampler);
+};
 
-uint32 createUniformBuffer(const void* data, uintptr dataSize,
-                           enum BufferUsage usage);
-void updateUniformBuffer(uint32 buffer, const void* data, uintptr dataSize);
-uint32 deleteUniformBuffer(uint32 buffer);
+static GLint getOpenGLFormat(OpenGLDevice::TexturePixelFormat format) {
+  switch (format) {
+    case OpenGLDevice::FORMAT_R:
+      return GL_RED;
+    case OpenGLDevice::FORMAT_RG:
+      return GL_RG;
+    case OpenGLDevice::FORMAT_RGB:
+      return GL_RGB;
+    case OpenGLDevice::FORMAT_RGBA:
+      return GL_RGBA;
+    case OpenGLDevice::FORMAT_DEPTH:
+      return GL_DEPTH_COMPONENT;
+    case OpenGLDevice::FORMAT_DEPTH_AND_STENCIL:
+      return GL_DEPTH_STENCIL;
+  };
 
-void setShaderUniformBuffer(uint32 shader, const std::string& uniformBufferName,
-                            uint32 buffer);
-void setShaderSampler(uint32 shader, const std::string& samplerName,
-                      uint32 texture, uint32 sampler, uint32 unit);
-uint32 deleteShaderProgram(uint32 shader);
+  A_LOG("Render", "PixelFormat %d is not a valid PixelFormat.", format);
+  return 0;
+}
 
-void draw(uint32 fbo, uint32 shader, uint32 vao, const DrawOInfo& drawParams,
-          uint32 numInstances, uint32 numElements);
+uint32 OpenGLDevice::createTexture2D(int32 width, int32 height,
+                                     const void* data,
+                                     TexturePixelFormat dataFormat,
+                                     TexturePixelFormat internalFormat,
+                                     bool generateMipmaps) {
+  GLint format = getOpenGLFormat(dataFormat);
+  GLint internalFormat = getOpenGLFormat(internalFormat);
+  GLenum textureTarget = GL_TEXTURE_2D;
+  GLuint texture;
+
+  glGenTextures(1, &texture);
+  glBindTexture(textureTarget, texture);
+
+  glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+  glTexImage2D(texture, 0, internalFormat, width, height, 0, format,
+               GL_UNSIGNED_BYTE, data);
+
+  if (generateMipmaps)
+    glGenerateMipmap(textureTarget);
+  else {
+    glTexParameteri(textureTarget, GL_TEXTURE_BASE_LEVEL, 0);
+    glTexParameteri(textureTarget, GL_TEXTURE_MAX_LEVEL, 0);
+  }
+  return texture;
+}
+
+void OpenGLDevice::deleteTexture2D(uint32 texture2D) {
+  if (texture2D == 0) return;
+  glDeleteTextures(1, &texture2D);
+}
+
+uint32 OpenGLDevice::createUniformBuffer(const void* data, uintptr dataSize,
+                                         enum BufferUsage usage) {
+  uint32 ubo;
+  glGenBuffers(1, &ubo);
+  glBindBuffer(GL_UNIFORM_BUFFER, ubo);
+  glBufferData(GL_UNIFORM_BUFFER, dataSize, data, usage);
+  return ubo;
+}
+void OpenGLDevice::updateUniformBuffer(uint32 buffer, const void* data,
+                                       uintptr dataSize) {
+  glBindBuffer(GL_UNIFORM_BUFFER, buffer);
+  void* dest = glMapBuffer(GL_UNIFORM_BUFFER, GL_WRITE_ONLY);
+  memcpy(dest, data, dataSize);
+  glUnmapBuffer(GL_UNIFORM_BUFFER);
+}
+
+void OpenGLDevice::deleteUniformBuffer(uint32 buffer) {
+  if (buffer == 0) return;
+  deleteUniformBuffer(buffer);
+}
+
+void OpenGLDevice::setShaderUniformBuffer(uint32 shader,
+                                          const std::string& uniformBufferName,
+                                          uint32 buffer) {
+  setShader(shader);
+  glBindBufferBase(GL_UNIFORM_BUFFER,
+                   shaderProgramMap[shader].uniforms[uniformBufferName],
+                   buffer);
+}
+void OpenGLDevice::setShaderSampler(uint32 shader,
+                                    const std::string& samplerName,
+                                    uint32 texture, uint32 sampler,
+                                    uint32 unit) {
+  setShader(shader);
+  glActiveTexture(GL_TEXTURE0 + unit);
+  glBindTexture(GL_TEXTURE_2D, texture);
+  glBindSampler(unit, sampler);
+  glUniform1i(shaderProgramMap[shader].samplers[samplerName], unit);
+}
+
+void OpenGLDevice::deleteShaderProgram(uint32 shader) {
+  if (shader == 0) return;
+
+  auto it = shaderProgramMap.find(shader);
+  if (it == shaderProgramMap.end()) return;
+
+  const ShaderProgram* shaderProgram = &it->second;
+
+  for (auto it = shaderProgram->shaders.begin();
+       it != shaderProgram->shaders.end(); ++it) {
+    glDetachShader(shader, *it);
+    glDeleteShader(*it);
+  }
+
+  glDeleteProgram(shader);
+  shaderProgramMap.erase(it);
+}
+
+void OpenGLDevice::draw(uint32 fbo, uint32 shader, uint32 vao,
+                        const DrawInfo& drawParams, uint32 numInstances,
+                        uint32 numElements) {}
 
 }  // namespace Angine

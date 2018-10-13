@@ -35,6 +35,7 @@
     <ClInclude Include="src\renderer\Mesh.h" />
     <ClInclude Include="src\renderer\Model.h" />
     <ClInclude Include="src\renderer\ModelFactory.h" />
+    <ClInclude Include="src\renderer\RenderContext.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
     <ClInclude Include="src\renderer\SkyBox.h" />
@@ -60,6 +61,7 @@
     <ClCompile Include="src\renderer\Loader.cpp" />
     <ClCompile Include="src\renderer\Material.cpp" />
     <ClCompile Include="src\renderer\ModelFactory.cpp" />
+    <ClCompile Include="src\renderer\RenderContext.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\renderer\Shader.cpp" />
     <ClCompile Include="src\renderer\SkyBox.cpp" />
