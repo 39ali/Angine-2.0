@@ -2,15 +2,6 @@
 
 namespace Angine {
 
-	//TODO : implement these funcs
-	//static bool addShader(GLuint shaderProgram, const String& text, GLenum type,
-	//	Array<GLuint>* shaders);
-	//static void addAllAttributes(GLuint program, const String& vertexShaderText, uint32 version);
-	//static bool checkShaderError(GLuint shader, int flag,
-	//	bool isProgram, const String& errorMessage);
-	//static void addShaderUniforms(GLuint shaderProgram, const String& shaderText,
-	//	Map<String, GLint>& uniformMap, Map<String, GLint>& samplerMap);
-	uint32 createShaderProgram(const String& shaderText);
 bool OpenGLDevice::isInitialized = false;
 bool OpenGLDevice::initialInit() {
   if (isInitialized) return true;
@@ -43,7 +34,9 @@ OpenGLDevice::OpenGLDevice(Renderer::Window& window)
       stencilTestEnabled(false),
       scissorTestEnabled(false) {
   glfwMakeContextCurrent(window.getWindowHandle());
-
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   glewExperimental = GL_TRUE;
   GLenum stat = glewInit();
   if (stat != GLEW_OK) {
@@ -51,10 +44,10 @@ OpenGLDevice::OpenGLDevice(Renderer::Window& window)
     throw std::runtime_error("could not initialize Render Device");
   }
 
-  glEnable(GL_DEPTH_TEST);
-  glDepthFunc(DRAW_FUNC_ALWAYS);
-  glDepthMask(GL_FALSE);
-  glFrontFace(GL_CW);
+  // glEnable(GL_DEPTH_TEST);
+  // glDepthFunc(DRAW_FUNC_ALWAYS);
+  // glDepthMask(GL_FALSE);
+  // glFrontFace(GL_CW);
 
   Fbo fbo;
   fbo.width = window.getWidth();
@@ -80,15 +73,11 @@ void OpenGLDevice::clear(uint32 fbo, bool shouldclearcolor,
     currentFlags |= GL_DEPTH_BUFFER_BIT;
   }
   if (shouldclearstencil) {
-    setStencilWriteMask(stencilWriteMask);
+    //  setStencilWriteMask(stencilWriteMask);
     currentFlags |= GL_STENCIL_BUFFER_BIT;
   }
   glClear(currentFlags);
 }
-
-void OpenGLDevice::draw(uint32 fbo, uint32 shader, uint32 vao,
-                        const DrawInfo& drawInfo, uint32 numInstances,
-                        uint32 numElements) {}
 
 void OpenGLDevice::setFBO(uint32 fbo) {
   if (fbo == currentFBO) {
@@ -221,7 +210,9 @@ uint32 OpenGLDevice::createVertexArray(const float** Data,
                                        uint32 numInstanceComponents,
                                        uint32 numVertices,
                                        const uint32* indices, uint32 numIndices,
-                                       enum BufferUsage usage) {}
+                                       enum BufferUsage usage) {
+  return 0;
+}
 
 void OpenGLDevice::updateVertexArrayBuffer(uint32 vao, uint32 bufferIndex,
                                            const void* data, uintptr dataSize) {
@@ -229,7 +220,8 @@ void OpenGLDevice::updateVertexArrayBuffer(uint32 vao, uint32 bufferIndex,
   auto it = vaoMap.find(vao);
   if (it == vaoMap.end()) return;
 
-  const VertexArray* data = &it->second;
+  const VertexArray* vdata = &it->second;
+  //  TODO complete this;
 }
 
 void deleteVertexArray(uint32 vao);
@@ -280,10 +272,10 @@ static GLint getOpenGLFormat(OpenGLDevice::TexturePixelFormat format) {
 uint32 OpenGLDevice::createTexture2D(int32 width, int32 height,
                                      const void* data,
                                      TexturePixelFormat dataFormat,
-                                     TexturePixelFormat internalFormat,
+                                     TexturePixelFormat internalFormat1,
                                      bool generateMipmaps) {
   GLint format = getOpenGLFormat(dataFormat);
-  GLint internalFormat = getOpenGLFormat(internalFormat);
+  GLint internalFormat = getOpenGLFormat(internalFormat1);
   GLenum textureTarget = GL_TEXTURE_2D;
   GLuint texture;
 
@@ -368,10 +360,124 @@ void OpenGLDevice::deleteShaderProgram(uint32 shader) {
 
   glDeleteProgram(shader);
   shaderProgramMap.erase(it);
+};
+
+uint32 OpenGLDevice::createShaderProgram(const std::string& filepath) {
+  GLuint shaderProgram = glCreateProgram();
+
+  if (shaderProgram == 0) {
+    A_LOG("RENDER", "error", 0);
+    return -1;
+  }
+  ShaderString ss = parseShader(filepath);
+  GLuint m_vs_id =
+      compile(ss.vertex, GL_VERTEX_SHADER, filepath, shaderProgram);
+  GLuint m_fg_id =
+      compile(ss.fragment, GL_FRAGMENT_SHADER, filepath, shaderProgram);
+  link(shaderProgram, m_vs_id, m_fg_id);
+
+  return shaderProgram;
+}
+
+OpenGLDevice::ShaderString OpenGLDevice::parseShader(
+    const std::string& filepath) {
+  std::ifstream file(filepath);
+  std::string line;
+  std::stringstream stringStreams[2];
+
+  if (file.fail()) {
+    std::cout << "ERROR opening : " << filepath << std::endl;
+    return {};
+  }
+
+  enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMNET = 1 };
+
+  ShaderType shaderType = ShaderType::NONE;
+
+  while (getline(file, line)) {
+    if (line.find("#shader") != std::string::npos) {
+      if (line.find("vertex") != std::string::npos) {
+        shaderType = ShaderType::VERTEX;
+      } else if (line.find("fragment") != std::string::npos) {
+        shaderType = ShaderType::FRAGMNET;
+      }
+
+    } else
+      stringStreams[(int)shaderType] << line << '\n';
+  }
+
+  return {stringStreams[0].str(), stringStreams[1].str()};
+}
+
+GLuint OpenGLDevice::compile(const std::string& shaderSource, GLenum type,
+                             const std::string& filename, GLuint m_program_id) {
+  GLuint shader = glCreateShader(type);
+
+  const GLchar* source = (const GLchar*)shaderSource.c_str();
+  glShaderSource(shader, 1, &source, 0);
+
+  glCompileShader(shader);
+
+  GLint isCompiled = 0;
+  glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
+  if (isCompiled == GL_FALSE) {
+    GLint maxLength = 0;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+
+    std::vector<GLchar> infoLog(maxLength);
+    glGetShaderInfoLog(shader, maxLength, &maxLength, &infoLog[0]);
+
+    std::cout << "shader compile  error : " << filename << "->>"
+              << std::string((type == GL_VERTEX_SHADER) ? "VERTEX_SHADER"
+                                                        : "FRAGMENT_SHADER")
+              << " : " << std::string(infoLog.begin(), infoLog.end())
+              << std::endl;
+
+    glDeleteShader(shader);
+
+    return 0;
+  }
+  glAttachShader(m_program_id, shader);
+  return shader;
+};
+
+void OpenGLDevice::link(GLuint m_program_id, GLuint m_vs_id, GLuint m_fg_id) {
+  glLinkProgram(m_program_id);
+
+  GLint isLinked = 0;
+  glGetProgramiv(m_program_id, GL_LINK_STATUS, (int*)&isLinked);
+  if (isLinked == GL_FALSE) {
+    GLint maxLength = 0;
+    glGetProgramiv(m_program_id, GL_INFO_LOG_LENGTH, &maxLength);
+    //	if (maxLength == 0)return;
+
+    std::vector<GLchar> infoLog(maxLength);
+    glGetProgramInfoLog(m_program_id, maxLength, &maxLength, &infoLog[0]);
+
+    std::cout << "shader linking error : "
+              << std::string(infoLog.begin(), infoLog.end()) << std::endl;
+
+    glDeleteProgram(m_program_id);
+
+    glDeleteShader(m_vs_id);
+    glDeleteShader(m_vs_id);
+
+    return;
+  }
+
+  glDetachShader(m_program_id, m_vs_id);
+  glDetachShader(m_program_id, m_fg_id);
 }
 
 void OpenGLDevice::draw(uint32 fbo, uint32 shader, uint32 vao,
                         const DrawInfo& drawParams, uint32 numInstances,
                         uint32 numElements) {}
+
+void OpenGLDevice::draw(uint32 shader) { setShader(shader); }
+
+void OpenGLDevice::setUniform() const 
+{
+
+}
 
 }  // namespace Angine

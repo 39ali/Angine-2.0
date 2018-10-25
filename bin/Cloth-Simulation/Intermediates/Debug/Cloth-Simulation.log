@@ -1,2 +1,37 @@
-﻿  Cloth-Simulation.vcxproj -> C:\Dev\Angine\bin\Cloth-Simulation\Output\Debug\Cloth-Simulation.exe
-  Cloth-Simulation.vcxproj -> C:\Dev\Angine\bin\Cloth-Simulation\Output\Debug\Cloth-Simulation.pdb (Partial PDB)
+﻿  game.cpp
+c:\dev\angine-2.0\cloth-simulation\game.h(4): error C2039: 'Scene': is not a member of 'Angine::Core'
+  c:\dev\angine-2.0\angine-core\src\core\entity.h(9): note: see declaration of 'Angine::Core'
+c:\dev\angine-2.0\cloth-simulation\game.h(5): error C2504: 'Scene': base class undefined
+c:\dev\angine-2.0\cloth-simulation\game.h(22): error C2143: syntax error: missing ';' before '*'
+c:\dev\angine-2.0\cloth-simulation\game.h(22): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+c:\dev\angine-2.0\cloth-simulation\game.h(22): error C2238: unexpected token(s) preceding ';'
+c:\dev\angine-2.0\cloth-simulation\game.h(10): error C3668: 'Game::init': method with override specifier 'override' did not override any base class methods
+c:\dev\angine-2.0\cloth-simulation\game.h(11): error C3668: 'Game::update': method with override specifier 'override' did not override any base class methods
+c:\dev\angine-2.0\cloth-simulation\game.h(12): error C3668: 'Game::tick': method with override specifier 'override' did not override any base class methods
+c:\dev\angine-2.0\cloth-simulation\game.h(13): error C3668: 'Game::onRender': method with override specifier 'override' did not override any base class methods
+c:\dev\angine-2.0\cloth-simulation\game.cpp(5): error C3861: 'createWindow': identifier not found
+c:\dev\angine-2.0\cloth-simulation\game.cpp(22): error C2061: syntax error: identifier 'FPSCamera'
+c:\dev\angine-2.0\cloth-simulation\game.cpp(23): error C3861: 'setCamera': identifier not found
+c:\dev\angine-2.0\cloth-simulation\game.cpp(26): error C2065: 'm_cloth': undeclared identifier
+c:\dev\angine-2.0\cloth-simulation\game.cpp(26): error C2061: syntax error: identifier 'Cloth'
+c:\dev\angine-2.0\cloth-simulation\game.cpp(27): error C2065: 'm_cloth': undeclared identifier
+c:\dev\angine-2.0\cloth-simulation\game.cpp(27): error C3861: 'AddCloth': identifier not found
+c:\dev\angine-2.0\cloth-simulation\game.cpp(31): error C2061: syntax error: identifier 'BasicLightingMaterial'
+c:\dev\angine-2.0\cloth-simulation\game.cpp(33): error C2065: 'm_cloth': undeclared identifier
+c:\dev\angine-2.0\cloth-simulation\game.cpp(33): error C2227: left of '->setLightPos' must point to class/struct/union/generic type
+  c:\dev\angine-2.0\cloth-simulation\game.cpp(33): note: type is 'unknown-type'
+c:\dev\angine-2.0\cloth-simulation\game.cpp(39): error C3861: 'AddEntity': identifier not found
+c:\dev\angine-2.0\cloth-simulation\game.cpp(43): error C2653: 'ModelFactory': is not a class or namespace name
+c:\dev\angine-2.0\cloth-simulation\game.cpp(43): error C3861: 'createPlane': identifier not found
+c:\dev\angine-2.0\cloth-simulation\game.cpp(47): error C3861: 'AddEntity': identifier not found
+c:\dev\angine-2.0\cloth-simulation\game.cpp(66): error C2061: syntax error: identifier 'SkyBox'
+c:\dev\angine-2.0\cloth-simulation\game.cpp(66): error C3861: 'AddSkyBox': identifier not found
+c:\dev\angine-2.0\cloth-simulation\game.cpp(81): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+c:\dev\angine-2.0\cloth-simulation\game.cpp(86): warning C4244: '-=': conversion from 'double' to 'float', possible loss of data
+c:\dev\angine-2.0\cloth-simulation\game.cpp(89): error C2065: 'm_cloth': undeclared identifier
+c:\dev\angine-2.0\cloth-simulation\game.cpp(89): error C2227: left of '->updateSphere' must point to class/struct/union/generic type
+  c:\dev\angine-2.0\cloth-simulation\game.cpp(89): note: type is 'unknown-type'
+c:\dev\angine-2.0\cloth-simulation\game.cpp(104): error C2653: 'Scene': is not a class or namespace name
+c:\dev\angine-2.0\cloth-simulation\game.cpp(104): error C3861: 'printFpsUps': identifier not found
+c:\dev\angine-2.0\cloth-simulation\game.cpp(112): error C2039: 'start': is not a member of 'Game'
+  c:\dev\angine-2.0\cloth-simulation\game.h(4): note: see declaration of 'Game'

@@ -29,9 +29,7 @@ namespace Angine {
 
 
 			glfwInit();
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+			
 			//glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 			if (fullScreen)
@@ -50,17 +48,17 @@ namespace Angine {
 				std::cout << "didn't create window" << std::endl;
 				glfwTerminate();
 			}
-			glfwMakeContextCurrent(m_window);
+		//	glfwMakeContextCurrent(m_window);
 
-			glewExperimental = GL_TRUE;
-			if (glewInit() != 0)
+		//	glewExperimental = GL_TRUE;
+			/*if (glewInit() != 0)
 			{
 				std::cout << "glew init error" << std::endl;
 			}
 
 			if (depth) {
 				glEnable(GL_DEPTH_TEST);
-			}
+			}*/
 
 			//int m_width, m_height;
 

@@ -13,4 +13,4 @@
 #include "src\core/Entity.h"
 #include "src\renderer/Model.h"
 #include "src\renderer/TextureManager.h"
-#include "src\core\Scene.h"
+//#include "src\core\Scene.h"

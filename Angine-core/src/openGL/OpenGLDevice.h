@@ -2,6 +2,9 @@
 #include <glew\glew.h>
 #include <unordered_map>
 #include <vector>
+#include <fstream>
+#include <sstream>
+#include <string>
 #include "../common.h"
 #define GLEW_STATIC
 #include <GLFW\glfw3.h>
@@ -9,6 +12,7 @@
 
 #include "../math/Color.h"
 #include "../renderer/Window.h"
+
 ///TODO: make sure you need all these includes ..?
 namespace Angine {
 class OpenGLDevice {
@@ -170,13 +174,14 @@ class OpenGLDevice {
                          bool generateMipmaps);
   void deleteTexture2D(uint32 texture2D);
 
+ 
   uint32 createUniformBuffer(const void* data, uintptr dataSize,
                              enum BufferUsage usage);
   void updateUniformBuffer(uint32 buffer, const void* data, uintptr dataSize);
   void deleteUniformBuffer(uint32 buffer);
 
 
-  uint32 createShaderProgram(const String& shaderText);
+  uint32 createShaderProgram(const std::string& shaderText);
 
   void setShaderUniformBuffer(uint32 shader,
                               const std::string& uniformBufferName,
@@ -187,9 +192,14 @@ class OpenGLDevice {
 
   void draw(uint32 fbo, uint32 shader, uint32 vao, const DrawInfo& drawParams,
             uint32 numInstances, uint32 numElements);
+  void draw(uint32 shader);
 
   void clear(uint32 fbo, bool shouldclearcolor, bool shouldcleardepth,
              bool shouldclearstencil, const Color& color, uint32 stencil);
+
+
+  void  setUniform()const ;
+
 
  private:
   struct VertexArray {
@@ -201,6 +211,12 @@ class OpenGLDevice {
     uint32 instanceComponentsStartIndex;
   };
 
+
+  struct ShaderString {
+	  std::string vertex;
+	  std::string fragment;
+  };
+ 
   struct ShaderProgram {
     std::unordered_map<std::string, int32> uniforms;
     std::vector<uint32> shaders;
@@ -250,9 +266,16 @@ class OpenGLDevice {
                       int32 stencilComparisonVal, enum StencilOp stencilFail,
                       enum StencilOp stencilPassButDepthFail,
                       enum StencilOp stencilPass);
-  void setStencilWriteMask(uint32 mask);
+  // void setStencilWriteMask(uint32 mask);
   void setScissorTest(bool enable, uint32 startX = 0, uint32 startY = 0,
                       uint32 width = 0, uint32 height = 0);
   void getCurrentVersion() const;
+
+  static ShaderString parseShader(const std::string& filepath);
+  static GLuint compile(const std::string& shaderSource, GLenum type,
+	  const std::string& filename, GLuint m_program_id);
+  static void link(GLuint m_program_id, GLuint m_vs_id, GLuint m_fg_id);
+
+
 };
 }  // namespace Angine

@@ -66,10 +66,10 @@ void Game::tick()
 };
 
 
-int main()
-{
-	Game game;
-
-	game.start();
-	return 0;
-}
+//int main()
+//{
+//	Game game;
+//
+//	game.start();
+//	return 0;
+//}
