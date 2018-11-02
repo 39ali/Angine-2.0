@@ -71,7 +71,7 @@
     <ProjectGuid>{272AA8B6-93F5-46BE-BB4A-A477C046026C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Anginecore</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
