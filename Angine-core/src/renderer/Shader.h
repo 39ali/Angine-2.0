@@ -1,9 +1,5 @@
 #pragma once
-#define GLEW_STATIC
-#include <glew\glew.h>
-#include <glm\glm.hpp>
-#include <iostream>
-#include "../Utils/Reader.h"
+#include "RenderDevice.h"
 
 namespace Angine {
 	namespace Renderer {
@@ -12,27 +8,33 @@ namespace Angine {
 		class Shader
 		{
 		public:
-			Shader(const char * vertexshaderloc, const char* fragmentshaderloc);
-			Shader(const char * ComputeShader);
-			~Shader();
+			inline Shader(RenderDevice& _device, const std::string& filepath) :
+				device(&_device), programID(device->createShaderProgram(filepath))
+			{};
 
-		public:
-			void use()const;
-			void unuse()const;
-			inline GLuint& getProgramId() { return m_program_id; };
-		public:
-
-			void setUniform(const char* name, const glm::mat4& value) const;
-			void setUniform(const char * name, const glm::vec3& value) const;
-			void setUniform(const char * name, const float& value) const;
-			void setUniform(const char * name, const int& value) const;
+			inline ~Shader() {
+				device->deleteShaderProgram(programID);
+			}
+			//template<typename T>
+			//inline void setUniform<T>(void* data)
+			//{
+			//	//TODO : implement this 
+			//}
+			//TODO set sampler
+			inline uint32 getId()const ;
 		private:
-			GLuint compile(const char * shaderloc, GLenum type);
-			void link() const;
-
-		private:
-			GLuint m_program_id, m_vs_id, m_fg_id, m_cs_id;
+			RenderDevice * device;
+			uint32 programID;
 		};
+
+
+		inline uint32 Shader::getId()const
+		{
+			return programID;
+			
+		}
+		
+
 
 
 	}

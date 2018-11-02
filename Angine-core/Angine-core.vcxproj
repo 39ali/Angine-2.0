@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Angine.h" />
-    <ClInclude Include="game.h" />
     <ClInclude Include="src\common.h" />
-    <ClInclude Include="src\core\Entity.h" />
-    <ClInclude Include="src\ParticleSystem\Cloth.h" />
+    <ClInclude Include="src\math\Color.h" />
+    <ClInclude Include="src\math\CommonMath.h" />
+    <ClInclude Include="src\math\Matrix4f.h" />
+    <ClInclude Include="src\math\Vector3f.h" />
+    <ClInclude Include="src\openGL\OpenGLDevice.h" />
     <ClInclude Include="src\renderer\BasicLightingMaterial.h" />
     <ClInclude Include="src\renderer\Camera.h" />
     <ClInclude Include="src\renderer\FPSCamera.h" />
@@ -33,32 +35,34 @@
     <ClInclude Include="src\renderer\Mesh.h" />
     <ClInclude Include="src\renderer\Model.h" />
     <ClInclude Include="src\renderer\ModelFactory.h" />
+    <ClInclude Include="src\renderer\RenderContext.h" />
+    <ClInclude Include="src\renderer\RenderDevice.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
     <ClInclude Include="src\renderer\SkyBox.h" />
     <ClInclude Include="src\renderer\Texture2D.h" />
     <ClInclude Include="src\renderer\TextureManager.h" />
     <ClInclude Include="src\renderer\TPScamera.h" />
+    <ClInclude Include="src\renderer\VertexArray.h" />
     <ClInclude Include="src\renderer\VertexData.h" />
     <ClInclude Include="src\renderer\Window.h" />
-    <ClInclude Include="src\core\Scene.h" />
     <ClInclude Include="src\core\Time.h" />
     <ClInclude Include="src\Utils\imageLoader.h" />
     <ClInclude Include="src\Utils\Reader.h" />
     <ClInclude Include="src\Utils\Tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="game.cpp" />
-    <ClCompile Include="src\core\Entity.cpp" />
-    <ClCompile Include="src\core\Scene.cpp" />
-    <ClCompile Include="src\ParticleSystem\Cloth.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\math\Matrix4f.cpp" />
+    <ClCompile Include="src\math\Vector3f.cpp" />
+    <ClCompile Include="src\openGL\OpenGLDevice.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\FPSCamera.cpp" />
     <ClCompile Include="src\renderer\Loader.cpp" />
     <ClCompile Include="src\renderer\Material.cpp" />
     <ClCompile Include="src\renderer\ModelFactory.cpp" />
+    <ClCompile Include="src\renderer\RenderContext.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
-    <ClCompile Include="src\renderer\Shader.cpp" />
     <ClCompile Include="src\renderer\SkyBox.cpp" />
     <ClCompile Include="src\renderer\Texture2D.cpp" />
     <ClCompile Include="src\renderer\TextureManager.cpp" />
@@ -66,6 +70,9 @@
     <ClCompile Include="src\renderer\Window.cpp" />
     <ClCompile Include="src\core\Time.cpp" />
     <ClCompile Include="src\Utils\tiny_obj_loader.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\shaders\shader.sh" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{272AA8B6-93F5-46BE-BB4A-A477C046026C}</ProjectGuid>
@@ -75,13 +82,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>

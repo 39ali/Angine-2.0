@@ -1,4 +1,5 @@
 /Angine 2.0.VC.db
 /Angine 2.0.VC.VC.opendb
-/bin/Angine-core/Intermediates/Debug
+/bin
 /*.opendb
+.vs/
