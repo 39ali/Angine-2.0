@@ -15,10 +15,10 @@ namespace Angine {
 
 	Matrix4f& Matrix4f::inverse()
 	{
-		float det = determinant ();
+		float det = determinant();
 		if (det == 0.0f)
 		{
-			
+
 			return *this;
 		}
 
@@ -46,7 +46,7 @@ namespace Angine {
 		return *this;
 	}
 
-		inline Matrix4f Matrix4f::operator*(const Matrix4f& right) const {
+	inline Matrix4f Matrix4f::operator*(const Matrix4f& right) const {
 		Matrix4f m1;
 
 		for (uint32 i = 0; i < 4; i++) {
@@ -62,73 +62,86 @@ namespace Angine {
 	}
 
 
-		Matrix4f Matrix4f::transpose() const {
-			Matrix4f m1;
-			for (uint32 i = 0; i < 4; i++) {
-				for (uint32 j = 0; j < 4; j++) {
-					m1.m[i][j] = m[j][i];
-				}
+	Matrix4f Matrix4f::transpose() const {
+		Matrix4f m1;
+		for (uint32 i = 0; i < 4; i++) {
+			for (uint32 j = 0; j < 4; j++) {
+				m1.m[i][j] = m[j][i];
 			}
-
-			return m1;
-		}
-		// fov is in degrees
-		Matrix4f& Matrix4f::makePerspectiveProjection(const float znear, const float zfar, const float width, const float height, const  float FOV) {
-		
-			const float ar = width / height;
-			const float zrange = znear - zfar;
-			const float tanHalfFov = std::tanf(toRadian(FOV)/2.0f);
-		
-			m[0][0] = 1.0f / (tanHalfFov * ar); m[0][1] = 0.0f;            m[0][2] = 0.0f;            m[0][3] = 0.0;
-			m[1][0] = 0.0f;                   m[1][1] = 1.0f / tanHalfFov; m[1][2] = 0.0f;            m[1][3] = 0.0;
-			m[2][0] = 0.0f;                   m[2][1] = 0.0f;            m[2][2] = (znear - zfar) / zrange; m[2][3] = 2.0f*zfar*znear / zrange;
-			m[3][0] = 0.0f;                   m[3][1] = 0.0f;            m[3][2] = 1.0f;            m[3][3] = 0.0;
-		
-			return *this;
 		}
 
-		
+		return m1;
+	}
+	// fov is in degrees
+	Matrix4f& Matrix4f::makePerspectiveProjection(const float znear, const float zfar, const float width, const float height, const  float FOV) {
 
-		Matrix4f& Matrix4f::makeTranslate(const vec3f& vec3) {
-			m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = vec3.x;
-			m[1][0] = 0.0f; m[1][1] = 1.0f; m[1][2] = 0.0f; m[1][3] = vec3.y;
-			m[2][0] = 0.0f; m[2][1] = 0.0f; m[2][2] = 1.0f; m[2][3] = vec3.z;
-			m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 1.0f;
-			return *this;
-		}
+		const float ar = width / height;
+		const float zrange = znear - zfar;
+		const float tanHalfFov = std::tanf(toRadian(FOV) / 2.0f);
 
-		Matrix4f& Matrix4f::makeScale(const vec3f& vec3) {
-			m[0][0] = vec3.x; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = 0.0f;
-			m[1][0] = 0.0f; m[1][1] = vec3.y; m[1][2] = 0.0f; m[1][3] = 0.0f;
-			m[2][0] = 0.0f; m[2][1] = 0.0f; m[2][2] = vec3.z; m[2][3] = 0.0f;
-			m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 1.0f;
-			return *this;
-		}
+		m[0][0] = 1.0f / (tanHalfFov * ar); m[0][1] = 0.0f;            m[0][2] = 0.0f;            m[0][3] = 0.0;
+		m[1][0] = 0.0f;                   m[1][1] = 1.0f / tanHalfFov; m[1][2] = 0.0f;            m[1][3] = 0.0;
+		m[2][0] = 0.0f;                   m[2][1] = 0.0f;            m[2][2] = (-znear - zfar) / zrange; m[2][3] = 2.0f*zfar*znear / zrange;
+		m[3][0] = 0.0f;                   m[3][1] = 0.0f;            m[3][2] = 1.0f;            m[3][3] = 0.0;
 
-		// rotation is in degrees
-		Matrix4f& Matrix4f::makeRotateTransform(const vec3f& vec3) {
-			Matrix4f rx, ry, rz;
+		return *this;
+	}
 
-			const float x = toRadian(vec3.x);
-			const float y = toRadian(vec3.y);
-			const float z = toRadian(vec3.z);
 
-			rx.m[0][0] = 1.0f; rx.m[0][1] = 0.0f; rx.m[0][2] = 0.0f; rx.m[0][3] = 0.0f;
-			rx.m[1][0] = 0.0f; rx.m[1][1] = cosf(x); rx.m[1][2] = -sinf(x); rx.m[1][3] = 0.0f;
-			rx.m[2][0] = 0.0f; rx.m[2][1] = sinf(x); rx.m[2][2] = cosf(x); rx.m[2][3] = 0.0f;
-			rx.m[3][0] = 0.0f; rx.m[3][1] = 0.0f; rx.m[3][2] = 0.0f; rx.m[3][3] = 1.0f;
 
-			ry.m[0][0] = cosf(y); ry.m[0][1] = 0.0f; ry.m[0][2] = -sinf(y); ry.m[0][3] = 0.0f;
-			ry.m[1][0] = 0.0f; ry.m[1][1] = 1.0f; ry.m[1][2] = 0.0f; ry.m[1][3] = 0.0f;
-			ry.m[2][0] = sinf(y); ry.m[2][1] = 0.0f; ry.m[2][2] = cosf(y); ry.m[2][3] = 0.0f;
-			ry.m[3][0] = 0.0f; ry.m[3][1] = 0.0f; ry.m[3][2] = 0.0f; ry.m[3][3] = 1.0f;
+	Matrix4f& Matrix4f::makeTranslate(const vec3f& vec3) {
+		m[0][0] = 1.0f; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = vec3.x;
+		m[1][0] = 0.0f; m[1][1] = 1.0f; m[1][2] = 0.0f; m[1][3] = vec3.y;
+		m[2][0] = 0.0f; m[2][1] = 0.0f; m[2][2] = 1.0f; m[2][3] = vec3.z;
+		m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 1.0f;
+		return *this;
+	}
 
-			rz.m[0][0] = cosf(z); rz.m[0][1] = -sinf(z); rz.m[0][2] = 0.0f; rz.m[0][3] = 0.0f;
-			rz.m[1][0] = sinf(z); rz.m[1][1] = cosf(z); rz.m[1][2] = 0.0f; rz.m[1][3] = 0.0f;
-			rz.m[2][0] = 0.0f; rz.m[2][1] = 0.0f; rz.m[2][2] = 1.0f; rz.m[2][3] = 0.0f;
-			rz.m[3][0] = 0.0f; rz.m[3][1] = 0.0f; rz.m[3][2] = 0.0f; rz.m[3][3] = 1.0f;
+	Matrix4f& Matrix4f::makeScale(const vec3f& vec3) {
+		m[0][0] = vec3.x; m[0][1] = 0.0f; m[0][2] = 0.0f; m[0][3] = 0.0f;
+		m[1][0] = 0.0f; m[1][1] = vec3.y; m[1][2] = 0.0f; m[1][3] = 0.0f;
+		m[2][0] = 0.0f; m[2][1] = 0.0f; m[2][2] = vec3.z; m[2][3] = 0.0f;
+		m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f; m[3][3] = 1.0f;
+		return *this;
+	}
 
-			*this = rz *ry * rx;
-			return *this;
-		}
+	Matrix4f& Matrix4f::makeCameraTransform(const vec3f& pos ,  vec3f& target, vec3f& up) {
+
+		vec3f N=target.normalize();
+		vec3f right = up.normalize().cross(N).normalize();
+		vec3f V = N.cross(right).normalize();
+
+		m[0][0] =right.x; m[0][1] = right.y; m[0][2] = right.z; m[0][3] = -pos.x;
+		m[1][0] = V.x; m[1][1] = V.y; m[1][2] = V.z;			m[1][3] = -pos.y;
+		m[2][0] = N.x; m[2][1] = N.y; m[2][2] = N.z;			m[2][3] = -pos.z;
+		m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f;			m[3][3] = 1.0f;
+		return *this;
+	}
+	
+	// rotation is in degrees
+	Matrix4f& Matrix4f::makeRotateTransform(const vec3f& vec3) {
+		Matrix4f rx, ry, rz;
+
+		const float x = toRadian(vec3.x);
+		const float y = toRadian(vec3.y);
+		const float z = toRadian(vec3.z);
+
+		rx.m[0][0] = 1.0f; rx.m[0][1] = 0.0f; rx.m[0][2] = 0.0f; rx.m[0][3] = 0.0f;
+		rx.m[1][0] = 0.0f; rx.m[1][1] = cosf(x); rx.m[1][2] = -sinf(x); rx.m[1][3] = 0.0f;
+		rx.m[2][0] = 0.0f; rx.m[2][1] = sinf(x); rx.m[2][2] = cosf(x); rx.m[2][3] = 0.0f;
+		rx.m[3][0] = 0.0f; rx.m[3][1] = 0.0f; rx.m[3][2] = 0.0f; rx.m[3][3] = 1.0f;
+
+		ry.m[0][0] = cosf(y); ry.m[0][1] = 0.0f; ry.m[0][2] = -sinf(y); ry.m[0][3] = 0.0f;
+		ry.m[1][0] = 0.0f; ry.m[1][1] = 1.0f; ry.m[1][2] = 0.0f; ry.m[1][3] = 0.0f;
+		ry.m[2][0] = sinf(y); ry.m[2][1] = 0.0f; ry.m[2][2] = cosf(y); ry.m[2][3] = 0.0f;
+		ry.m[3][0] = 0.0f; ry.m[3][1] = 0.0f; ry.m[3][2] = 0.0f; ry.m[3][3] = 1.0f;
+
+		rz.m[0][0] = cosf(z); rz.m[0][1] = -sinf(z); rz.m[0][2] = 0.0f; rz.m[0][3] = 0.0f;
+		rz.m[1][0] = sinf(z); rz.m[1][1] = cosf(z); rz.m[1][2] = 0.0f; rz.m[1][3] = 0.0f;
+		rz.m[2][0] = 0.0f; rz.m[2][1] = 0.0f; rz.m[2][2] = 1.0f; rz.m[2][3] = 0.0f;
+		rz.m[3][0] = 0.0f; rz.m[3][1] = 0.0f; rz.m[3][2] = 0.0f; rz.m[3][3] = 1.0f;
+
+		*this = rz *ry * rx;
+		return *this;
+	}
 }

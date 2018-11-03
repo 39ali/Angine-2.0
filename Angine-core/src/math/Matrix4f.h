@@ -58,14 +58,25 @@ namespace Angine {
 		float determinant()const;
 		Matrix4f& inverse();
 		Matrix4f& makePerspectiveProjection(const float znear , const float zfar ,const float width , const float height,const  float FOV );
-		Matrix4f& makeTranslate(const vec3f& vec3);
+		Matrix4f& makeTranslate( const vec3f& vec3);
 		Matrix4f& makeRotateTransform(const vec3f& vec3);
-		Matrix4f& Matrix4f::makeScale(const vec3f& vec3);
+		Matrix4f& makeCameraTransform(const vec3f& pos , vec3f& target,  vec3f& up);
+		Matrix4f& Matrix4f::makeScale(const  vec3f& vec3);
+		
+		
+		/*Matrix4f& operator=(const Matrix4f& mat) {
+	
+			std::copy(mat.m, mat.m + sizeof(float) * 16, m[0][0]);
+			return *this;
+		}*/
+				
+	
+		//const matrix
 	};
 
-	using mat4f = Matrix4f;
 	
 
+	using mat4f = Matrix4f;
 
 
 }

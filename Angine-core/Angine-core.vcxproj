@@ -43,6 +43,7 @@
     <ClInclude Include="src\renderer\Texture2D.h" />
     <ClInclude Include="src\renderer\TextureManager.h" />
     <ClInclude Include="src\renderer\TPScamera.h" />
+    <ClInclude Include="src\renderer\TransformPipeline.h" />
     <ClInclude Include="src\renderer\VertexArray.h" />
     <ClInclude Include="src\renderer\VertexData.h" />
     <ClInclude Include="src\renderer\Window.h" />
