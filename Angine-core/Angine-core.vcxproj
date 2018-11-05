@@ -24,10 +24,13 @@
     <ClInclude Include="src\math\Color.h" />
     <ClInclude Include="src\math\CommonMath.h" />
     <ClInclude Include="src\math\Matrix4f.h" />
+    <ClInclude Include="src\math\Quaternion.h" />
+    <ClInclude Include="src\math\Vector2f.h" />
     <ClInclude Include="src\math\Vector3f.h" />
     <ClInclude Include="src\openGL\OpenGLDevice.h" />
     <ClInclude Include="src\renderer\BasicLightingMaterial.h" />
     <ClInclude Include="src\renderer\Camera.h" />
+    <ClInclude Include="src\renderer\CameraFP.h" />
     <ClInclude Include="src\renderer\FPSCamera.h" />
     <ClInclude Include="src\renderer\IRenderable.h" />
     <ClInclude Include="src\renderer\Loader.h" />
@@ -55,6 +58,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\math\Matrix4f.cpp" />
+    <ClCompile Include="src\math\Quaternion.cpp" />
     <ClCompile Include="src\math\Vector3f.cpp" />
     <ClCompile Include="src\openGL\OpenGLDevice.cpp" />
     <ClCompile Include="src\renderer\Camera.cpp" />

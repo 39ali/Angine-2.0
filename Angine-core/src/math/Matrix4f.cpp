@@ -108,13 +108,23 @@ namespace Angine {
 	Matrix4f& Matrix4f::makeCameraTransform(const vec3f& pos ,  vec3f& target, vec3f& up) {
 
 		vec3f N=target.normalize();
-		vec3f right = up.normalize().cross(N).normalize();
-		vec3f V = N.cross(right).normalize();
+		vec3f right = up.cross(N).normalize();
+		vec3f V = N.cross(right);
+		float m2[4][4];
 
-		m[0][0] =right.x; m[0][1] = right.y; m[0][2] = right.z; m[0][3] = -pos.x;
-		m[1][0] = V.x; m[1][1] = V.y; m[1][2] = V.z;			m[1][3] = -pos.y;
-		m[2][0] = N.x; m[2][1] = N.y; m[2][2] = N.z;			m[2][3] = -pos.z;
+		Matrix4f m3;
+		
+		m3.m[0][0] = 1.0f; m3.m[0][1] = 0.0f; m3.m[0][2] = 0.0f; m3.m[0][3] = -pos.x;
+		m3.m[1][0] = 0.0f; m3.m[1][1] = 1.0f; m3.m[1][2] = 0.0f; m3.m[1][3] = -pos.y;
+		m3.m[2][0] = 0.0f; m3.m[2][1] = 0.0f; m3.m[2][2] = 1.0f; m3.m[2][3] = -pos.z;
+		m3.m[3][0] = 0.0f; m3.m[3][1] = 0.0f; m3.m[3][2] = 0.0f; m3.m[3][3] = 1.0f;
+
+		m[0][0] = right.x; m[0][1] = right.y; m[0][2] = right.z; m[0][3] = 0.0f;
+		m[1][0] = V.x; m[1][1] = V.y; m[1][2] = V.z;			m[1][3] = 0.0f;
+		m[2][0] = N.x; m[2][1] = N.y; m[2][2] = N.z;			m[2][3] = 0.0f;
 		m[3][0] = 0.0f; m[3][1] = 0.0f; m[3][2] = 0.0f;			m[3][3] = 1.0f;
+
+		*this = *this*m3;
 		return *this;
 	}
 	

@@ -35,7 +35,7 @@ namespace Angine {
 		return Vector3f(x * vec3.x, y *vec3.y, z *vec3.z);
 	}
 	Vector3f Vector3f::operator*(const float value)const  {
-		return Vector3f(x + value , y + value, z + value);
+		return Vector3f(x * value , y * value, z * value);
 	}
 	Vector3f& Vector3f::operator*=(const Vector3f &vec3) {
 		x *= vec3.x;

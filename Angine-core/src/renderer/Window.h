@@ -27,6 +27,7 @@ namespace Angine {
 			bool static isKeyPressed(unsigned int keycode);
 			static bool isMouseButtonPressed(unsigned int keycode);
 			void static  getMousePos(double& x, double& y) { x = mx; y = my; };
+			void static  getMousePos(float& x, float& y) { x = mx; y = my; };
 			double static getDx() { return dx; }
 
 			double static getDy() { return dy; }

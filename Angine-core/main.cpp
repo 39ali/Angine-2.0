@@ -4,6 +4,7 @@
 #include "src\renderer\Shader.h"
 #include "src\math\Matrix4f.h"
 #include "src\renderer\TransformPipeline.h"
+#include "src\renderer\CameraFP.h"
 using namespace Angine;
 
 int main() {
@@ -36,15 +37,14 @@ int main() {
 	GLuint vbo;
 	GLuint vao;
 	GLuint vio;
-
+	glfwSetInputMode(window->getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	
 	TransformPipeline transform;
 	
 	transform.setPerspectiveProj(1.f, 1000.f, width,height,30.f);
-	vec3f camPos(0, 0, -10);
-	vec3f camTarget(0, 0, 1);
-	vec3f camUp(0,1,0);
-	transform.setCamera(camPos,camTarget,camUp);
+;
+	CameraFP camera(*window,vec3f(0, 0, -10) , vec3f(0, 0, 1),vec3f(0,1,0));
+	
 	//transform.setRotate(vec3f(0,0,45));
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -56,7 +56,8 @@ int main() {
 
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glRenderMode(wireframe)
 	glfwSwapInterval(1);
 	float scale = 0.0f;
 	vec3f worldPos;
@@ -65,7 +66,8 @@ int main() {
 		context.draw(shader);
 		scale += 0.001f;
 
-		
+		camera.update();
+		transform.setCamera(camera.getPos(), camera.getTarget(), camera.getUp());
 	//	transform.setScale(vec3f(sin(scale),sin(scale),sin(scale)));
 	
 		worldPos.x = sin(scale);

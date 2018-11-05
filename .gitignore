@@ -3,3 +3,6 @@
 /bin/Intermediates/
 /*.opendb
 .vs/
+
+/bin/**/*.ilk
+/bin/**/*.pdb
