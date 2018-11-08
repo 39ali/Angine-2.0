@@ -1,18 +1,17 @@
 #pragma once
-#include "../common.h"
+#include "../math/Vector2f.h"
+#include "../math/Vector3f.h"
 namespace Angine
 {
-	namespace Renderer
-	{
-
 		struct VertexData
 		{
-			glm::vec3 position;
-			glm::vec2 uv;
-			glm::vec3 normal;
+
+			VertexData() {};
+			VertexData(const vec3f& _pos, const vec2f& _uv, const vec3f& _normal) :position(_pos), uv(_uv), normal(_normal) {};
+			VertexData(const vec3f& _pos, const vec2f& _uv) :position(_pos), uv(_uv) {};
+			vec3f position;
+			vec2f uv;
+			vec3f normal;
 
 		};
-
-
-	}
 }

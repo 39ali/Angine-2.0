@@ -87,7 +87,7 @@ namespace Angine {
 					vertex.uv.y = mesh->mTextureCoords[0][i].y;
 				}
 				else
-					vertex.uv = glm::vec2(0.0f, 0.0f);
+					vertex.uv =vec2f(0.0f, 0.0f);
 
 				vertices.push_back(vertex);
 			}

@@ -4,9 +4,6 @@
 #include <iostream>
 namespace Angine
 {
-	namespace Utils
-	{
-
 		static BYTE*   imageLoader(const char * filename, unsigned int &width, unsigned int &height, unsigned int& BPP, FIBITMAP * dib) {
 			//	, const unsigned int texID, GLenum image_format, GLint internal_format, GLint level, GLint border
 			//image format
@@ -75,5 +72,5 @@ namespace Angine
 			return data;
 		}
 
-	}
+
 }

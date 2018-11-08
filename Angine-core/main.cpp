@@ -5,39 +5,73 @@
 #include "src\math\Matrix4f.h"
 #include "src\renderer\TransformPipeline.h"
 #include "src\renderer\CameraFP.h"
+#include "src\Utils\imageLoader.h"
+#include "src\renderer\VertexData.h"
+
 using namespace Angine;
 
 int main() {
+	 
+
 	const float width = 1024, height = 768;
 	std::vector<int> v = {1,2,3,4,5};
 	std::vector<int > bb = std::move(v);
 
-	Vector3f Vertices[4];
-	//vertices[0] = glm::vec3(-1.0f, -1.0f, 0.0f);
-	//vertices[1] = glm::vec3(1.0f, -1.0f, 0.0f);
-	//vertices[2] = glm::vec3(1.0f, 1.0f, 0.0f);
-	//vertices[3] = glm::vec3(-1.0f, 1.0f, 0.0f);
-	Vertices[0] = Vector3f(-1.0f, -1.0f, 0.5773f);
-	Vertices[1] = Vector3f(0.0f, -1.0f, -1.15475f);
-	Vertices[2] = Vector3f(1.0f, -1.0f, 0.5773f);
-	Vertices[3] = Vector3f(0.0f, 1.0f, 0.0f);
-	//uint32 Indices[6] = {0,1,2,2,0,3};
-	unsigned int Indices[] = { 0, 3, 1,
+		VertexData Vertices[4] = 
+		{	VertexData (Vector3f(-1.0f, -1.0f, 0.5773f), Vector2f(0.0f, 0.0f)),
+			VertexData (Vector3f(0.0f, -1.0f, -1.15475f), Vector2f(0.5f, 0.0f)),
+			VertexData(Vector3f(1.0f, -1.0f, 0.5773f),  Vector2f(1.0f, 0.0f)),
+			VertexData(Vector3f(0.0f, 1.0f, 0.0f),      Vector2f(0.5f, 1.0f))
+		};
+	
+		unsigned int Indices[] = { 0, 3, 1,
 		1, 3, 2,
 		2, 3, 0,
 		0, 1, 2 };
 
-	Renderer::Window::CreateInstance(width, height, "game", glm::vec3(0.0, 0.0, 0.0), true, false);
+	Renderer::Window::CreateInstance(width, height, "game", glm::vec3(0.0, 0.5, 0.5), true, false);
 	Renderer::Window* window = Renderer::Window::getInstance();
-	
 	RenderDevice device(*window);
 	RenderContext context(device);
-	Shader shader(device ,"./res/shaders/shader.sh");
-		
+	Shader shader(device, "./res/shaders/shader.sh");
+	glUseProgram(shader.getId());
+
 	GLuint vbo;
 	GLuint vao;
 	GLuint vio;
 	glfwSetInputMode(window->getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	glFrontFace(GL_CW);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+
+	GLuint textureID;
+	unsigned int imgw, imgh,BPP;
+	FIBITMAP* map(0);
+	{//textures
+		BYTE* img = imageLoader("res/textures/bricks.jpg", imgw, imgh, BPP, map);
+		glGenTextures(1, &textureID);
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		if (BPP == 24) {
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgw, imgh, GL_FALSE, GL_BGR, GL_UNSIGNED_BYTE, img);
+		
+		}
+		else if (BPP == 32)
+		{
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imgw, imgh, GL_FALSE, GL_BGRA, GL_UNSIGNED_BYTE, img);
+		
+		}
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+		;
+		GLuint id = glGetUniformLocation(shader.getId(), "gsampler");
+		glUniform1i(id, 0);
+	
+	}
+
+
 	
 	TransformPipeline transform;
 	
@@ -55,8 +89,11 @@ int main() {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(Indices), Indices,GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void *)offsetof(VertexData,position));
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, uv));
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//glRenderMode(wireframe)
 	glfwSwapInterval(1);
 	float scale = 0.0f;
@@ -73,10 +110,16 @@ int main() {
 		worldPos.x = sin(scale);
 		worldPos.z = 5;
 		transform.setWorldPos(worldPos);
-		glEnableVertexAttribArray(0);
+	
+	
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		//opengl needs matrix to be coloumn-major  
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void *)offsetof(VertexData, position));
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, uv));
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, textureID);
 		glUniformMatrix4fv(glGetUniformLocation(shader.getId(), "translate"),1,GL_TRUE,(const GLfloat*)transform.getTransform());
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vio);
 		glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT,0);

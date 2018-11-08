@@ -15,7 +15,7 @@ namespace Angine {
 			texture->fileName = filename;
 			unsigned int BPP;
 			FIBITMAP * dib(0);
-			BYTE*data = Utils::imageLoader(filename, texture->m_width, texture->m_height, BPP, dib);
+			BYTE*data = imageLoader(filename, texture->m_width, texture->m_height, BPP, dib);
 			glGenTextures(1, &texture->m_texID);
 			glBindTexture(GL_TEXTURE_2D, texture->m_texID);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -47,7 +47,7 @@ namespace Angine {
 			FIBITMAP * dib(0);
 			for (unsigned int i = 0; i < faces.size(); i++)
 			{
-				BYTE* data = Utils::imageLoader(faces[i].c_str(), texture->m_width, texture->m_height, BPP, dib);
+				BYTE* data = imageLoader(faces[i].c_str(), texture->m_width, texture->m_height, BPP, dib);
 				if (data)
 				{
 					if (BPP == 24) {
