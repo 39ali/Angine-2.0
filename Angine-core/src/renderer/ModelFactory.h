@@ -3,7 +3,6 @@
 
 namespace Angine
 {
-	namespace Renderer {
 		class ModelFactory
 		{
 		public:
@@ -17,6 +16,4 @@ namespace Angine
 
 		};
 
-
-	}
 }

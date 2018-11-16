@@ -2,7 +2,7 @@
 #include "RenderDevice.h"
 
 namespace Angine {
-	namespace Renderer {
+
 
 
 		class Shader
@@ -37,5 +37,5 @@ namespace Angine {
 
 
 
-	}
+	
 }

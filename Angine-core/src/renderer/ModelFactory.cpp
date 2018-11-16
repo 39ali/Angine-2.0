@@ -3,7 +3,7 @@
 
 namespace Angine
 {
-	namespace Renderer {
+	
 
 #define M_PI  3.14159265359	
 #define M_PI_2 M_PI/2
@@ -123,5 +123,5 @@ namespace Angine
 
 		}
 
-	}
+	
 }

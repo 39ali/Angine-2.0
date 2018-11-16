@@ -10,6 +10,13 @@
 
 using namespace Angine;
 
+
+struct DirectionalLight {
+	vec3f color;
+	float AmbientInten;
+	vec3f direction;
+	float diffuseInten;
+};
 int main() {
 	 
 
@@ -92,6 +99,18 @@ int main() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void *)offsetof(VertexData,position));
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, uv));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData), (const void*)offsetof(VertexData, normal));
+
+	GLuint gdlc = glGetUniformLocation(shader.getId(), "gDirectionalLight.ambientInten");
+	glUniform1f(gdlc,0.3f);
+
+	GLuint gdlcc= glGetUniformLocation(shader.getId(), "gDirectionalLight.color");	
+	glUniform3fv(gdlcc,1,(const GLfloat*)& vec3f(1));
+	
+	glUniform3fv(glGetUniformLocation(shader.getId(), "gDirectionalLight.direction"), 1, (const GLfloat*)& vec3f(1));
+	glUniform1f(glGetUniformLocation(shader.getId(), "gDirectionalLight.diffuseInten"),1);
+
 
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	//glRenderMode(wireframe)
@@ -126,8 +145,7 @@ int main() {
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
 
 		glDisableVertexAttribArray(0);
-	
-	
+
 		window->update();
 	}
 	

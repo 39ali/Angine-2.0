@@ -2,9 +2,7 @@
 
 
 namespace Angine {
-	namespace Renderer
-	{
-
+	
 		void Texture2D::bind() const
 		{
 			glBindTexture(GL_TEXTURE_2D, m_texID);
@@ -14,7 +12,7 @@ namespace Angine {
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
-	}
+	
 
 
 

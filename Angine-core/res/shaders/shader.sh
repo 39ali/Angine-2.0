@@ -21,7 +21,14 @@ out vec4 fragColor;
 in vec4 positionOut;
 in vec2 uvOut;
 
+struct DirectionalLight {
+	vec3 color;
+	float ambientInten;
+};
+
+uniform DirectionalLight gDirectionalLight;
 uniform sampler2D gsampler;
+
 void main(){
-fragColor = texture2D(gsampler,uvOut.xy);
+fragColor = texture2D(gsampler,uvOut.xy)*vec4(gDirectionalLight.color,1.0f)*gDirectionalLight.ambientInten;
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include "Shader.h"
 namespace Angine {
-	namespace Renderer {
+	
 		class Material
 		{
 		public:
@@ -25,5 +25,5 @@ namespace Angine {
 
 		};
 
-	}
+	
 }

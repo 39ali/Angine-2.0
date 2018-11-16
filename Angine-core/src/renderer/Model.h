@@ -2,7 +2,7 @@
 #include "../common.h"
 #include "../renderer/Mesh.h"
 namespace Angine {
-	namespace Renderer {
+	
 		class Model
 		{
 		public:
@@ -18,5 +18,5 @@ namespace Angine {
 
 
 		};
-	}
+	
 }

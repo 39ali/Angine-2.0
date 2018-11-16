@@ -5,7 +5,7 @@
 #include "Texture2D.h"
 
 namespace Angine {
-	namespace Renderer {
+
 
 		class Mesh {
 		public:
@@ -27,5 +27,5 @@ namespace Angine {
 		private:
 			GLuint m_vaoID, m_vioID;
 		};
-	}
+	
 }

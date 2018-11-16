@@ -4,8 +4,7 @@
 #include "../Utils/imageLoader.h"
 
 namespace Angine {
-	namespace Renderer
-	{
+
 
 		enum TextureType
 		{
@@ -25,5 +24,5 @@ namespace Angine {
 			TextureType m_type;
 			
 		};
-	}
+	
 }
