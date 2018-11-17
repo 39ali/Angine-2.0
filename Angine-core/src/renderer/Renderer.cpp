@@ -3,7 +3,7 @@
 namespace Angine {
 	namespace Renderer {
 
-		void Renderer::render(Mesh* model, Core::RenderMode mode)
+	/*	void Renderer::render(Mesh* model, Core::RenderMode mode)
 		{
 			renderMode(mode);
 
@@ -29,7 +29,7 @@ namespace Angine {
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			}
 		}
-
+*/
 
 
 	}

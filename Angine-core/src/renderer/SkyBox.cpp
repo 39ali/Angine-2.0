@@ -6,7 +6,7 @@ namespace Angine {
 
 		SkyBox::SkyBox(const std::vector<std::string>& faces)
 		{
-			m_tex = TextureManager::LoadCubeMap(faces);
+			//m_tex = TextureManager::LoadCubeMap(faces);
 			//m_Shader = new Shader("../Shaders/SkyBox/SkyBox.vs", "../Shaders/SkyBox/SkyBox.fs");
 			//m_Shader->use();
 			//m_Shader->setUniform("skybox", 0);
@@ -78,7 +78,7 @@ namespace Angine {
 			//m_Shader->setUniform("view", glm::mat4(glm::mat3(cam->getMatrix())));
 			glBindVertexArray(m_vio);
 			glActiveTexture(GL_TEXTURE0);
-			m_tex->bind();
+		//	m_tex->bind();
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 			glDepthFunc(GL_LESS);
 		}

@@ -43,7 +43,7 @@
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
     <ClInclude Include="src\renderer\SkyBox.h" />
-    <ClInclude Include="src\renderer\Texture2D.h" />
+    <ClInclude Include="src\renderer\Texture.h" />
     <ClInclude Include="src\renderer\TextureManager.h" />
     <ClInclude Include="src\renderer\TPScamera.h" />
     <ClInclude Include="src\renderer\TransformPipeline.h" />
@@ -64,12 +64,10 @@
     <ClCompile Include="src\renderer\Camera.cpp" />
     <ClCompile Include="src\renderer\FPSCamera.cpp" />
     <ClCompile Include="src\renderer\Loader.cpp" />
-    <ClCompile Include="src\renderer\Material.cpp" />
     <ClCompile Include="src\renderer\ModelFactory.cpp" />
     <ClCompile Include="src\renderer\RenderContext.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
     <ClCompile Include="src\renderer\SkyBox.cpp" />
-    <ClCompile Include="src\renderer\Texture2D.cpp" />
     <ClCompile Include="src\renderer\TextureManager.cpp" />
     <ClCompile Include="src\renderer\TPScamera.cpp" />
     <ClCompile Include="src\renderer\Window.cpp" />
@@ -189,7 +187,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>NotSet</SubSystem>
@@ -197,6 +195,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32s.lib;glfw3.lib;FreeImage.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/verbose:lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

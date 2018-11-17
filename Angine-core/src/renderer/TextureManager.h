@@ -1,21 +1,21 @@
 #pragma once
-#include "Texture2D.h"
 #include <unordered_map>
 #include "../common.h"
+#include "Texture.h"
 namespace Angine {
-	namespace Renderer {
-		class TextureManager
-		{
 
-		public:
-			static	Texture2D* LoadTexture(const char* filename);
-			static	Texture2D* LoadCubeMap(const std::vector<std::string>& faces);
-			static void Clean();
-		private:
-			TextureManager() {};
-			~TextureManager();
-			static	std::unordered_map < std::string, Texture2D*> m_textures;
+class TextureManager {
+ public:
+  static Texture* TextureManager::loadTexture(RenderDevice& renderDevice,
+                                              const char* filename);
+   Texture* LoadCubeMap(const std::vector<std::string>& faces);
+  void clean(RenderDevice& renderDevice);
 
-		};
-	}
-}
+
+ private:
+  TextureManager(){};
+  ~TextureManager(){};
+  static std::unordered_map<std::string, Texture> textures;
+};
+
+}  // namespace Angine

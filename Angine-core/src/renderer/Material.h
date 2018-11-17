@@ -1,29 +1,13 @@
 #pragma once
-#include "Shader.h"
+#include <unordered_map>
+#include "../math/Matrix4f.h"
 namespace Angine {
-	
-		class Material
-		{
-		public:
-			Material(Shader* shader);
-			~Material();
-			void setSpecular();
-			void setDiffuse();
-			template<typename T>
-			void setUniform(const std::string& name, const T& value)
-			{
-				//m_shader->use();
-				//m_shader->setUniform(name.c_str(), value);
-			}
 
-			void use() {};
-				void unuse() {};             
-			virtual void  onRender() {};
-		protected:
-			Shader*	m_shader;
+struct MaterialSpec {
+  std::unordered_map<std::string, std::string> textureNames;
+  std::unordered_map<std::string, float> floats;
+  std::unordered_map<std::string, Vector3f> vectors;
+  std::unordered_map<std::string, mat4f> matrices;
+};
 
-
-		};
-
-	
-}
+}  // namespace Angine

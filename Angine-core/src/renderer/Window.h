@@ -1,10 +1,8 @@
 #pragma once
-#define GLEW_STATIC
-#include <glew\glew.h>
 #include <GLFW\glfw3.h>
 #include <iostream>
 #include "../core/Time.h"
-#include <glm\glm.hpp>
+#include "../math/Vector3f.h"
 #define MAX_KEYS 1024
 #define MAX_BUTTONS 32
 
@@ -15,7 +13,7 @@ namespace Angine {
 		{
 		public:
 			~Window();
-			static void CreateInstance(const unsigned int width, const unsigned int height, const char* title, const glm::vec3& color, bool depth, bool fullscreen);
+			static void CreateInstance(const unsigned int width, const unsigned int height, const char* title, const vec3f& color, bool depth, bool fullscreen);
 			inline static Window* getInstance() { return m_win; }
 			inline static int getWidth() { return m_width; };
 			inline static int getHeight() { return m_height; };
@@ -27,7 +25,7 @@ namespace Angine {
 			bool static isKeyPressed(unsigned int keycode);
 			static bool isMouseButtonPressed(unsigned int keycode);
 			void static  getMousePos(double& x, double& y) { x = mx; y = my; };
-			void static  getMousePos(float& x, float& y) { x = mx; y = my; };
+			void static  getMousePos(float& x, float& y) { x =static_cast<float> (mx); y = static_cast<float>(my); };
 			double static getDx() { return dx; }
 
 			double static getDy() { return dy; }
@@ -48,7 +46,7 @@ namespace Angine {
 			static bool m_isInstanciated;
 			bool m_isResized;
 			static Window* m_win;
-			static glm::vec3 m_color;
+			static vec3f m_color;
 		private:
 			friend void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 			friend void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);

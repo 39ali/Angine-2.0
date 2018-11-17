@@ -9,7 +9,7 @@ namespace Angine {
 		bool  Window::m_isclosed;
 		bool Window::m_isInstanciated = false;
 		Window* Window::m_win = nullptr;
-		glm::vec3 Window::m_color;
+		vec3f Window::m_color;
 		int  Window::m_width, Window::m_height;
 		double Window::xoffset, Window::yoffset;
 		double  Window::dx, Window::dy;
@@ -77,7 +77,7 @@ namespace Angine {
 
 		}
 
-		void Window::CreateInstance(const unsigned int width, const unsigned int height, const char* title, const glm::vec3& color, bool depth, bool fullscreen)
+		void Window::CreateInstance(const unsigned int width, const unsigned int height, const char* title, const vec3f& color, bool depth, bool fullscreen)
 		{
 			m_color = color;
 			if (m_isInstanciated) { return; }

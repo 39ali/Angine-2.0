@@ -1,22 +1,49 @@
 #pragma once
 #include "../common.h"
-#include "../renderer/Mesh.h"
+#include "VertexData.h"
+#include "Texture.h"
 namespace Angine {
-	
-		class Model
-		{
-		public:
-			Model() {};
-			~Model() {};
-			//void addMesh(Mesh * mesh) { m_meshes.push_back(mesh); };
-			/// TODO : delete meshes ?
-			std::vector<Mesh*> m_meshes;
-		private:
-			std::string m_directory;
 
+class Mesh {
+ public:
+	 Mesh() {};
+  Mesh(const std::vector<VertexData>& vertices,
+       const std::vector<uint32>& indices) {
+    init(vertices, indices);
+  }
 
+  void init(const std::vector<VertexData>& vertices,
+            const std::vector<unsigned int>& indices) {
+    numIndices = indices.size();
 
+    glGenVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
-		};
-	
-}
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(VertexData) * vertices.size(),
+                 vertices.data(), GL_STATIC_DRAW);
+
+    glGenBuffers(1, &vio);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vio);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * numIndices,
+                 indices.data(), GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
+  }
+  ~Mesh() {}
+  uint32 vio, vbo, vao;
+  uint32 numIndices;
+  uint32 materialIndex;
+};
+
+class Model {
+ public:
+  Model(){};
+  ~Model(){};
+
+  std::vector<Mesh> meshes;
+  std::vector<Texture*> textures;
+};
+
+}  // namespace Angine

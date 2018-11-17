@@ -4,17 +4,17 @@
 namespace Angine {
 	namespace Renderer {
 
-		class Renderer
-		{
-		public:
-			Renderer() {};
-			~Renderer() {};
+		//class Renderer
+		//{
+		//public:
+		//	Renderer() {};
+		//	~Renderer() {};
 
-			void render(Mesh* model, Core::RenderMode mode);
-		private:
-			void renderMode(Core::RenderMode mode)const;
+		//	void render(Mesh* model, Core::RenderMode mode);
+		//private:
+		//	void renderMode(Core::RenderMode mode)const;
 
-		};
+		//};
 
 
 

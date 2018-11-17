@@ -15,7 +15,7 @@ namespace Angine {
 			void initBuffer();
 
 		private:
-			Texture2D* m_tex;
+			Texture* m_tex;
 			GLuint m_vbo, m_vio;
 			Shader * m_Shader;
 		};

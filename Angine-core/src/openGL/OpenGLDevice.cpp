@@ -44,10 +44,13 @@ OpenGLDevice::OpenGLDevice(Renderer::Window& window)
     throw std::runtime_error("could not initialize Render Device");
   }
 
-  // glEnable(GL_DEPTH_TEST);
   // glDepthFunc(DRAW_FUNC_ALWAYS);
   // glDepthMask(GL_FALSE);
-  // glFrontFace(GL_CW);
+
+  glEnable(GL_DEPTH_TEST);
+  glFrontFace(GL_CW);
+  glCullFace(GL_BACK);
+  glEnable(GL_CULL_FACE);
 
   Fbo fbo;
   fbo.width = window.getWidth();
@@ -259,6 +262,10 @@ static GLint getOpenGLFormat(OpenGLDevice::TexturePixelFormat format) {
       return GL_RGB;
     case OpenGLDevice::FORMAT_RGBA:
       return GL_RGBA;
+    case OpenGLDevice::FORMAT_BGR:
+      return GL_BGR;
+    case OpenGLDevice::FORMAT_BGRA:
+      return GL_BGRA;
     case OpenGLDevice::FORMAT_DEPTH:
       return GL_DEPTH_COMPONENT;
     case OpenGLDevice::FORMAT_DEPTH_AND_STENCIL:
@@ -271,8 +278,9 @@ static GLint getOpenGLFormat(OpenGLDevice::TexturePixelFormat format) {
 
 uint32 OpenGLDevice::createTexture2D(int32 width, int32 height,
                                      const void* data,
-                                     TexturePixelFormat dataFormat,
                                      TexturePixelFormat internalFormat1,
+                                     TexturePixelFormat dataFormat,
+
                                      bool generateMipmaps) {
   GLint format = getOpenGLFormat(dataFormat);
   GLint internalFormat = getOpenGLFormat(internalFormat1);
@@ -282,13 +290,13 @@ uint32 OpenGLDevice::createTexture2D(int32 width, int32 height,
   glGenTextures(1, &texture);
   glBindTexture(textureTarget, texture);
 
-  glTexParameterf(textureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameterf(textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexImage2D(textureTarget, 0, internalFormat, width, height, GL_FALSE,
+               format, GL_UNSIGNED_BYTE, (const void*)data);
 
-  glTexImage2D(texture, 0, internalFormat, width, height, 0, format,
-               GL_UNSIGNED_BYTE, data);
+  glTexParameteri(textureTarget, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri(textureTarget, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(textureTarget, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(textureTarget, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
   if (generateMipmaps)
     glGenerateMipmap(textureTarget);
@@ -475,9 +483,6 @@ void OpenGLDevice::draw(uint32 fbo, uint32 shader, uint32 vao,
 
 void OpenGLDevice::draw(uint32 shader) { setShader(shader); }
 
-void OpenGLDevice::setUniform() const 
-{
-
-}
+void OpenGLDevice::setUniform() const {}
 
 }  // namespace Angine
