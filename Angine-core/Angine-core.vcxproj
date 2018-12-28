@@ -29,9 +29,7 @@
     <ClInclude Include="src\math\Vector3f.h" />
     <ClInclude Include="src\openGL\OpenGLDevice.h" />
     <ClInclude Include="src\renderer\BasicLightingMaterial.h" />
-    <ClInclude Include="src\renderer\Camera.h" />
     <ClInclude Include="src\renderer\CameraFP.h" />
-    <ClInclude Include="src\renderer\FPSCamera.h" />
     <ClInclude Include="src\renderer\IRenderable.h" />
     <ClInclude Include="src\renderer\Loader.h" />
     <ClInclude Include="src\renderer\Material.h" />
@@ -42,10 +40,8 @@
     <ClInclude Include="src\renderer\RenderDevice.h" />
     <ClInclude Include="src\renderer\Renderer.h" />
     <ClInclude Include="src\renderer\Shader.h" />
-    <ClInclude Include="src\renderer\SkyBox.h" />
     <ClInclude Include="src\renderer\Texture.h" />
     <ClInclude Include="src\renderer\TextureManager.h" />
-    <ClInclude Include="src\renderer\TPScamera.h" />
     <ClInclude Include="src\renderer\TransformPipeline.h" />
     <ClInclude Include="src\renderer\VertexArray.h" />
     <ClInclude Include="src\renderer\VertexData.h" />
@@ -54,25 +50,36 @@
     <ClInclude Include="src\Utils\imageLoader.h" />
     <ClInclude Include="src\Utils\Reader.h" />
     <ClInclude Include="src\Utils\Tiny_obj_loader.h" />
+    <ClInclude Include="vendor\include\imgui\imconfig.h" />
+    <ClInclude Include="vendor\include\imgui\imgui.h" />
+    <ClInclude Include="vendor\include\imgui\imgui_impl_glfw.h" />
+    <ClInclude Include="vendor\include\imgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="vendor\include\imgui\imgui_internal.h" />
+    <ClInclude Include="vendor\include\imgui\imstb_rectpack.h" />
+    <ClInclude Include="vendor\include\imgui\imstb_textedit.h" />
+    <ClInclude Include="vendor\include\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\imgui\examples\example_glfw_opengl3\main.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\math\Matrix4f.cpp" />
     <ClCompile Include="src\math\Quaternion.cpp" />
     <ClCompile Include="src\math\Vector3f.cpp" />
     <ClCompile Include="src\openGL\OpenGLDevice.cpp" />
-    <ClCompile Include="src\renderer\Camera.cpp" />
-    <ClCompile Include="src\renderer\FPSCamera.cpp" />
     <ClCompile Include="src\renderer\Loader.cpp" />
     <ClCompile Include="src\renderer\ModelFactory.cpp" />
     <ClCompile Include="src\renderer\RenderContext.cpp" />
     <ClCompile Include="src\renderer\Renderer.cpp" />
-    <ClCompile Include="src\renderer\SkyBox.cpp" />
     <ClCompile Include="src\renderer\TextureManager.cpp" />
-    <ClCompile Include="src\renderer\TPScamera.cpp" />
     <ClCompile Include="src\renderer\Window.cpp" />
     <ClCompile Include="src\core\Time.cpp" />
     <ClCompile Include="src\Utils\tiny_obj_loader.cc" />
+    <ClCompile Include="vendor\include\imgui\imgui.cpp" />
+    <ClCompile Include="vendor\include\imgui\imgui_demo.cpp" />
+    <ClCompile Include="vendor\include\imgui\imgui_draw.cpp" />
+    <ClCompile Include="vendor\include\imgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="vendor\include\imgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="vendor\include\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\shader.sh" />
@@ -81,7 +88,7 @@
     <ProjectGuid>{272AA8B6-93F5-46BE-BB4A-A477C046026C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Anginecore</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -132,23 +139,29 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\Output\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\Intermediates\$(ProjectName)\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)Deps\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Deps\libs\glew\;$(SolutionDir)Deps\libs\;$(SolutionDir)Deps\libs\FreeImage\;$(SolutionDir)Deps\libs\Assimp\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Angine-core\vendor\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Angine-core\vendor\libs\glew\;$(SolutionDir)Angine-core\vendor\libs\Assimp\;$(SolutionDir)Angine-core\vendor\libs\FreeImage\x32\;$(SolutionDir)Angine-core\vendor\libs\glfw3\x32\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)bin\Output\$(ProjectName)\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)bin\Intermediates\$(ProjectName)\$(Configuration)\</IntDir>
+    <IncludePath>$(SolutionDir)Angine-core\vendor\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Angine-core\vendor\libs\glew\;$(SolutionDir)Angine-core\vendor\libs\Assimp\;$(SolutionDir)Angine-core\vendor\libs\FreeImage\x64\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)bin\$(ProjectName)\Output\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)bin\$(ProjectName)\Intermediates\$(Configuration)\</IntDir>
-    <IncludePath>$(SolutionDir)Deps\include\;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Deps\libs\glew\;$(SolutionDir)Deps\libs\;$(SolutionDir)Deps\libs\FreeImage\;$(SolutionDir)Deps\libs\Assimp\;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)bin\Output\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\Intermediates\$(ProjectName)\$(Configuration)\</IntDir>
+    <IncludePath>$(SolutionDir)Angine-core\vendor\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Angine-core\vendor\libs\glew\;$(SolutionDir)Angine-core\vendor\libs\Assimp\;$(SolutionDir)Angine-core\vendor\libs\FreeImage\x32\;$(SolutionDir)Angine-core\vendor\libs\glfw3\x32\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\Output\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\Intermediates\$(ProjectName)\$(Configuration)\</IntDir>
+    <IncludePath>$(SolutionDir)Angine-core\vendor\include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Angine-core\vendor\libs\glew\;$(SolutionDir)Angine-core\vendor\libs\Assimp\;$(SolutionDir)Angine-core\vendor\libs\FreeImage\x64\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

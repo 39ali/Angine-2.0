@@ -1,4 +1,6 @@
 #pragma once
+#define STATIC_GLEW
+#include <glew\glew.h>
 #include <GLFW\glfw3.h>
 #include <iostream>
 #include "../core/Time.h"

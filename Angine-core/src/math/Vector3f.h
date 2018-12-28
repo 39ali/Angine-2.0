@@ -33,6 +33,10 @@ namespace Angine {
 			return &v[0];
 		}
 
+		inline const float operator[](unsigned int index)const {
+			return v[index];
+		}
+
 		union {
 			struct {
 				float x, y, z;

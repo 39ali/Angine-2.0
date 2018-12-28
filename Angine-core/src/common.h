@@ -1,11 +1,10 @@
 #pragma once
-#define STATIC_GLEW
-#include <glew\glew.h>
+//#define STATIC_GLEW
+//#include <glew\glew.h>
 #include <string>
 #include <vector>
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm\glm.hpp>
+
 /// TODO : remove what's above
 
 #include <stdint.h>

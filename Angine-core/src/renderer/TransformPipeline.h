@@ -44,12 +44,13 @@ namespace Angine {
 			mcamera.makeCameraTransform(camera.pos, camera.target, camera.up);
 			proj.makePerspectiveProjection(PerspectiveProjection.znear, PerspectiveProjection.zfar, PerspectiveProjection.width,
 				PerspectiveProjection.height, PerspectiveProjection.fov);
-
-			transform =proj*mcamera*mtranslate*mrotate*mscale;
+			
+			worldTransform = mtranslate * mrotate*mscale;
+			transform =proj*mcamera*worldTransform;
 			//transform = stransform;
 			return &transform;
 		};
-
+		const mat4f* getWorldTransform() { return &worldTransform; }
 	private:
 
 		struct PerspectiveProjData{
@@ -60,6 +61,7 @@ namespace Angine {
 		vec3f rotate;
 		vec3f worldPos;
 		mat4f transform;
+		mat4f worldTransform;
 		PerspectiveProjData PerspectiveProjection;
 		struct {
 			vec3f pos;
