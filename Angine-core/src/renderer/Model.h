@@ -2,6 +2,10 @@
 #include "../common.h"
 #include "VertexData.h"
 #include "Texture.h"
+////
+#define GLEW_STATIC
+#include <glew\glew.h>
+//TODO: delete this
 namespace Angine {
 
 class Mesh {

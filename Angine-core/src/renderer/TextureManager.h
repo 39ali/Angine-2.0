@@ -2,6 +2,8 @@
 #include <unordered_map>
 #include "../common.h"
 #include "Texture.h"
+#include "RenderDevice.h"
+#include "../Utils/imageLoader.h"
 namespace Angine {
 
 class TextureManager {

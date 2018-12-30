@@ -60,7 +60,6 @@
     <ClInclude Include="vendor\include\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\imgui\examples\example_glfw_opengl3\main.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\math\Matrix4f.cpp" />
     <ClCompile Include="src\math\Quaternion.cpp" />

@@ -15,14 +15,14 @@ namespace Angine {
 			const RenderDevice::DrawInfo& drawParams, uint32 numInstances,
 			uint32 numIndices);
 
-		inline void draw(const Shader& shader);
+		inline void draw(const Shader& shader , Model& model);
 	private :
 		RenderDevice * device;
 };
 
-	inline void RenderContext::draw(const Shader& shader) {
+	inline void RenderContext::draw( const Shader& shader , Model& model) {
 	
-		device->draw(shader.getId());
+		device->draw(shader.getId() , model);
 	}
 
 

@@ -1,8 +1,5 @@
 #pragma once
 #include "../common.h"
-#include "RenderDevice.h"
-#include "../Utils/imageLoader.h"
-
 namespace Angine {
 
 

@@ -19,41 +19,6 @@ struct DirectionalLight {
   vec3f direction;
   float diffuseInten;
 };
-
-void Render(Model &model, Shader &shader) {
-  glEnableVertexAttribArray(0);
-  glEnableVertexAttribArray(1);
-  glEnableVertexAttribArray(2);
-
-  for (unsigned int i = 0; i < model.meshes.size(); i++) {
-    glBindBuffer(GL_ARRAY_BUFFER, model.meshes[i].vbo);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),
-                          (const void *)offsetof(VertexData, position));
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData),
-                          (const void *)offsetof(VertexData, uv));
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),
-                          (const void *)offsetof(VertexData, normal));
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.meshes[i].vio);
-
-    const unsigned int MaterialIndex = model.meshes[i].materialIndex;
-
-    if (MaterialIndex < model.textures.size()) {
-       glActiveTexture(GL_TEXTURE0);
-       glBindTexture(GL_TEXTURE_2D, model.textures[MaterialIndex]->texId);
-      //	GLuint id = glGetUniformLocation(shader.getId(), "gsampler");
-      //	glUniform1i(id, 0);
-    }
-
-    glDrawElements(GL_TRIANGLES, model.meshes[i].numIndices, GL_UNSIGNED_INT,
-                   0);
-  }
-
-  glDisableVertexAttribArray(0);
-  glDisableVertexAttribArray(1);
-  glDisableVertexAttribArray(2);
-}
-
 int main() {
   const uint32 width = 1024, height = 768;
   Renderer::Window::CreateInstance(width, height, "game", vec3f(0.0, 0.0, 0.0),
@@ -176,7 +141,7 @@ int main() {
 	
 
 
-    context.draw(shader);
+   
 	if (window->isKeyPressed(GLFW_KEY_Q)) {
 		scale += 0.5f;
 		transform.setRotate(vec3f(0, scale, 0));
@@ -211,7 +176,8 @@ int main() {
 
     glDisableVertexAttribArray(0);
 
-    Render(model,shader);
+	context.draw(shader,model);
+ 
 
 
 

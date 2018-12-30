@@ -481,7 +481,41 @@ void OpenGLDevice::draw(uint32 fbo, uint32 shader, uint32 vao,
                         const DrawInfo& drawParams, uint32 numInstances,
                         uint32 numElements) {}
 
-void OpenGLDevice::draw(uint32 shader) { setShader(shader); }
+void OpenGLDevice::draw(uint32 shader ,Model& model) { 
+	setShader(shader); 
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glEnableVertexAttribArray(2);
+
+	for (unsigned int i = 0; i < model.meshes.size(); i++) {
+		glBindBuffer(GL_ARRAY_BUFFER, model.meshes[i].vbo);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),
+			(const void *)offsetof(VertexData, position));
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VertexData),
+			(const void *)offsetof(VertexData, uv));
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexData),
+			(const void *)offsetof(VertexData, normal));
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, model.meshes[i].vio);
+
+		const unsigned int MaterialIndex = model.meshes[i].materialIndex;
+
+		if (MaterialIndex < model.textures.size()) {
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, model.textures[MaterialIndex]->texId);
+			//	GLuint id = glGetUniformLocation(shader.getId(), "gsampler");
+			//	glUniform1i(id, 0);
+		}
+
+		glDrawElements(GL_TRIANGLES, model.meshes[i].numIndices, GL_UNSIGNED_INT,
+			0);
+	}
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(2);
+
+}
 
 void OpenGLDevice::setUniform() const {}
 

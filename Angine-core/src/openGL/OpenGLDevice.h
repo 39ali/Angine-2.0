@@ -10,6 +10,7 @@
 #include "../math/Color.h"
 #include "../renderer/Window.h"
 #include <string>
+#include "../renderer/Model.h"
 
 /// TODO: make sure you need all these includes ..?
 namespace Angine {
@@ -192,7 +193,7 @@ namespace Angine {
 
 		void draw(uint32 fbo, uint32 shader, uint32 vao, const DrawInfo& drawParams,
 			uint32 numInstances, uint32 numElements);
-		void draw(uint32 shader);
+		void draw(uint32 shader, Model& model);
 
 		void clear(uint32 fbo, bool shouldclearcolor, bool shouldcleardepth,
 			bool shouldclearstencil, const Color& color, uint32 stencil);
